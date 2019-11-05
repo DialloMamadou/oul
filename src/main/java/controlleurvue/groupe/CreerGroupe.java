@@ -38,7 +38,7 @@ public class CreerGroupe implements Vue {
         Image image=new Image("img/mooo.png");
         Notifications notification=Notifications.create()
                 .title("finit")
-                .text("groupe creer avec succss")
+                .text("groupe creer avec succss ")
                 .hideAfter(Duration.seconds(3))
                 .position(Pos.BOTTOM_LEFT)
                 .graphic(new ImageView(image));

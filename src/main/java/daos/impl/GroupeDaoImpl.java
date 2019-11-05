@@ -65,6 +65,7 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
         int res=0;
 
         try {
+
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1, id);
 

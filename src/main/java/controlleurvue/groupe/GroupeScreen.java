@@ -20,6 +20,7 @@ public class GroupeScreen implements Vue {
 
     }
 
+
     public void souris_dessus_3(MouseEvent mouseEvent) {
         pane_3.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
     }
