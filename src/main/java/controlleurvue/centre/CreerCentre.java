@@ -4,6 +4,8 @@ import basededonnee.DBconnexion;
 import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
+import daos.CentreDao;
+import daos.impl.CentreDaoImpl;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,18 +35,8 @@ public class CreerCentre implements Vue {
     public void book(MouseEvent mouseEvent) {
 
         int res=0;
-        String sql="INSERT INTO centre (nom_centre) VALUES (?)";
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-            if(nom.getText().length()!=0) {
-                ps.setString(1, nom.getText().toString());
-            }
-
-            res=ps.executeUpdate();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
+        if(nom.getText().length()!=0) {
+         res= centreDaoImpl.inserrerCentre(nom.getText());
         }
 
         if(res>0){
@@ -73,8 +65,11 @@ public class CreerCentre implements Vue {
 
     }
 
+    private CentreDao centreDaoImpl;
+
     public void setController(Controlleur controller) {
 
+        this.centreDaoImpl=new CentreDaoImpl(DBconnexion.getConnection());
         this.controlleur=controller;
     }
 }
