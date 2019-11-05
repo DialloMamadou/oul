@@ -5,8 +5,9 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
-import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.centre.CreerCentre;
+import daos.GroupeDao;
+import daos.impl.GroupeDaoImpl;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,13 +26,14 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import modele.Centre;
+import modele.Groupe;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,7 +51,7 @@ public class ConsulterGroupe implements Initializable, Vue {
 
     String status=null;
     @FXML
-    private JFXTreeTableView<Centre> treeView;
+    private JFXTreeTableView<Groupe> treeView;
     @FXML
     private JFXTextField search_text;
 
@@ -58,52 +60,50 @@ public class ConsulterGroupe implements Initializable, Vue {
     private StackPane stackepane;
 
 
-
-
-
-    public void loadallcentre(String sql){
-
-
-        JFXTreeTableColumn<Centre,String> room_id=new JFXTreeTableColumn<>("groupe Id");
+    private JFXTreeTableColumn<Groupe,String> creerGroupeId(){
+        JFXTreeTableColumn<Groupe,String> room_id=new JFXTreeTableColumn<>("groupe Id");
         room_id.setPrefWidth(100);
-        room_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Centre, String>, ObservableValue<String>>() {
+        room_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Centre, String> param) {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
                 return param.getValue().getValue().id;
             }
         });
+        return room_id;
+    }
 
 
-        JFXTreeTableColumn<Centre,String> room_type=new JFXTreeTableColumn<>("nom du groupe");
+    private JFXTreeTableColumn<Groupe,String> creernomgroupe(){
+        JFXTreeTableColumn<Groupe,String> room_type=new JFXTreeTableColumn<>("nom du groupe");
         room_type.setPrefWidth(110);
-        room_type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Centre, String>, ObservableValue<String>>() {
+        room_type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Centre, String> param) {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
                 return param.getValue().getValue().nom_centre;
             }
         });
 
+        return room_type;
+    }
 
 
-        ObservableList<Centre> rooms = FXCollections.observableArrayList();
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
 
-            ResultSet rs=ps.executeQuery();
+    public void loadallgroupe(){
 
-            while(rs.next()){
 
-                rooms.add(new Centre(rs.getInt(1)+"",rs.getString(2)));
+        JFXTreeTableColumn<Groupe,String> room_id=this.creerGroupeId();
 
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
+
+
+        JFXTreeTableColumn<Groupe,String> room_type=this.creernomgroupe();
+
+
+        ObservableList<Groupe> rooms = FXCollections.observableArrayList();
+        List<Groupe> liste=groupeDao.listeGroupes();
+        for(Groupe groupe:liste){
+            rooms.add(groupe);
         }
-
-
-        final TreeItem<Centre> root = new RecursiveTreeItem<Centre>(rooms, RecursiveTreeObject::getChildren);
-
+        final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(rooms, RecursiveTreeObject::getChildren);
         treeView.getColumns().setAll(room_id,room_type);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
@@ -116,12 +116,14 @@ public class ConsulterGroupe implements Initializable, Vue {
 
 
 
+    private GroupeDao groupeDao;
 
 
 
     public void initialize(URL location, ResourceBundle resources) {
+        this.groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
 
-        loadallcentre("SELECT * FROM groupe");
+        loadallgroupe();
     }
 
 
@@ -165,40 +167,47 @@ public class ConsulterGroupe implements Initializable, Vue {
     public void cherchecentreparid(MouseEvent mouseEvent) {
 
 
-        //loadAllRooms("SELECT * FROM chambre WHERE numero ='"+search_text.getText().toString().trim()+"'");
-String sql="";
-        if(search_text.getText().toString().length()==0){
-           sql="SELECT * FROM `groupe` WHERE 1";
-        }else {
-
-             sql = "SELECT * FROM groupe WHERE id_groupe ='" + search_text.getText().toString().trim() + "'";
+        if(search_text.getText().length()==0){
+            loadallgroupe();
         }
-        loadallcentre(sql);
-       /* System.out.println(search_text.getText().toString());
+        loadAllgroupeParId();
 
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
 
-            ResultSet rs=ps.executeQuery();
+    }
 
-            int cpt=0;
-            while(rs.next()){
-                cpt++;
-            }
-            if(cpt==0){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("centre recherche");
-                alert.setHeaderText("Information Dialog");
-                alert.setContentText("aucun centre avec cette id!");
-                alert.showAndWait();
-            }else{
-                this.controlleur.lancerCentreVueSpe(search_text.getText());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
+    private void loadAllgroupeParId() {
+
+
+        JFXTreeTableColumn<Groupe,String> room_id=this.creerGroupeId();
+
+
+
+        JFXTreeTableColumn<Groupe,String> room_type=this.creernomgroupe();
+
+        ObservableList<Groupe> rooms = FXCollections.observableArrayList();
+
+        Groupe groupe=this.groupeDao.getGroupeParId(search_text.getText().toString());
+
+        if(groupe!=null) {
+            rooms.add(groupe);
+
+            final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(rooms, RecursiveTreeObject::getChildren);
+            treeView.getColumns().setAll(room_id, room_type);
+            treeView.setRoot(root);
+            treeView.setShowRoot(false);
+        }else{
+            Image image=new Image("img/delete.png");
+            Notifications notification=Notifications.create()
+                    .title("Error")
+                    .text("aucun centre avec cette id en base")
+                    .hideAfter(Duration.seconds(3))
+                    .position(Pos.BOTTOM_LEFT)
+                    .graphic(new ImageView(image));
+            notification.darkStyle();
+            notification.show();
+            loadallgroupe();
+
         }
-*/
     }
 
     public void EditerCentre(MouseEvent mouseEvent) {
@@ -208,31 +217,25 @@ String sql="";
 
         int res=0;
 
-        String sql="DELETE FROM groupe WHERE id_groupe=?";
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-            if(search_text2.getText().length()!=0) {
-                ps.setString(1, search_text2.getText().toString());
-            }
+        if(search_text2.getText().length()!=0) {
 
-            res=ps.executeUpdate();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
+            res=groupeDao.supprimerGroupe(search_text2.getText().toString());
         }
+
+
+
 
         if(res>0){
             Image image=new Image("img/mooo.png");
             Notifications notification=Notifications.create()
                     .title("finit")
-                    .text("centre supprimer avec succss")
+                    .text("groupe supprimer avec succss")
                     .hideAfter(Duration.seconds(3))
                     .position(Pos.BOTTOM_LEFT)
                     .graphic(new ImageView(image));
             notification.darkStyle();
             notification.show();
-            loadallcentre("SELECT * FROM `groupe` WHERE 1");
+            loadallgroupe();
 
             //updateStatus();
         }else{

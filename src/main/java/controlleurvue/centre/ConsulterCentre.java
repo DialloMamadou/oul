@@ -41,10 +41,6 @@ import java.util.logging.Logger;
 public class ConsulterCentre  implements Initializable, Vue {
     public JFXTextField search_text2;
     public JFXTextField search_text3;
-    /**
-     * Initializes the controller class.
-     */
-
     private Controlleur controlleur;
 
 
@@ -146,6 +142,7 @@ public class ConsulterCentre  implements Initializable, Vue {
                     .graphic(new ImageView(image));
             notification.darkStyle();
             notification.show();
+            loadallcentre();
 
         }
 
@@ -214,6 +211,11 @@ public class ConsulterCentre  implements Initializable, Vue {
 
     public void EditerCentre(MouseEvent mouseEvent) {
     }
+
+
+
+
+
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
 
