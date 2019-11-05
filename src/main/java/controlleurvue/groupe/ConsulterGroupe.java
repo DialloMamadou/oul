@@ -241,7 +241,8 @@ public class ConsulterGroupe implements Initializable, Vue {
         }else{
             Image image=new Image("img/delete.png");
             Notifications notification=Notifications.create()
-                    .title("Error ")
+                    .title("Error " +
+                            "")
                     .text("il y a eu une erreur dans la suppression")
                     .hideAfter(Duration.seconds(3))
                     .position(Pos.BOTTOM_LEFT)

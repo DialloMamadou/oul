@@ -15,6 +15,7 @@ public class GroupeScreen implements Vue {
         pane_1.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
     }
 
+
     public void souris_sort_1(MouseEvent mouseEvent) {
         pane_1.setStyle("-fx-background-color: white; -fx-background-radius: 6px;");
 

@@ -21,4 +21,5 @@ public interface GroupeDao {
 
 
     Groupe getGroupeParId(String id);
+
 }
