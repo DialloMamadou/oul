@@ -10,6 +10,7 @@ public class Main extends Application{
     public static void main(String... args){
         // Méthode issus d'application qui permet de lancer l'application.
         launch(args);
+       // test
     }
 
     @Override
