@@ -9,6 +9,7 @@ import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.sejour.CreerSejour;
 import dto.CentreDto;
 import dto.ClientDto;
+import enumerations.Depart;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -385,12 +386,90 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
 
 
+        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirDate((Integer)newItem);
+        });
+
+
+        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirDepart();
+        });
+
+
+        this.depart.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirPrix();
+        });
+
+
+        
+    }
+
+    private void remplirPrix() {
+        String date=(String)this.date.getValue();
+        String[] args = date.split(" au ");
+
+        String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND date_debut='"+args[0]+"' AND date_fin='"+
+                args[1]+"'";
+
+        System.out.println("requete sql "+sql);
+
+
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                System.out.println("right here right now");
+            this.prix.setText(String.valueOf(rs.getInt(7)));
+
+            }
+        }catch (Exception e){
+
+        }
+        System.out.println("right here right now");
+
+
+    }
+
+    private void remplirDepart() {
+        for(Depart depart:Depart.values()){
+            this.depart.getItems().add(depart);
+        }
+    }
+
+    private void remplirDate(int newItem) {
+        this.date.getItems().clear();
+        String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND duree ='"+String.valueOf(newItem)+"'";
+
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+
+                this.date.getItems().add(rs.getString(3)+" au "+rs.getString(4));
+            }
+        }catch (Exception e){
+
+        }
+
     }
 
 
     public void remplirtemp(String nom){
 
         this.duree.getItems().clear();
+        this.date.getItems().clear();
+
+
+        
+        
         String sql="SELECT * from sejour where type_sejour ='"+nom+"'";
 
         System.out.println("sql:"+sql);
@@ -417,6 +496,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
     private void remplirCombo(String value) {
         this.type.getItems().clear();
+        this.date.getItems().clear();
         this.duree.getItems().clear();
        String sql = "SELECT * FROM centre WHERE nom_centre ='" + value + "'";
 
