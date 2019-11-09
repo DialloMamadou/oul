@@ -32,6 +32,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -304,12 +306,86 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
 
 
+        this.chercheCentre.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                vueCentre.setPredicate(new Predicate<TreeItem<CentreDto>>() {
+
+                    @Override
+                    public boolean test(TreeItem<CentreDto> t) {
+
+                        boolean flag = t.getValue().nom_centre.getValue().contains(newValue);
+                                if(flag){
+                                    remplirCombo(t.getValue().nom_centre.getValue());
+                                }
+                                ;
+
+                        return flag;
+
+
+                    }
+                });
+            }
+
+        });
+
+
+
+
 
 
         vueCentre.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
                 ->
                 showCentre(newValue)
         );
+
+
+    }
+
+    private void remplirCombo(String value) {
+
+       String sql = "SELECT * FROM centre WHERE nom_centre ='" + value + "'";
+
+int id=-1;
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                 id=rs.getInt(1);
+
+            }
+        }catch (Exception e){
+
+        }
+
+
+
+
+
+        String sql2 = "SELECT * FROM sejour WHERE id_centre ='" + id + "'";
+
+        List<String> listeSejour=new ArrayList<>();
+
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql2);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                listeSejour.add(rs.getString(2));
+            }
+        }catch (Exception e){
+
+        }
+
+
 
 
     }
