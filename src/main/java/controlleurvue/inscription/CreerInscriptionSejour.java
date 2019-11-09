@@ -32,9 +32,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -252,6 +250,37 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
 
 
+    }
+
+    private void remplirDuree(Object selectedItem) {
+        String duree=(String)selectedItem;
+
+
+
+        this.type.getItems().clear();
+        String sql = "SELECT * FROM sejour WHERE type_sejour ='" + this.type.getSelectionModel().getSelectedItem() + "'";
+
+        List<String>listeDuree=new ArrayList<>();
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                String id=rs.getString(2);
+
+                listeDuree.add(id);
+            }
+        }catch (Exception e){
+
+        }
+
+
+
+
+
 
     }
 
@@ -318,6 +347,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
                         boolean flag = t.getValue().nom_centre.getValue().contains(newValue);
                                 if(flag){
+                                    System.out.println("combox");
                                     remplirCombo(t.getValue().nom_centre.getValue());
                                 }
                                 ;
@@ -342,10 +372,14 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         );
 
 
+
+
+
+
     }
 
     private void remplirCombo(String value) {
-
+        this.type.getItems().clear();
        String sql = "SELECT * FROM centre WHERE nom_centre ='" + value + "'";
 
 int id=-1;
@@ -368,7 +402,7 @@ int id=-1;
 
 
 
-        String sql2 = "SELECT * FROM sejour WHERE id_centre ='" + id + "'";
+        String sql2 = "SELECT * FROM sejour WHERE centre_id ='" + id + "'";
 
         List<String> listeSejour=new ArrayList<>();
 
@@ -379,7 +413,7 @@ int id=-1;
 
             while (rs.next()) {
 
-                listeSejour.add(rs.getString(2));
+                listeSejour.add(rs.getString(5));
             }
         }catch (Exception e){
 
@@ -387,11 +421,42 @@ int id=-1;
 
 
 
+        System.out.println(listeSejour.get(0));
+        System.out.println("combox box remplit");
 
+
+
+
+
+        Set<String> set = new LinkedHashSet<String>();
+
+        // Add the elements to set
+        set.addAll(listeSejour);
+
+        // Clear the list
+        listeSejour.clear();
+
+        // add the elements of set
+        // with no duplicates to the list
+        listeSejour.addAll(set);
+
+
+
+
+
+
+
+
+        for(String chaine:listeSejour){
+
+            this.type.getItems().add(chaine);
+
+        }
     }
 
     private void showCentre(TreeItem<CentreDto> newValue) {
         centre.setText(newValue.getValue().nom_centre.getValue());
+        remplirCombo(newValue.getValue().nom_centre.getValue());
     }
 
     public void showDetails(TreeItem<ClientDto> pModel) {
@@ -415,4 +480,6 @@ int id=-1;
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
+
 }
