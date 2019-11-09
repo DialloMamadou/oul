@@ -263,6 +263,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
 
         this.type.getItems().clear();
+        this.prix.setText("");
         String sql = "SELECT * FROM sejour WHERE type_sejour ='" + this.type.getSelectionModel().getSelectedItem() + "'";
 
         List<String>listeDuree=new ArrayList<>();
@@ -435,6 +436,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
     }
 
     private void remplirDepart() {
+        this.depart.getItems().clear();
         for(Depart depart:Depart.values()){
             this.depart.getItems().add(depart);
         }
@@ -466,6 +468,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
         this.duree.getItems().clear();
         this.date.getItems().clear();
+        this.prix.setText("");
 
 
         
@@ -497,6 +500,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
     private void remplirCombo(String value) {
         this.type.getItems().clear();
         this.date.getItems().clear();
+        this.prix.setText("");
         this.duree.getItems().clear();
        String sql = "SELECT * FROM centre WHERE nom_centre ='" + value + "'";
 
@@ -602,5 +606,11 @@ int id=-1;
 
     public void retour(MouseEvent mouseEvent) {
         this.controlleur.lancerPageInscription();
+    }
+
+    public void validerinscription(MouseEvent mouseEvent) {
+
+
+
     }
 }

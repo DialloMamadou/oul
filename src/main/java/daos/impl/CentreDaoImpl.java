@@ -20,7 +20,6 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
         super(conn);
     }
 
-    @Override
     public int inserrerCentre(String nom_centre) {
         int res=0;
         String sql="INSERT INTO centre (nom_centre) VALUES (?)";
@@ -47,7 +46,6 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
 
     }
 
-    @Override
     public int supprimerCentre(String id) {
         int res=0;
         String sql="DELETE FROM centre WHERE id_centre=?";
@@ -67,11 +65,10 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
 
 
 
-    @Override
     public List<Centre> listeCentres() {
 
         String sql="SELECT * FROM centre";
-        List<Centre>liste=new ArrayList<>();
+        List<Centre>liste=new ArrayList<Centre>();
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
@@ -90,7 +87,6 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
         return liste;
     }
 
-    @Override
     public Centre getCentreParId(String id) {
         String sql="SELECT * FROM centre WHERE id_centre ='"+id+"'";
         Centre liste=null;
