@@ -41,6 +41,8 @@ public class CreerClient  implements Initializable, Vue {
     public void setController(Controlleur controller) {
         this.controlleur=controller;
 
+
+
         Connection connection= DBconnexion.getConnection();
         try {
             String sql="SELECT * FROM groupe";
