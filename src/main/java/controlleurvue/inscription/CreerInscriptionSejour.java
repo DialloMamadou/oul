@@ -146,6 +146,10 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
 
 
+
+
+
+
         ObservableList<ClientDto> rooms = FXCollections.observableArrayList();
         Connection connection= DBconnexion.getConnection();
         String sql="SELECT * FROM client";
@@ -372,14 +376,48 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         );
 
 
+        this.type.valueProperty().addListener((obs, oldItem, newItem) -> {
+            System.out.println("nouvelle valeur = "+newItem);
+            remplirtemp((String)newItem);
+            });
+
 
 
 
 
     }
 
+
+    public void remplirtemp(String nom){
+
+        this.duree.getItems().clear();
+        String sql="SELECT * from sejour where type_sejour ='"+nom+"'";
+
+        System.out.println("sql:"+sql);
+
+        List<String>liste=new ArrayList<>();
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+
+                this.duree.getItems().add(rs.getInt(2));
+                System.out.println("duree +"+rs.getInt(2));
+            }
+        }catch (Exception e){
+
+        }
+
+
+    }
+
     private void remplirCombo(String value) {
         this.type.getItems().clear();
+        this.duree.getItems().clear();
        String sql = "SELECT * FROM centre WHERE nom_centre ='" + value + "'";
 
 int id=-1;
@@ -482,4 +520,7 @@ int id=-1;
     }
 
 
+    public void retour(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageInscription();
+    }
 }
