@@ -36,12 +36,12 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <JFXTextField  fx:id="capacite" layoutX="151.0" layoutY="265.0" prefHeight="25.0" prefWidth="200.0" promptText="capacite du centre" />
+                  <JFXTextField fx:id="capacite" layoutX="151.0" layoutY="265.0" prefHeight="25.0" prefWidth="200.0" promptText="capacite du centre" />
 
                     </children>
                 </Pane>
 
-                <Pane layoutX="284.0" layoutY="621.0" opacity="0.7" prefHeight="69.0" prefWidth="781.0" style="-fx-background-color: white; -fx-background-radius: 6px;">
+                <Pane layoutX="284.0" layoutY="621.0" opacity="0.7" prefHeight="69.0" prefWidth="596.0" style="-fx-background-color: white; -fx-background-radius: 6px;">
                     <children>
                         <JFXButton buttonType="RAISED" layoutX="340.0" layoutY="24.0" onMouseClicked="#back" prefHeight="40.0" prefWidth="100.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="retour" textFill="WHITE">
                             <font>

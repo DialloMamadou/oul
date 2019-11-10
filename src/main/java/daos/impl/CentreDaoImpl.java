@@ -4,6 +4,7 @@ import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.centre.CreerCentre;
 import daos.CentreDao;
 import modele.Centre;
+import modele.Groupe;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -72,6 +73,28 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
             while(rs.next()){
 
                 liste.add(new Centre(rs.getInt(1)+"",rs.getString(2),rs.getString(3)));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;
+    }
+
+    @Override
+    public Centre trouverParNomCentre(String nom) {
+        String sql="SELECT * FROM centre WHERE nom_centre ='"+nom+"'";
+        Centre liste=null;
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste=new Centre(rs.getInt(1)+"",rs.getString(2),rs.getString(3));
 
             }
 

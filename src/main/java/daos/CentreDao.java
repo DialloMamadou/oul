@@ -15,6 +15,7 @@ public interface CentreDao {
 
     List<Centre> listeCentres();
 
+    Centre trouverParNomCentre(String nom);
 
     Centre getCentreParId(String id);
 }
