@@ -20,25 +20,6 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
         super(conn);
     }
 
-    @Override
-    public boolean create(Groupe obj) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Groupe obj) {
-        return false;
-    }
-
-    @Override
-    public boolean update(Groupe obj) {
-        return false;
-    }
-
-    @Override
-    public Groupe find(int id) {
-        return null;
-    }
 
 
     @Override

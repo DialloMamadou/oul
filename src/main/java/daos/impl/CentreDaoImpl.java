@@ -20,12 +20,13 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
         super(conn);
     }
 
-    public int inserrerCentre(String nom_centre) {
+    public int inserrerCentre(String nom_centre,String capacite) {
         int res=0;
-        String sql="INSERT INTO centre (nom_centre) VALUES (?)";
+        String sql="INSERT INTO centre (nom_centre,capacite) VALUES (?,?)";
         try {
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
                 ps.setString(1, nom_centre);
+                ps.setString(2,capacite);
 
 
             res=ps.executeUpdate();
@@ -39,12 +40,7 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
     }
 
 
-    private  Centre map( ResultSet rs ) throws SQLException {
 
-
-        return         new Centre(rs.getInt(1)+"",rs.getString(2));
-
-    }
 
     public int supprimerCentre(String id) {
         int res=0;
@@ -75,7 +71,7 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
 
             while(rs.next()){
 
-                liste.add(new Centre(rs.getInt(1)+"",rs.getString(2)));
+                liste.add(new Centre(rs.getInt(1)+"",rs.getString(2),rs.getString(3)));
 
             }
 
@@ -96,7 +92,7 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
 
             while(rs.next()){
 
-                liste=new Centre(rs.getInt(1)+"",rs.getString(2));
+               liste=new Centre(rs.getInt(1)+"",rs.getString(2),rs.getString(3));
 
             }
 
@@ -109,23 +105,5 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
 
     }
 
-    @Override
-    public boolean create(Centre obj) {
-        return false;
-    }
 
-    @Override
-    public boolean delete(Centre obj) {
-        return false;
-    }
-
-    @Override
-    public boolean update(Centre obj) {
-        return false;
-    }
-
-    @Override
-    public Centre find(int id) {
-        return null;
-    }
 }

@@ -90,19 +90,36 @@ public class ConsulterCentre  implements Initializable, Vue {
 
 
 
+    private JFXTreeTableColumn<Centre,String>creationTableColumnomcCapacite(){
+        JFXTreeTableColumn<Centre,String> room_type=new JFXTreeTableColumn<>("capacite du centre");
+        room_type.setPrefWidth(110);
+        room_type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Centre, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Centre, String> param) {
+                return param.getValue().getValue().capacite_centre;
+            }
+        });
+
+        return room_type;
+
+    }
+
+
 
 
     public void loadallcentre(){
 
         JFXTreeTableColumn<Centre,String> room_id=this.creationTableColumCentreI();
         JFXTreeTableColumn<Centre,String> room_type=this.creationTableColumnomcentre();
+        JFXTreeTableColumn<Centre,String> capacite=this.creationTableColumnomcCapacite();
+
         ObservableList<Centre> rooms = FXCollections.observableArrayList();
         List<Centre> liste=centreDao.listeCentres();
         for(Centre centre:liste){
             rooms.add(centre);
         }
         final TreeItem<Centre> root = new RecursiveTreeItem<Centre>(rooms, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(room_id,room_type);
+        treeView.getColumns().setAll(room_id,room_type,capacite);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
