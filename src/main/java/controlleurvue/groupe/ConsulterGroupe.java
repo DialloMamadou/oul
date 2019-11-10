@@ -3,9 +3,7 @@ package controlleurvue.groupe;
 import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
-import controlleurvue.centre.CreerCentre;
 import daos.GroupeDao;
 import daos.impl.GroupeDaoImpl;
 import javafx.beans.value.ObservableValue;
@@ -25,18 +23,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import modele.Centre;
 import modele.Groupe;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ConsulterGroupe implements Initializable, Vue {
     public JFXTextField search_text2;
@@ -79,7 +72,7 @@ public class ConsulterGroupe implements Initializable, Vue {
         room_type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
-                return param.getValue().getValue().nom_centre;
+                return param.getValue().getValue().nom_groupe;
             }
         });
 

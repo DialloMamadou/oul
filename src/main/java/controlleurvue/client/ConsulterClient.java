@@ -7,6 +7,8 @@ import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
 import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.centre.CreerCentre;
+import daos.ClientDao;
+import daos.impl.ClientDaoImpl;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +27,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import modele.Client;
+import modele.Groupe;
 import modele.Sejour;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
@@ -33,6 +36,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,13 +64,14 @@ public class ConsulterClient implements Initializable, Vue {
 
 
 
+    private ClientDao clientDao;
 
 
     public void loadAllClient(String sql){
 
 
         JFXTreeTableColumn<Client,String> room_id=new JFXTreeTableColumn<>("Id");
-        room_id.setPrefWidth(100);
+        room_id.setPrefWidth(30);
         room_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
@@ -99,7 +104,7 @@ public class ConsulterClient implements Initializable, Vue {
 
 
         JFXTreeTableColumn<Client,String> date_fin=new JFXTreeTableColumn<>("age");
-        date_fin.setPrefWidth(110);
+        date_fin.setPrefWidth(30);
         date_fin.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
@@ -122,48 +127,29 @@ public class ConsulterClient implements Initializable, Vue {
 
 
 
-        ObservableList<Client> rooms = FXCollections.observableArrayList();
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
 
-            ResultSet rs=ps.executeQuery();
-
-            while(rs.next()){
-
-
-                System.out.println("client groupe +"+rs.getString(5));
-                String sqql=             "SELECT * FROM groupe WHERE id_groupe ='" + rs.getString(5) + "'";
-                System.out.println("sql :"+sqql);
-
-                PreparedStatement pss=(PreparedStatement)connection.prepareStatement(sqql);
-
-                ResultSet res=pss.executeQuery();
-                String s="";
-                while(res.next()){
-
-                    s=res.getString(2);
-
-
-                }
-
-
-
-                rooms.add(new Client(String.valueOf(rs.getInt(1)),rs.getString(2),rs.getString(3),
-                        rs.getString(4),s));
-
+        JFXTreeTableColumn<Client,String> date=new JFXTreeTableColumn<>(" date naissance");
+        date.setPrefWidth(110);
+        date.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
+                return param.getValue().getValue().datenaissance;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
+        });
+
+
+
+
+        ObservableList<Client> rooms = FXCollections.observableArrayList();
+        List<Client> liste=clientDao.listeClient();
+        for(Client client:liste){
+            rooms.add(client);
         }
-
-
         final TreeItem<Client> root = new RecursiveTreeItem<Client>(rooms, RecursiveTreeObject::getChildren);
-
-        treeView.getColumns().setAll(room_id,duree,date_debut,date_fin,type);
-
+        treeView.getColumns().setAll(room_id,duree,date_debut,date_fin,type,date);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
+
 
 
     }
@@ -178,6 +164,7 @@ public class ConsulterClient implements Initializable, Vue {
 
     public void initialize(URL location, ResourceBundle resources) {
 
+        clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         loadAllClient("SELECT * FROM client");
     }
 
@@ -217,45 +204,12 @@ public class ConsulterClient implements Initializable, Vue {
 
     public void setController(Controlleur controller) {
         this.controlleur=controller;
+        clientDao=new ClientDaoImpl(DBconnexion.getConnection());
     }
 
     public void cherchecentreparid(MouseEvent mouseEvent) {
 
 
-        //loadAllRooms("SELECT * FROM chambre WHERE numero ='"+search_text.getText().toString().trim()+"'");
-        String sql="";
-        if(search_text.getText().toString().length()==0){
-            sql="SELECT * FROM `client` WHERE 1";
-        }else {
-
-            sql = "SELECT * FROM client WHERE id ='" + search_text.getText().toString().trim() + "'";
-        }
-        loadAllClient(sql);
-       /* System.out.println(search_text.getText().toString());
-
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-
-            ResultSet rs=ps.executeQuery();
-
-            int cpt=0;
-            while(rs.next()){
-                cpt++;
-            }
-            if(cpt==0){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("centre recherche");
-                alert.setHeaderText("Information Dialog");
-                alert.setContentText("aucun centre avec cette id!");
-                alert.showAndWait();
-            }else{
-                this.controlleur.lancerCentreVueSpe(search_text.getText());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
-        }
-*/
     }
 
     public void EditerCentre(MouseEvent mouseEvent) {
