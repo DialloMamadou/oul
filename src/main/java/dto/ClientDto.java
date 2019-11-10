@@ -11,18 +11,19 @@ public StringProperty nom_client;
 public  StringProperty prenom_client;
 public  StringProperty age_client;
 public StringProperty groupe;
+public StringProperty datenaissance;
 
 
 public ClientDto(){
         super();
         }
 
-public ClientDto(String name,String prenom,String age,String groupe) {
+public ClientDto(String name,String prenom,String age,String groupe,String dateNaissance) {
         this.nom_client = new SimpleStringProperty(name);
         this.prenom_client = new SimpleStringProperty(prenom);
         this.age_client = new SimpleStringProperty(age);
         this.groupe = new SimpleStringProperty(groupe);
-
+        this.datenaissance=new SimpleStringProperty(dateNaissance);
 
         }
 }
