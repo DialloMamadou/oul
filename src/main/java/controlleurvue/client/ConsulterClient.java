@@ -122,8 +122,6 @@ public class ConsulterClient implements Initializable, Vue {
 
 
 
-
-
         ObservableList<Client> rooms = FXCollections.observableArrayList();
         Connection connection= DBconnexion.getConnection();
         try {
