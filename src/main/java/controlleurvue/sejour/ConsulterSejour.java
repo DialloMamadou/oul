@@ -7,6 +7,8 @@ import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
 import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.centre.CreerCentre;
+import daos.SejourDao;
+import daos.impl.SejourDaoImpl;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,6 +29,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import modele.Centre;
+import modele.Groupe;
 import modele.Sejour;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
@@ -35,6 +38,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -135,39 +139,13 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
 
+
         ObservableList<Sejour> rooms = FXCollections.observableArrayList();
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-
-            ResultSet rs=ps.executeQuery();
-
-            while(rs.next()){
-
-
-
-                PreparedStatement pss=(PreparedStatement)connection.prepareStatement("SELECT * FROM centre where " +
-                        "id_centre = "+rs.getInt(6));
-
-                ResultSet res=pss.executeQuery();
-                String s="";
-                while(res.next()){
-
-                    s=res.getString(2);
-
-
-                }
-
-
-
-                rooms.add(new Sejour(String.valueOf(rs.getInt(1)),String.valueOf(rs.getInt(2)),rs.getString(3),
-                        rs.getString(4),rs.getString(5),s));
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
+        List<Sejour> liste=sejourDao.listeSejour();
+        for(Sejour sejour:liste){
+            System.out.println("hihihihihihi");
+            rooms.add(sejour);
         }
-
 
         final TreeItem<Sejour> root = new RecursiveTreeItem<Sejour>(rooms, RecursiveTreeObject::getChildren);
 
@@ -187,8 +165,9 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
 
+    private SejourDao sejourDao;
     public void initialize(URL location, ResourceBundle resources) {
-
+        sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         loadallcentre("SELECT * FROM sejour");
     }
 
@@ -242,31 +221,7 @@ public class ConsulterSejour implements Initializable, Vue {
             sql = "SELECT * FROM sejour WHERE id_sejour ='" + search_text.getText().toString().trim() + "'";
         }
         loadallcentre(sql);
-       /* System.out.println(search_text.getText().toString());
 
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-
-            ResultSet rs=ps.executeQuery();
-
-            int cpt=0;
-            while(rs.next()){
-                cpt++;
-            }
-            if(cpt==0){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("centre recherche");
-                alert.setHeaderText("Information Dialog");
-                alert.setContentText("aucun centre avec cette id!");
-                alert.showAndWait();
-            }else{
-                this.controlleur.lancerCentreVueSpe(search_text.getText());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
-        }
-*/
     }
 
     public void EditerCentre(MouseEvent mouseEvent) {

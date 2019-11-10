@@ -29,6 +29,7 @@ import javafx.util.Duration;
 import modele.Client;
 import modele.Groupe;
 import modele.Sejour;
+import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
@@ -47,29 +48,17 @@ public class ConsulterClient implements Initializable, Vue {
     /**
      * Initializes the controller class.
      */
-
     private Controlleur controlleur;
-
-
-
-    String status=null;
     @FXML
     private JFXTreeTableView<Client> treeView;
     @FXML
     private JFXTextField search_text;
-
-
     @FXML
     private StackPane stackepane;
-
-
-
     private ClientDao clientDao;
 
 
-    public void loadAllClient(String sql){
-
-
+    public JFXTreeTableColumn<Client ,String> genererId(){
         JFXTreeTableColumn<Client,String> room_id=new JFXTreeTableColumn<>("Id");
         room_id.setPrefWidth(30);
         room_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
@@ -78,10 +67,11 @@ public class ConsulterClient implements Initializable, Vue {
                 return param.getValue().getValue().id;
             }
         });
+        return room_id;
 
+    }
 
-
-
+    public JFXTreeTableColumn<Client ,String> genererNom(){
         JFXTreeTableColumn<Client,String> duree=new JFXTreeTableColumn<>("nom");
         duree.setPrefWidth(100);
         duree.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
@@ -90,8 +80,11 @@ public class ConsulterClient implements Initializable, Vue {
                 return param.getValue().getValue().nom_client;
             }
         });
+        return duree;
+    }
 
 
+    public JFXTreeTableColumn<Client ,String> genererPrenom(){
 
         JFXTreeTableColumn<Client,String> date_debut=new JFXTreeTableColumn<>("prenom");
         date_debut.setPrefWidth(110);
@@ -102,6 +95,11 @@ public class ConsulterClient implements Initializable, Vue {
             }
         });
 
+        return date_debut;
+    }
+
+
+    public JFXTreeTableColumn<Client ,String> genererAge(){
 
         JFXTreeTableColumn<Client,String> date_fin=new JFXTreeTableColumn<>("age");
         date_fin.setPrefWidth(30);
@@ -111,9 +109,11 @@ public class ConsulterClient implements Initializable, Vue {
                 return param.getValue().getValue().age_client;
             }
         });
+        return date_fin;
+    }
 
 
-
+    public JFXTreeTableColumn<Client ,String> genererGroupe(){
 
         JFXTreeTableColumn<Client,String> type=new JFXTreeTableColumn<>(" groupe");
         type.setPrefWidth(110);
@@ -123,23 +123,32 @@ public class ConsulterClient implements Initializable, Vue {
                 return param.getValue().getValue().groupe;
             }
         });
+        return type;
+    }
 
 
+    public JFXTreeTableColumn<Client ,String> genererDateNaissance(){
 
-
-
-        JFXTreeTableColumn<Client,String> date=new JFXTreeTableColumn<>(" date naissance");
-        date.setPrefWidth(110);
-        date.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Client,String> type=new JFXTreeTableColumn<>(" groupe");
+        type.setPrefWidth(110);
+        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
-                return param.getValue().getValue().datenaissance;
+                return param.getValue().getValue().groupe;
             }
         });
+        return type;
+    }
 
 
 
-
+    public void loadAllClient(String sql){
+        JFXTreeTableColumn<Client,String> room_id=this.genererId();
+        JFXTreeTableColumn<Client,String> duree=this.genererNom();
+        JFXTreeTableColumn<Client,String> date_debut= this.genererPrenom();
+        JFXTreeTableColumn<Client,String> date_fin=this.genererAge();
+        JFXTreeTableColumn<Client,String> type=this.genererGroupe();
+        JFXTreeTableColumn<Client,String> date=this.genererDateNaissance();
         ObservableList<Client> rooms = FXCollections.observableArrayList();
         List<Client> liste=clientDao.listeClient();
         for(Client client:liste){
@@ -154,24 +163,11 @@ public class ConsulterClient implements Initializable, Vue {
 
     }
 
-
-
-
-
-
-
-
-
     public void initialize(URL location, ResourceBundle resources) {
 
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         loadAllClient("SELECT * FROM client");
     }
-
-
-
-
-
 
     public void close(javafx.scene.input.MouseEvent mouseEvent) {
         JFXDialogLayout dialogLayout=new JFXDialogLayout();
@@ -199,7 +195,6 @@ public class ConsulterClient implements Initializable, Vue {
 
     public void goBack(javafx.scene.input.MouseEvent mouseEvent) {
         this.controlleur.lancerPageClient();
-
     }
 
     public void setController(Controlleur controller) {
@@ -217,45 +212,17 @@ public class ConsulterClient implements Initializable, Vue {
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
 
-        int res=0;
-
-        String sql="DELETE FROM client WHERE id=?";
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-            if(search_text2.getText().length()!=0) {
-                ps.setString(1, search_text2.getText().toString());
-            }
-
-            res=ps.executeUpdate();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int res=clientDao.supprimerClient(search_text2.getText().toString());
 
         if(res>0){
-            Image image=new Image("img/mooo.png");
-            Notifications notification=Notifications.create()
-                    .title("finit")
-                    .text("client supprimer avec succss")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
+            Notification.affichageSucces("succes","client supprimer avec succes");
+
             loadAllClient("SELECT * FROM `client` WHERE 1");
 
             //updateStatus();
         }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
-                    .title("Error")
-                    .text("il y a eu une erreur dans la suppression")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
+            Notification.affichageEchec("echec","il y a eu erreur dans la suppression");
+
         }
     }
 

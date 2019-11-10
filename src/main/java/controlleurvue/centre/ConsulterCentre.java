@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import modele.Centre;
+import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
@@ -42,19 +43,13 @@ public class ConsulterCentre  implements Initializable, Vue {
     public JFXTextField search_text2;
     public JFXTextField search_text3;
     private Controlleur controlleur;
-
-
-
     String status=null;
     @FXML
     private JFXTreeTableView<Centre> treeView;
     @FXML
     private JFXTextField search_text;
-
-
     @FXML
     private StackPane stackepane;
-
 
 
     private JFXTreeTableColumn<Centre,String>creationTableColumCentreI(){
@@ -127,21 +122,11 @@ public class ConsulterCentre  implements Initializable, Vue {
     }
 
 
-
-
-
-
-
-
-
     public void loadallcentreParId(){
-
         JFXTreeTableColumn<Centre,String> room_id=this.creationTableColumCentreI();
         JFXTreeTableColumn<Centre,String> room_type=this.creationTableColumnomcentre();
         ObservableList<Centre> rooms = FXCollections.observableArrayList();
-
         Centre centre=centreDao.getCentreParId(search_text.getText().toString());
-
         if(centre!=null) {
             rooms.add(centre);
 
@@ -149,34 +134,19 @@ public class ConsulterCentre  implements Initializable, Vue {
             treeView.getColumns().setAll(room_id, room_type);
             treeView.setRoot(root);
             treeView.setShowRoot(false);
-        }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
-                    .title("Error")
-                    .text("aucun centre avec cette id en base")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
+        }else {
+            Notification.affichageEchec("echec", "aucun centre avec cette id en base");
             loadallcentre();
 
         }
-
-
     }
 
 
 
     public void initialize(URL location, ResourceBundle resources) {
         this.centreDao=new CentreDaoImpl(DBconnexion.getConnection());
-
         loadallcentre();
     }
-
-
-
-
 
 
     public void close(javafx.scene.input.MouseEvent mouseEvent) {
@@ -235,40 +205,15 @@ public class ConsulterCentre  implements Initializable, Vue {
 
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
-
         int res=0;
-
         if(search_text2.getText().length()!=0) {
-
             res=centreDao.supprimerCentre(search_text2.getText().toString());
         }
-
-
-
-
         if(res>0){
-            Image image=new Image("img/mooo.png");
-            Notifications notification=Notifications.create()
-                    .title("finit")
-                    .text("centre supprimer avec succss")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
+            Notification.affichageSucces("succes","centre supprimer avec succes");
             loadallcentre();
-
-            //updateStatus();
         }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
-                    .title("Error")
-                    .text("il y a eu une erreur dans la suppression")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
+           Notification.affichageEchec("echec","echec dans la suppresion du centre");
         }
     }
 

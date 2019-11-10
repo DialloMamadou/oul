@@ -28,14 +28,11 @@ public class CreerCentre implements Vue {
     public JFXTextField nom;
     public JFXTextField capacite;
     private Controlleur controlleur;
-
     public void back(MouseEvent mouseEvent) {
         this.controlleur.lancerPageCentre();
     }
-
     public void close(MouseEvent mouseEvent) {
     }
-
     public void book(MouseEvent mouseEvent) {
         int res=0;
         if(nom.getText().length()!=0) {
@@ -47,9 +44,7 @@ public class CreerCentre implements Vue {
             Notification.affichageEchec("echec","echec dans la creation du centre");
         }
     }
-
     private CentreDao centreDaoImpl;
-
     public void setController(Controlleur controller) {
         this.centreDaoImpl=new CentreDaoImpl(DBconnexion.getConnection());
         this.controlleur=controller;

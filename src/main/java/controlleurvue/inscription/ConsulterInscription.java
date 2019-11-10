@@ -263,31 +263,6 @@ public class ConsulterInscription implements Initializable, Vue {
             sql = "SELECT * FROM inscription WHERE id_inscription ='" + search_text.getText().toString().trim() + "'";
         }
         loadallcentre(sql);
-       /* System.out.println(search_text.getText().toString());
-
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-
-            ResultSet rs=ps.executeQuery();
-
-            int cpt=0;
-            while(rs.next()){
-                cpt++;
-            }
-            if(cpt==0){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("centre recherche");
-                alert.setHeaderText("Information Dialog");
-                alert.setContentText("aucun centre avec cette id!");
-                alert.showAndWait();
-            }else{
-                this.controlleur.lancerCentreVueSpe(search_text.getText());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
-        }
-*/
     }
 
     public void EditerCentre(MouseEvent mouseEvent) {

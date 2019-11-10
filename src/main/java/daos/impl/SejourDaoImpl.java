@@ -3,12 +3,17 @@ package daos.impl;
 import basededonnee.DBconnexion;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.sejour.CreerSejour;
+import daos.CentreDao;
 import daos.SejourDao;
+import modele.Centre;
+import modele.Groupe;
 import modele.Sejour;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,5 +51,38 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
         }
 
         return  res;
+    }
+
+    @Override
+    public List<Sejour> listeSejour() {
+        CentreDao centreDao=new CentreDaoImpl(DBconnexion.getConnection());
+        String sql="SELECT * FROM sejour";
+        List<Sejour>liste=new ArrayList<>();
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                Centre centre=centreDao.getCentreParId(rs.getString(6));
+                liste.add(new Sejour(rs.getString(1),rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4)
+                ,rs.getString(5),
+                        centre.nom_centre.get(),
+                        rs.getString(7),
+                        rs.getString(8),
+                      rs.getString(9),
+                        rs.getString(10)  ));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;
     }
 }
