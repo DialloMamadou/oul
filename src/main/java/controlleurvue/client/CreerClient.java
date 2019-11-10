@@ -35,6 +35,12 @@ public class CreerClient  implements Initializable, Vue {
     public ComboBox groupe;
     public TextField prenom;
     public TextField age;
+    public TextField portable;
+    public TextField observation;
+    public TextField email;
+    public TextField poste;
+    public DatePicker annee;
+    public TextField adresse;
 
     private Controlleur controlleur;
     @Override
@@ -83,7 +89,7 @@ public class CreerClient  implements Initializable, Vue {
 
 
         int res=0;
-        String sql="INSERT INTO client (nom_client,prenom_client,age_client,groupe_client) VALUES (?,?,?,?)";
+        String sql="INSERT INTO client (nom_client,prenom_client,age_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance) VALUES (?,?,?,?,?,?,?,?,?,?)";
         Connection connection= DBconnexion.getConnection();
         try {
 
@@ -100,6 +106,12 @@ public class CreerClient  implements Initializable, Vue {
             ps.setString(2, this.nom.getText().toString());
             ps.setString(3, this.age.getText().toString());
             ps.setInt(4, s);
+            ps.setString(5,this.portable.getText().toString());
+            ps.setString(6,this.observation.getText().toString());
+            ps.setString(7,this.email.getText().toString());
+            ps.setString(8,this.adresse.getText().toString());
+            ps.setString(9,this.poste.getText().toString());
+            ps.setString(10,this.annee.getValue().toString());
 
 
             res=ps.executeUpdate();
