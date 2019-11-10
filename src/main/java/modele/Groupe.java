@@ -8,7 +8,7 @@ public class Groupe  extends RecursiveTreeObject<Groupe> {
 
 
     public StringProperty id;
-    public StringProperty nom_centre;
+    public StringProperty nom_groupe;
 
     public Groupe(){
         super();
@@ -16,7 +16,7 @@ public class Groupe  extends RecursiveTreeObject<Groupe> {
 
     public Groupe(String id, String name) {
         this.id = new SimpleStringProperty(id);
-        this.nom_centre = new SimpleStringProperty(name);
+        this.nom_groupe = new SimpleStringProperty(name);
 
     }
 }

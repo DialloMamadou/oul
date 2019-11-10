@@ -19,6 +19,7 @@ public interface GroupeDao {
 
     List<Groupe> listeGroupes();
 
+    Groupe trouverGroupeParNomGroupe(String nom_groupe);
 
     Groupe getGroupeParId(String id);
 

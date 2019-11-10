@@ -65,6 +65,7 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
     public List<Groupe> listeGroupes() {
         String sql="SELECT * FROM groupe";
         List<Groupe>liste=new ArrayList<>();
+
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
@@ -81,6 +82,30 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
         }
 
         return liste;    }
+
+    @Override
+    public Groupe trouverGroupeParNomGroupe(String nom_groupe) {
+        String sql="SELECT * FROM groupe WHERE nom_groupe ='"+nom_groupe+"'";
+        Groupe liste=null;
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste=new Groupe(rs.getInt(1)+"",rs.getString(2));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;
+    }
+
+
 
     @Override
     public Groupe getGroupeParId(String id) {
