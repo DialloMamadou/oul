@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -13,15 +13,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-
-
-<StackPane fx:id="stack" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.inscription.InscriptionScreen">
+<StackPane fx:id="stack" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.inscription.InscriptionScreen">
     <children>
-        <AnchorPane maxHeight="700.0" maxWidth="800.0" minHeight="700.0" minWidth="800.0" prefHeight="700.0" prefWidth="800.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
+        <AnchorPane prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
             <children>
-                <Pane fx:id="pane_1" layoutX="57.0" layoutY="162.0" onMouseClicked="#inscrireClientSejour" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseEntered="#souris_dessus_1" onMouseExited="#souris_sort_1" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+                <Pane fx:id="pane_1" layoutX="334.0" layoutY="395.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#inscrireClientSejour" onMouseEntered="#souris_dessus_1" onMouseExited="#souris_sort_1" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
                     <children>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0"  pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/003-student.png" />
                             </image>
@@ -29,7 +27,7 @@
                         <Label layoutX="49.0" layoutY="145.0" text="faire une inscription" />
                     </children>
                 </Pane>
-                <Pane fx:id="pane_2" layoutX="321.0" layoutY="165.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consulterListeInscription" onMouseEntered="#souris_dessus_2" onMouseExited="#souris_sort_2" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                <Pane fx:id="pane_2" layoutX="334.0" layoutY="162.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consulterListeInscription" onMouseEntered="#souris_dessus_2" onMouseExited="#souris_sort_2" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -40,9 +38,9 @@
                     </children>
                 </Pane>
 
-                <Pane fx:id="pane_3" layoutX="590.0" layoutY="162.0" onMouseClicked="#goback" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseEntered="#souris_dessus_3" onMouseExited="#souris_sort_3" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+                <Pane fx:id="pane_3" layoutX="67.0" layoutY="395.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#goback" onMouseEntered="#souris_dessus_3" onMouseExited="#souris_sort_3" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
                     <children>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0"  pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/010-home.png" />
                             </image>
@@ -50,6 +48,26 @@
                         <Label layoutX="49.0" layoutY="145.0" text="retour acceuil" />
                     </children>
                 </Pane>
+            <Pane fx:id="pane_11" layoutX="74.0" layoutY="162.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#inscrireClientSejour" onMouseEntered="#souris_dessus_1" onMouseExited="#souris_sort_1" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/003-student.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="49.0" layoutY="145.0" text="faire une reservation" />
+               </children>
+            </Pane>
+            <Pane fx:id="pane_21" layoutX="570.0" layoutY="162.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consulterListeInscription" onMouseEntered="#souris_dessus_2" onMouseExited="#souris_sort_2" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/delete.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="49.0" layoutY="145.0" text="consulter les annulations" />
+               </children>
+            </Pane>
 
             </children>
         </AnchorPane>

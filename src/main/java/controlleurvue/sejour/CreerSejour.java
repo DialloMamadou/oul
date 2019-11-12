@@ -4,6 +4,10 @@ import basededonnee.DBconnexion;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
 import controlleurvue.centre.ConsulterCentre;
+import daos.CentreDao;
+import daos.SejourDao;
+import daos.impl.CentreDaoImpl;
+import daos.impl.SejourDaoImpl;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
@@ -15,6 +19,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import modele.Centre;
+import modele.Sejour;
+import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
@@ -22,6 +28,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,32 +42,25 @@ public class CreerSejour implements Initializable, Vue {
     public DatePicker dateF;
     public ComboBox centre;
     public TextField duree;
+    public TextField capacite;
+    public TextField agemax;
+    public TextField agemin;
+    public TextField prix;
+
+    private SejourDao sejourDao;
+    private CentreDao centreDao;
 
     private  Controlleur controlleur;
     @Override
     public void setController(Controlleur controller) {
         this.controlleur=controller;
-
+        sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
+        centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         Connection connection= DBconnexion.getConnection();
-        try {
-            String sql="SELECT * FROM centre";
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-
-            ResultSet rs=ps.executeQuery();
-
-            while(rs.next()){
-
-                this.centre.getItems().add(rs.getString(2));
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
+        List<Centre> centres=centreDao.listeCentres();
+        for(Centre centre:centres){
+            this.centre.getItems().add(centre.nom_centre.get());
         }
-
-
-
-
-
     }
 
     public void back(MouseEvent mouseEvent) {
@@ -76,67 +76,25 @@ public class CreerSejour implements Initializable, Vue {
     public void book(MouseEvent mouseEvent) {
 
 
-        String sql2 = "SELECT * FROM centre WHERE nom_centre ='" + this.centre.getValue().toString().trim() + "'";
-
-
-
-        int res=0;
-        String sql="INSERT INTO sejour (duree,date_debut,date_fin,type_sejour,centre_id) VALUES (?,?,?,?,?)";
-        Connection connection= DBconnexion.getConnection();
-        try {
-
-            PreparedStatement preparedStatement2=(PreparedStatement)connection.prepareStatement(sql2);
-            ResultSet rs=preparedStatement2.executeQuery();
-            int s=0;
-            while(rs.next()){
-                s=rs.getInt(1);
-
-            }            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-            ps.setString(1, this.duree.getText().toString());
-            ps.setString(2, this.dateD.getValue().toString());
-            ps.setString(3, this.dateF.getValue().toString());
-            ps.setString(4, this.type.getText().toString());
-            ps.setInt(5,s );
-
-
-            res=ps.executeUpdate();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CreerSejour.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        Centre centre=centreDao.trouverParNomCentre(this.centre.getValue().toString());
+        String id=centre.id.get();
+        String duree= this.duree.getText().toString();
+        String datedebut= this.dateD.getValue().toString();
+       String datefin= this.dateF.getValue().toString();
+        String type=this.type.getText().toString();
+        String max=this.agemax.getText().toString();
+        String min=this.agemin.getText().toString();
+        String prix=this.prix.getText().toString();
+        String capacite=this.capacite.getText().toString();
+        Sejour sejour=new Sejour(duree,datedebut,datefin,type,id,max,min,capacite,prix);
+        int res=sejourDao.insererSejour(sejour);
         if(res>0){
-            Image image=new Image("img/mooo.png");
-            Notifications notification=Notifications.create()
-                    .title("Done")
-                    .text("Sejour creer avec succes")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
-         //   updateStatus();
+            Notification.affichageSucces("succes","Sejour creer avec succes");
+
         }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
-                    .title("Error")
-                    .text("echec dans la creation du centre")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
+            Notification.affichageEchec("echec","echec dans la creation du sejour");
+
         }
-
-
-
-
-
-        System.out.println("data =>"+ this.dateD.getValue().toString());
-
-
-
-
     }
 
     @Override

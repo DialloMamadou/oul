@@ -5,6 +5,7 @@ import controlleurvue.centre.CentreScreen;
 import controlleurvue.centre.CentreVueSpe;
 import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.client.ClientScreen;
+import controlleurvue.client.ConsulterClient;
 import controlleurvue.client.CreerClient;
 import controlleurvue.groupe.ConsulterGroupe;
 import controlleurvue.groupe.CreerGroupe;
@@ -63,9 +64,11 @@ public class FabriqueVue{
             view.setController(controlleur);
 
             stage.setTitle(title);
-            Scene scene=new Scene(root,800,700);
+            Scene scene=new Scene(root);
 
             stage.setScene(scene);
+          //  stage.setFullScreen(true);
+            stage.centerOnScreen();
             stage.show();
 
 
@@ -104,6 +107,8 @@ public class FabriqueVue{
 
     }
 
+    Parent root;
+
     public void creerVueCreeGroupe(Controlleur c) {
         //load(GroupeScreen.class.getResource("/vue/creerGroupe.fxml"), "ecran.");
 
@@ -118,7 +123,7 @@ public class FabriqueVue{
             view.setController(c);
 
             stage.setTitle("ehi");
-            Scene scene=new Scene(root,800,700);
+            Scene scene=new Scene(root);
 
             stage.setScene(scene);
             stage.show();
@@ -168,6 +173,8 @@ public class FabriqueVue{
 
     public void creerConsulterClientVue() {
         load(CreerClient.class.getResource("/vue/consulterClient.fxml"), "ecran.");
+
+
 
     }
 
