@@ -54,29 +54,29 @@ public class ConsulterGroupe implements Initializable, Vue {
 
 
     private JFXTreeTableColumn<Groupe,String> creerGroupeId(){
-        JFXTreeTableColumn<Groupe,String> room_id=new JFXTreeTableColumn<>("groupe Id");
-        room_id.setPrefWidth(100);
-        room_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Groupe,String> groupe_id=new JFXTreeTableColumn<>("groupe Id");
+        groupe_id.setPrefWidth(100);
+        groupe_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
                 return param.getValue().getValue().id;
             }
         });
-        return room_id;
+        return groupe_id;
     }
 
 
     private JFXTreeTableColumn<Groupe,String> creernomgroupe(){
-        JFXTreeTableColumn<Groupe,String> room_type=new JFXTreeTableColumn<>("nom du groupe");
-        room_type.setPrefWidth(110);
-        room_type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Groupe,String> groupe_nom=new JFXTreeTableColumn<>("nom du groupe");
+        groupe_nom.setPrefWidth(110);
+        groupe_nom.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
                 return param.getValue().getValue().nom_groupe;
             }
         });
 
-        return room_type;
+        return groupe_nom;
     }
 
 
@@ -84,20 +84,15 @@ public class ConsulterGroupe implements Initializable, Vue {
     public void loadallgroupe(){
 
 
-        JFXTreeTableColumn<Groupe,String> room_id=this.creerGroupeId();
-
-
-
-        JFXTreeTableColumn<Groupe,String> room_type=this.creernomgroupe();
-
-
-        ObservableList<Groupe> rooms = FXCollections.observableArrayList();
+        JFXTreeTableColumn<Groupe,String> groupe_id=this.creerGroupeId();
+        JFXTreeTableColumn<Groupe,String> groupe_nom=this.creernomgroupe();
+        ObservableList<Groupe> groupes = FXCollections.observableArrayList();
         List<Groupe> liste=groupeDao.listeGroupes();
         for(Groupe groupe:liste){
-            rooms.add(groupe);
+            groupes.add(groupe);
         }
-        final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(rooms, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(room_id,room_type);
+        final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(groupes, RecursiveTreeObject::getChildren);
+        treeView.getColumns().setAll(groupe_id,groupe_nom);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
@@ -169,23 +164,16 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
     private void loadAllgroupeParId() {
-
-
-        JFXTreeTableColumn<Groupe,String> room_id=this.creerGroupeId();
-
-
-
-        JFXTreeTableColumn<Groupe,String> room_type=this.creernomgroupe();
-
-        ObservableList<Groupe> rooms = FXCollections.observableArrayList();
-
+        JFXTreeTableColumn<Groupe,String> groupe_id=this.creerGroupeId();
+        JFXTreeTableColumn<Groupe,String> groupe_nom=this.creernomgroupe();
+        ObservableList<Groupe> groupes = FXCollections.observableArrayList();
         Groupe groupe=this.groupeDao.getGroupeParId(search_text.getText().toString());
 
         if(groupe!=null) {
-            rooms.add(groupe);
+            groupes.add(groupe);
 
-            final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(rooms, RecursiveTreeObject::getChildren);
-            treeView.getColumns().setAll(room_id, room_type);
+            final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(groupes, RecursiveTreeObject::getChildren);
+            treeView.getColumns().setAll(groupe_id, groupe_nom);
             treeView.setRoot(root);
             treeView.setShowRoot(false);
         }else{
