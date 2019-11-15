@@ -212,6 +212,7 @@ public class ConsulterCentre  implements Initializable, Vue {
         if(res>0){
             Notification.affichageSucces("succes","centre supprimer avec succes");
             loadallcentre();
+
         }else{
            Notification.affichageEchec("echec","echec dans la suppresion du centre");
         }

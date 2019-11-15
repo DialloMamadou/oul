@@ -49,5 +49,6 @@ public class CreerCentre implements Vue {
     public void setController(Controlleur controller) {
         this.centreDaoImpl=new CentreDaoImpl(DBconnexion.getConnection());
         this.controlleur=controller;
+
     }
 }
