@@ -26,7 +26,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
     @Override
     public int insererClient(Client client) {
-        String sql="INSERT INTO client (nom_client,prenom_client,age_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        String sql="INSERT INTO client (nom_client,prenom_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance) VALUES (?,?,?,?,?,?,?,?,?)";
 
         int res=0;
         try {
@@ -38,14 +38,13 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
             ps.setString(1, client.prenom_client.get());
             ps.setString(2, client.nom_client.get());
-            ps.setString(3, client.age_client.get());
-            ps.setString(4, client.groupe.get());
-            ps.setString(5,client.numero.get());
-            ps.setString(6,client.observation.get());
-            ps.setString(7,client.email.get());
-            ps.setString(8,client.adresse.get());
-            ps.setString(9,client.codePostale.get());
-            ps.setString(10,client.datenaissance.get());
+            ps.setString(3, client.groupe.get());
+            ps.setString(4,client.numero.get());
+            ps.setString(5,client.observation.get());
+            ps.setString(6,client.email.get());
+            ps.setString(7,client.adresse.get());
+            ps.setString(8,client.codePostale.get());
+            ps.setString(9,client.datenaissance.get());
 
 
 
@@ -68,24 +67,29 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
     @Override
     public List<Client> listeClient() {
+        System.out.println("xxxx");
 
         GroupeDao groupeDao=new GroupeDaoImpl(connect);
 
 
-        String sql="SELECT * FROM client";
+        String sql="SELECT * FROM client ";
         List<Client>liste=new ArrayList<>();
 
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
 
+
             while(rs.next()){
 
-                Groupe groupe=groupeDao.getGroupeParId(rs.getString(5));
+                System.out.println("xxxx1");
+                Groupe groupe=groupeDao.getGroupeParId(rs.getString(4));
                 liste.add(new Client(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
-                        rs.getString(4),groupe.nom_groupe.get(),rs.getString(11),
+                        groupe.nom_groupe.get(),rs.getString(5),
                         rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),
-                    rs.getString(10)));
+                        rs.getString(10)));
+
+
 
             }
 
@@ -98,7 +102,33 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
     }
 
     @Override
-    public Client getClientParId(String id) {
-        return null;
+    public Client getClientParId(String id){
+    String sql="SELECT * FROM Client WHERE id ='"+id+"'";
+    Client client=null;
+        try{
+        PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+        ResultSet rs=ps.executeQuery();
+
+        while(rs.next()){
+
+            client=new Client(rs.getString(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4),
+                    rs.getString(5)
+            ,rs.getString(6),
+                    rs.getString(7),
+                    rs.getString(8),
+                    rs.getString(9),
+                    rs.getString(10));
+
+        }
+
+
+    }catch (Exception e){
+
     }
+
+        return client;
+}
 }

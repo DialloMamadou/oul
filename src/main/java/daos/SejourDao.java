@@ -1,5 +1,6 @@
 package daos;
 
+import javafx.beans.property.StringProperty;
 import modele.Groupe;
 import modele.Sejour;
 
@@ -14,5 +15,8 @@ public interface SejourDao {
     List<Sejour> listeSejour();
 
 
+    Sejour getSejourParId(String id_sejour);
+
+    int supprimerSejourParid(String toString);
 }
 

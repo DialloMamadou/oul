@@ -3,10 +3,13 @@ package controlleurvue.inscription;
 import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
-import controlleurvue.centre.ConsulterCentre;
-import controlleurvue.centre.CreerCentre;
+import daos.ClientDao;
+import daos.InscriptionDao;
+import daos.SejourDao;
+import daos.impl.ClientDaoImpl;
+import daos.impl.InscriptionDaoImpl;
+import daos.impl.SejourDaoImpl;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,28 +17,21 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import javafx.util.Duration;
+import modele.Client;
 import modele.Inscription;
 import modele.Sejour;
-import org.controlsfx.control.Notifications;
+import notification.Notification;
 import principale.Controlleur;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ConsulterInscription implements Initializable, Vue {
     public JFXTextField search_text2;
@@ -60,140 +56,109 @@ public class ConsulterInscription implements Initializable, Vue {
 
 
 
+    public JFXTreeTableColumn<Inscription,String>genererInscriptionId(){
 
-
-    public void loadallcentre(String sql){
-
-
-        JFXTreeTableColumn<Inscription,String> room_id=new JFXTreeTableColumn<>(" Id");
-        room_id.setPrefWidth(100);
-        room_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Inscription,String> inscription_id=new JFXTreeTableColumn<>(" Id");
+        inscription_id.setPrefWidth(100);
+        inscription_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Inscription, String> param) {
                 return param.getValue().getValue().id;
             }
         });
+        return inscription_id;
+    }
 
-
-
-
-        JFXTreeTableColumn<Inscription,String> duree=new JFXTreeTableColumn<>("paiement");
-        duree.setPrefWidth(100);
-        duree.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
+    public JFXTreeTableColumn<Inscription,String> genererInscriptionPaiement(){
+        JFXTreeTableColumn<Inscription,String> inscription_paiement=new JFXTreeTableColumn<>("paiement");
+        inscription_paiement.setPrefWidth(100);
+        inscription_paiement.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Inscription, String> param) {
                 return param.getValue().getValue().paiement;
             }
         });
+        return inscription_paiement;
 
 
+    }
 
-        JFXTreeTableColumn<Inscription,String> date_debut=new JFXTreeTableColumn<>("observation");
-        date_debut.setPrefWidth(110);
-        date_debut.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
+
+    public JFXTreeTableColumn<Inscription,String> genererInscriptionObservation(){
+        JFXTreeTableColumn<Inscription,String> inscription_observation=new JFXTreeTableColumn<>("observation");
+        inscription_observation.setPrefWidth(110);
+        inscription_observation.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Inscription, String> param) {
                 return param.getValue().getValue().observation;
             }
         });
+        return inscription_observation;
+    }
 
 
-        JFXTreeTableColumn<Inscription,String> date_fin=new JFXTreeTableColumn<>("date inscription");
-        date_fin.setPrefWidth(110);
-        date_fin.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
+    public JFXTreeTableColumn<Inscription,String> genererDataInscriptioninscription(){
+        JFXTreeTableColumn<Inscription,String> inscription_dateinscription=new JFXTreeTableColumn<>("date inscription");
+        inscription_dateinscription.setPrefWidth(110);
+        inscription_dateinscription.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Inscription, String> param) {
                 return param.getValue().getValue().dateinscription;
             }
         });
+        return  inscription_dateinscription;
+    }
 
 
-
-
-        JFXTreeTableColumn<Inscription,String> type=new JFXTreeTableColumn<>(" Client");
-        type.setPrefWidth(110);
-        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
+    public JFXTreeTableColumn<Inscription,String> genererInscriptionClient(){
+        JFXTreeTableColumn<Inscription,String> inscription_client=new JFXTreeTableColumn<>(" Client");
+        inscription_client.setPrefWidth(110);
+        inscription_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Inscription, String> param) {
                 return param.getValue().getValue().code_client;
             }
         });
+        return inscription_client;
+    }
 
+    public  JFXTreeTableColumn<Inscription,String> genererInscriptionSejour(){
 
-        JFXTreeTableColumn<Inscription,String> centre=new JFXTreeTableColumn<>(" Sejour");
-        centre.setPrefWidth(110);
-        centre.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Inscription,String> inscription_sejour=new JFXTreeTableColumn<>(" Sejour");
+        inscription_sejour.setPrefWidth(110);
+        inscription_sejour.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Inscription, String> param) {
                 return param.getValue().getValue().id_sejour;
             }
         });
+        return  inscription_sejour;
+    }
+
+    public void chargertouslesinscriptions(){
+        JFXTreeTableColumn<Inscription,String> inscription_id=this.genererInscriptionId();
+        JFXTreeTableColumn<Inscription,String> inscription_paiement=this.genererInscriptionPaiement();
+        JFXTreeTableColumn<Inscription,String> inscription_observation=this.genererInscriptionObservation();
+        JFXTreeTableColumn<Inscription,String> inscription_dateinscription=this.genererDataInscriptioninscription();
+        JFXTreeTableColumn<Inscription,String> inscription_client=this.genererInscriptionClient();
+        JFXTreeTableColumn<Inscription,String> inscription_sejour=this.genererInscriptionSejour();
+        ObservableList<Inscription> inscriptions = FXCollections.observableArrayList();
+        List<Inscription> inscription=inscriptionDao.getInscriptions();
+        for(Inscription inscription1: inscription){
 
 
+            Client client=clientDao.getClientParId(inscription1.code_client.get());
+            System.out.println("id sejour :"+inscription1.id_sejour.get());
+            Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
+            String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
+            String id_sejour=sejour.id.get();
+            Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),inscription1.observation.get()
+            ,inscription1.dateinscription.get(),nom_client,id_sejour);
 
-
-
-        ObservableList<Inscription> rooms = FXCollections.observableArrayList();
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-
-            ResultSet rs=ps.executeQuery();
-
-            while(rs.next()){
-
-
-
-                PreparedStatement pss=(PreparedStatement)connection.prepareStatement(
-                        "SELECT * FROM client where id ="+rs.getString(5)
-                );
-
-                ResultSet res=pss.executeQuery();
-                String client="";
-                while(res.next()){
-
-                    client=res.getString(2)+" "+res.getString(3);
-
-
-                }
-
-                System.out.println("type "+rs.getInt(6));
-
-
-                PreparedStatement ps2=(PreparedStatement)connection.prepareStatement(
-                        "SELECT * FROM sejour where id_sejour ="+rs.getInt(6)
-                );
-
-                ResultSet rest=ps2.executeQuery();
-                String sejour="";
-                while(rest.next()){
-
-                    sejour=rest.getString(5);
-
-
-                }
-
-
-
-
-
-
-                rooms.add(new Inscription(String.valueOf(rs.getInt(1)),
-                        String.valueOf(rs.getString(2))
-                        ,rs.getString(3),
-                        rs.getString(4)
-                        ,client,sejour));
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
+            inscriptions.add(inscription2);
         }
-
-
-        final TreeItem<Inscription> root = new RecursiveTreeItem<Inscription>(rooms, RecursiveTreeObject::getChildren);
-
-        treeView.getColumns().setAll(room_id,duree,date_debut,date_fin,type,centre);
-
+        final TreeItem<Inscription> root = new RecursiveTreeItem<Inscription>(inscriptions, RecursiveTreeObject::getChildren);
+        treeView.getColumns().setAll(inscription_id,inscription_paiement,inscription_observation,inscription_dateinscription,inscription_client,inscription_sejour);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
@@ -206,11 +171,16 @@ public class ConsulterInscription implements Initializable, Vue {
 
 
 
+    private ClientDao clientDao;
+    private InscriptionDao inscriptionDao;
+    private SejourDao sejourDao;
 
 
     public void initialize(URL location, ResourceBundle resources) {
-
-        loadallcentre("SELECT * FROM inscription");
+        clientDao=new ClientDaoImpl(DBconnexion.getConnection());
+        sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
+        inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
+        chargertouslesinscriptions();
     }
 
 
@@ -252,63 +222,20 @@ public class ConsulterInscription implements Initializable, Vue {
     }
 
     public void cherchecentreparid(MouseEvent mouseEvent) {
-
-
-        //loadAllRooms("SELECT * FROM chambre WHERE numero ='"+search_text.getText().toString().trim()+"'");
-        String sql="";
-        if(search_text.getText().toString().length()==0){
-            sql="SELECT * FROM `inscription` WHERE 1";
-        }else {
-
-            sql = "SELECT * FROM inscription WHERE id_inscription ='" + search_text.getText().toString().trim() + "'";
-        }
-        loadallcentre(sql);
+        chargertouslesinscriptions();
     }
 
     public void EditerCentre(MouseEvent mouseEvent) {
     }
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
-
-        int res=0;
-
-        String sql="DELETE FROM inscription WHERE id_inscription=?";
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-            if(search_text2.getText().length()!=0) {
-                ps.setString(1, search_text2.getText().toString());
-            }
-
-            res=ps.executeUpdate();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        int res=inscriptionDao.supperimerParId(search_text2.getText().toString());
         if(res>0){
-            Image image=new Image("img/mooo.png");
-            Notifications notification=Notifications.create()
-                    .title("finit")
-                    .text("sejour supprimer avec succss")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
-            loadallcentre("SELECT * FROM `inscription` WHERE 1");
-
-            //updateStatus();
+            Notification.affichageSucces("sucess","inscription supprimer avec succes");
+            chargertouslesinscriptions();
         }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
-                    .title("Error")
-                    .text("il y a eu une erreur dans la suppression")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
+            Notification.affichageEchec("echec","il y a eu un erreur dans la supresion de lisncription");
+
         }
     }
 

@@ -2,10 +2,13 @@ package daos.impl;
 
 import basededonnee.DBconnexion;
 import com.mysql.jdbc.PreparedStatement;
+import controlleurvue.centre.CreerCentre;
 import controlleurvue.sejour.CreerSejour;
 import daos.CentreDao;
 import daos.SejourDao;
+import javafx.beans.property.StringProperty;
 import modele.Centre;
+import modele.Client;
 import modele.Groupe;
 import modele.Sejour;
 
@@ -84,5 +87,62 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
         }
 
         return liste;
+    }
+
+    @Override
+    public Sejour getSejourParId(String id_sejour) {
+        String sql="SELECT * FROM sejour WHERE id_sejour ='"+id_sejour+"'";
+        Sejour sejour=null;
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                sejour=new Sejour(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5)
+                        ,rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10));
+                System.out.println("trouvee");
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+
+        return sejour;
+
+    }
+
+    @Override
+    public int supprimerSejourParid(String toString) {
+
+
+        int res=0;
+
+        String sql="DELETE FROM sejour WHERE id_sejour=?";
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
+            if(toString.length()!=0) {
+                ps.setString(1, toString);
+            }
+
+            res=ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return res;
     }
 }

@@ -3,13 +3,9 @@ package controlleurvue.sejour;
 import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
-import controlleurvue.centre.ConsulterCentre;
-import controlleurvue.centre.CreerCentre;
 import daos.SejourDao;
 import daos.impl.SejourDaoImpl;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,31 +13,19 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import javafx.util.Duration;
-import modele.Centre;
-import modele.Groupe;
 import modele.Sejour;
-import org.controlsfx.control.Notifications;
+import notification.Notification;
 import principale.Controlleur;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ConsulterSejour implements Initializable, Vue {
     public JFXTextField search_text2;
@@ -68,12 +52,12 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
 
-    public void loadallcentre(String sql){
+    public void chargerTousLesSejours(){
 
 
-        JFXTreeTableColumn<Sejour,String> room_id=new JFXTreeTableColumn<>("sejour Id");
-        room_id.setPrefWidth(100);
-        room_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Sejour,String> sejour_id=new JFXTreeTableColumn<>("sejour Id");
+        sejour_id.setPrefWidth(100);
+        sejour_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Sejour, String> param) {
                 return param.getValue().getValue().id;
@@ -83,9 +67,9 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
 
-        JFXTreeTableColumn<Sejour,String> duree=new JFXTreeTableColumn<>("duree");
-        duree.setPrefWidth(100);
-        duree.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Sejour,String> sejour_duree =new JFXTreeTableColumn<>("sejour_duree");
+        sejour_duree.setPrefWidth(100);
+        sejour_duree.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Sejour, String> param) {
                 return param.getValue().getValue().duree;
@@ -94,9 +78,9 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
 
-        JFXTreeTableColumn<Sejour,String> date_debut=new JFXTreeTableColumn<>("date debut");
-        date_debut.setPrefWidth(110);
-        date_debut.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Sejour,String> sejour_datedebut=new JFXTreeTableColumn<>("date debut");
+        sejour_datedebut.setPrefWidth(110);
+        sejour_datedebut.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Sejour, String> param) {
                 return param.getValue().getValue().date_debut;
@@ -104,9 +88,9 @@ public class ConsulterSejour implements Initializable, Vue {
         });
 
 
-        JFXTreeTableColumn<Sejour,String> date_fin=new JFXTreeTableColumn<>("date fin");
-        date_fin.setPrefWidth(110);
-        date_fin.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Sejour,String> sejour_datefin=new JFXTreeTableColumn<>("date fin");
+        sejour_datefin.setPrefWidth(110);
+        sejour_datefin.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Sejour, String> param) {
                 return param.getValue().getValue().date_fin;
@@ -116,9 +100,9 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
 
-        JFXTreeTableColumn<Sejour,String> type=new JFXTreeTableColumn<>(" type");
-        type.setPrefWidth(110);
-        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Sejour,String> sejour_type=new JFXTreeTableColumn<>(" type");
+        sejour_type.setPrefWidth(110);
+        sejour_type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Sejour, String> param) {
                 return param.getValue().getValue().type;
@@ -126,9 +110,9 @@ public class ConsulterSejour implements Initializable, Vue {
         });
 
 
-        JFXTreeTableColumn<Sejour,String> centre=new JFXTreeTableColumn<>(" centre");
-        centre.setPrefWidth(110);
-        centre.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Sejour,String> sejour_centre=new JFXTreeTableColumn<>(" centre");
+        sejour_centre.setPrefWidth(110);
+        sejour_centre.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Sejour, String> param) {
                 return param.getValue().getValue().nom_centre;
@@ -149,7 +133,7 @@ public class ConsulterSejour implements Initializable, Vue {
 
         final TreeItem<Sejour> root = new RecursiveTreeItem<Sejour>(rooms, RecursiveTreeObject::getChildren);
 
-        treeView.getColumns().setAll(room_id,duree,date_debut,date_fin,type,centre);
+        treeView.getColumns().setAll(sejour_id, sejour_duree,sejour_datedebut,sejour_datefin,sejour_type,sejour_centre);
 
         treeView.setRoot(root);
         treeView.setShowRoot(false);
@@ -168,7 +152,7 @@ public class ConsulterSejour implements Initializable, Vue {
     private SejourDao sejourDao;
     public void initialize(URL location, ResourceBundle resources) {
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
-        loadallcentre("SELECT * FROM sejour");
+        chargerTousLesSejours();
     }
 
 
@@ -210,17 +194,7 @@ public class ConsulterSejour implements Initializable, Vue {
     }
 
     public void cherchecentreparid(MouseEvent mouseEvent) {
-
-
-        //loadAllRooms("SELECT * FROM chambre WHERE numero ='"+search_text.getText().toString().trim()+"'");
-        String sql="";
-        if(search_text.getText().toString().length()==0){
-            sql="SELECT * FROM `sejour` WHERE 1";
-        }else {
-
-            sql = "SELECT * FROM sejour WHERE id_sejour ='" + search_text.getText().toString().trim() + "'";
-        }
-        loadallcentre(sql);
+        chargerTousLesSejours();
 
     }
 
@@ -228,46 +202,13 @@ public class ConsulterSejour implements Initializable, Vue {
     }
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
-
-        int res=0;
-
-        String sql="DELETE FROM sejour WHERE id_sejour=?";
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-            if(search_text2.getText().length()!=0) {
-                ps.setString(1, search_text2.getText().toString());
-            }
-
-            res=ps.executeUpdate();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        int res=sejourDao.supprimerSejourParid(search_text2.getText().toString());
         if(res>0){
-            Image image=new Image("img/mooo.png");
-            Notifications notification=Notifications.create()
-                    .title("finit")
-                    .text("sejour supprimer avec succss")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
-            loadallcentre("SELECT * FROM `sejour` WHERE 1");
-
-            //updateStatus();
+            Notification.affichageSucces("succes","suces dans la supression du sejour");
+            chargerTousLesSejours();
         }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
-                    .title("Error")
-                    .text("il y a eu une erreur dans la suppression")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
+            Notification.affichageEchec("echec","il y a eu un probleme lors de la supresion du sejour" );
+
         }
     }
 

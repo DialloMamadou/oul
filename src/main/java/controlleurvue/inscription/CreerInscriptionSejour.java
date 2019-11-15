@@ -197,7 +197,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
 
                 rooms.add(new ClientDto(rs.getString(2),rs.getString(3),
-                        rs.getString(4),s,rs.getString(11)));
+                        rs.getString(4),s,rs.getString(10)));
 
             }
         } catch (SQLException ex) {

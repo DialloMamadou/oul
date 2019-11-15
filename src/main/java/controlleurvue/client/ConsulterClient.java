@@ -141,6 +141,7 @@ public class ConsulterClient implements Initializable, Vue {
         JFXTreeTableColumn<Client,String> client_datenaissance=this.genererDateNaissance();
         ObservableList<Client> clients = FXCollections.observableArrayList();
         List<Client> liste=clientDao.listeClient();
+        System.out.println("nb clients "+liste.size());
         for(Client client:liste){
             clients.add(client);
         }

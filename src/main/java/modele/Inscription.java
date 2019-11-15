@@ -10,17 +10,18 @@ public class Inscription extends RecursiveTreeObject<Inscription> {
 
     public StringProperty id;
     public StringProperty paiement;
-    public  StringProperty observation;
     public StringProperty  dateinscription;
     public StringProperty code_client;
     public StringProperty id_sejour;
+    public  StringProperty observation;
+
 
     public Inscription(){
         super();
     }
 
 
-    public Inscription(String id, String paiement, String observation, String dateinscription, String code_client, String id_sejour) {
+    public Inscription(String id, String paiement, String dateinscription, String code_client, String id_sejour, String observation) {
         this.id = new SimpleStringProperty(id);
         this.paiement = new SimpleStringProperty(paiement);
         this.observation =new SimpleStringProperty( observation);
