@@ -69,16 +69,16 @@ public class ConsulterCentre  implements Initializable, Vue {
 
 
     private JFXTreeTableColumn<Centre,String>creationTableColumnomcentre(){
-        JFXTreeTableColumn<Centre,String> room_type=new JFXTreeTableColumn<>("nom du centre");
-        room_type.setPrefWidth(110);
-        room_type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Centre, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Centre,String> colonneNomCentre=new JFXTreeTableColumn<>("nom du centre");
+        colonneNomCentre.setPrefWidth(110);
+        colonneNomCentre.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Centre, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Centre, String> param) {
                 return param.getValue().getValue().nom_centre;
             }
         });
 
-        return room_type;
+        return colonneNomCentre;
 
     }
 
@@ -86,16 +86,16 @@ public class ConsulterCentre  implements Initializable, Vue {
 
 
     private JFXTreeTableColumn<Centre,String>creationTableColumnomcCapacite(){
-        JFXTreeTableColumn<Centre,String> room_type=new JFXTreeTableColumn<>("capacite du centre");
-        room_type.setPrefWidth(110);
-        room_type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Centre, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Centre,String> capaciteCentre=new JFXTreeTableColumn<>("capacite du centre");
+        capaciteCentre.setPrefWidth(110);
+        capaciteCentre.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Centre, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Centre, String> param) {
                 return param.getValue().getValue().capacite_centre;
             }
         });
 
-        return room_type;
+        return capaciteCentre;
 
     }
 
@@ -104,17 +104,17 @@ public class ConsulterCentre  implements Initializable, Vue {
 
     public void loadallcentre(){
 
-        JFXTreeTableColumn<Centre,String> room_id=this.creationTableColumCentreI();
-        JFXTreeTableColumn<Centre,String> room_type=this.creationTableColumnomcentre();
-        JFXTreeTableColumn<Centre,String> capacite=this.creationTableColumnomcCapacite();
+        JFXTreeTableColumn<Centre,String> centre_id=this.creationTableColumCentreI();
+        JFXTreeTableColumn<Centre,String> centre_nom=this.creationTableColumnomcentre();
+        JFXTreeTableColumn<Centre,String> centre_capacite=this.creationTableColumnomcCapacite();
 
-        ObservableList<Centre> rooms = FXCollections.observableArrayList();
+        ObservableList<Centre> centres = FXCollections.observableArrayList();
         List<Centre> liste=centreDao.listeCentres();
         for(Centre centre:liste){
-            rooms.add(centre);
+            centres.add(centre);
         }
-        final TreeItem<Centre> root = new RecursiveTreeItem<Centre>(rooms, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(room_id,room_type,capacite);
+        final TreeItem<Centre> root = new RecursiveTreeItem<Centre>(centres, RecursiveTreeObject::getChildren);
+        treeView.getColumns().setAll(centre_id,centre_nom,centre_capacite);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
@@ -123,15 +123,15 @@ public class ConsulterCentre  implements Initializable, Vue {
 
 
     public void loadallcentreParId(){
-        JFXTreeTableColumn<Centre,String> room_id=this.creationTableColumCentreI();
-        JFXTreeTableColumn<Centre,String> room_type=this.creationTableColumnomcentre();
-        ObservableList<Centre> rooms = FXCollections.observableArrayList();
+        JFXTreeTableColumn<Centre,String> centre_id=this.creationTableColumCentreI();
+        JFXTreeTableColumn<Centre,String> centre_nom=this.creationTableColumnomcentre();
+        ObservableList<Centre> centres = FXCollections.observableArrayList();
         Centre centre=centreDao.getCentreParId(search_text.getText().toString());
         if(centre!=null) {
-            rooms.add(centre);
+            centres.add(centre);
 
-            final TreeItem<Centre> root = new RecursiveTreeItem<Centre>(rooms, RecursiveTreeObject::getChildren);
-            treeView.getColumns().setAll(room_id, room_type);
+            final TreeItem<Centre> root = new RecursiveTreeItem<Centre>(centres, RecursiveTreeObject::getChildren);
+            treeView.getColumns().setAll(centre_id, centre_nom);
             treeView.setRoot(root);
             treeView.setShowRoot(false);
         }else {
