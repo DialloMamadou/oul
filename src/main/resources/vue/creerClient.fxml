@@ -30,17 +30,8 @@
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
-
-                        <TextField fx:id="age" layoutX="101.0" layoutY="249.0" prefHeight="25.0" prefWidth="174.0" />
-
-
-                        <Label layoutX="27.0" layoutY="256.0" text="age client">
-                            <font>
-                                <Font name="System Bold" size="12.0" />
-                            </font>
-                        </Label>
-                        <ComboBox fx:id="groupe" layoutX="384.0" layoutY="376.0" prefHeight="25.0" prefWidth="174.0" />
-                        <Label layoutX="304.0" layoutY="380.0" text="groupe ">
+                        <ComboBox fx:id="groupe" layoutX="392.0" layoutY="321.0" prefHeight="25.0" prefWidth="174.0" />
+                        <Label layoutX="312.0" layoutY="325.0" text="groupe ">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
@@ -59,13 +50,13 @@
                   <Label layoutX="324.0" layoutY="142.0" text="Observation" />
                   <TextField fx:id="observation" layoutX="401.0" layoutY="138.0" />
                   <Label layoutX="324.0" layoutY="210.0" text="email" />
-                  <Label layoutX="324.0" layoutY="256.0" text="adresse" />
+                  <Label layoutX="27.0" layoutY="260.0" text="adresse" />
                   <TextField fx:id="email" layoutX="395.0" layoutY="206.0" />
-                  <Label layoutX="310.0" layoutY="316.0" text="code postale" />
-                  <TextField fx:id="poste" layoutX="401.0" layoutY="312.0" />
+                  <Label layoutX="312.0" layoutY="273.0" text="code postale" />
+                  <TextField fx:id="poste" layoutX="403.0" layoutY="269.0" />
                   <Label layoutX="16.0" layoutY="325.0" text="date naissance" />
                   <DatePicker fx:id="annee" layoutX="110.0" layoutY="321.0" />
-                  <TextField fx:id="adresse" layoutX="401.0" layoutY="261.0" />
+                  <TextField fx:id="adresse" layoutX="104.0" layoutY="265.0" />
                     </children>
                 </Pane>
 

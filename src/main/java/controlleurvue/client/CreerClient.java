@@ -42,7 +42,6 @@ public class CreerClient  implements Initializable, Vue {
 
     public ComboBox groupe;
     public TextField prenom;
-    public TextField age;
     public TextField portable;
     public TextField observation;
     public TextField email;
@@ -81,7 +80,6 @@ public class CreerClient  implements Initializable, Vue {
 
         String prenom=this.prenom.getText();
         String nom=this.nom.getText();
-        String age=this.age.getText();
         String id_group=groupe.id.get();
         String portable=this.portable.getText();
         String observation=this.observation.getText();
@@ -92,7 +90,7 @@ public class CreerClient  implements Initializable, Vue {
         String dateNaissance=this.annee.getValue().toString();
 
 
-        Client client=new Client(nom,prenom,age,id_group,dateNaissance,portable,observation,email,adresse,poste);
+        Client client=new Client(nom,prenom,id_group,dateNaissance,portable,observation,email,adresse,poste);
 
         int res=this.clientDao.insererClient(client);
 

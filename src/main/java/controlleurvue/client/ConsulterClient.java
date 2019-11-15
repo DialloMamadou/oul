@@ -43,6 +43,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ConsulterClient implements Initializable, Vue {
+
+
     public JFXTextField search_text2;
     public JFXTextField search_text3;
     /**
@@ -59,103 +61,91 @@ public class ConsulterClient implements Initializable, Vue {
 
 
     public JFXTreeTableColumn<Client ,String> genererId(){
-        JFXTreeTableColumn<Client,String> room_id=new JFXTreeTableColumn<>("Id");
-        room_id.setPrefWidth(30);
-        room_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Client,String> client_id=new JFXTreeTableColumn<>("Id");
+        client_id.setPrefWidth(30);
+        client_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
                 return param.getValue().getValue().id;
             }
         });
-        return room_id;
+        return client_id;
 
     }
 
     public JFXTreeTableColumn<Client ,String> genererNom(){
-        JFXTreeTableColumn<Client,String> duree=new JFXTreeTableColumn<>("nom");
-        duree.setPrefWidth(100);
-        duree.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Client,String> nom_client=new JFXTreeTableColumn<>("nom");
+        nom_client.setPrefWidth(100);
+        nom_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
                 return param.getValue().getValue().nom_client;
             }
         });
-        return duree;
+        return nom_client;
     }
 
 
     public JFXTreeTableColumn<Client ,String> genererPrenom(){
 
-        JFXTreeTableColumn<Client,String> date_debut=new JFXTreeTableColumn<>("prenom");
-        date_debut.setPrefWidth(110);
-        date_debut.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Client,String> prenom_client=new JFXTreeTableColumn<>("prenom");
+        prenom_client.setPrefWidth(110);
+        prenom_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
                 return param.getValue().getValue().prenom_client;
             }
         });
 
-        return date_debut;
+        return prenom_client;
     }
 
 
-    public JFXTreeTableColumn<Client ,String> genererAge(){
 
-        JFXTreeTableColumn<Client,String> date_fin=new JFXTreeTableColumn<>("age");
-        date_fin.setPrefWidth(30);
-        date_fin.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
-                return param.getValue().getValue().age_client;
-            }
-        });
-        return date_fin;
-    }
 
 
     public JFXTreeTableColumn<Client ,String> genererGroupe(){
 
-        JFXTreeTableColumn<Client,String> type=new JFXTreeTableColumn<>(" groupe");
-        type.setPrefWidth(110);
-        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Client,String> client_groupe=new JFXTreeTableColumn<>(" groupe");
+        client_groupe.setPrefWidth(110);
+        client_groupe.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
                 return param.getValue().getValue().groupe;
             }
         });
-        return type;
+        return client_groupe;
     }
 
 
     public JFXTreeTableColumn<Client ,String> genererDateNaissance(){
 
-        JFXTreeTableColumn<Client,String> type=new JFXTreeTableColumn<>(" groupe");
-        type.setPrefWidth(110);
-        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
+        JFXTreeTableColumn<Client,String> client_datenaissance=new JFXTreeTableColumn<>(" groupe");
+        client_datenaissance.setPrefWidth(110);
+        client_datenaissance.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
                 return param.getValue().getValue().groupe;
             }
         });
-        return type;
+        return client_datenaissance;
     }
 
 
 
-    public void loadAllClient(String sql){
-        JFXTreeTableColumn<Client,String> room_id=this.genererId();
-        JFXTreeTableColumn<Client,String> duree=this.genererNom();
-        JFXTreeTableColumn<Client,String> date_debut= this.genererPrenom();
-        JFXTreeTableColumn<Client,String> date_fin=this.genererAge();
-        JFXTreeTableColumn<Client,String> type=this.genererGroupe();
-        JFXTreeTableColumn<Client,String> date=this.genererDateNaissance();
-        ObservableList<Client> rooms = FXCollections.observableArrayList();
+    public void loadAllClient(){
+        JFXTreeTableColumn<Client,String> client_id=this.genererId();
+        JFXTreeTableColumn<Client,String> client_nom=this.genererNom();
+        JFXTreeTableColumn<Client,String> client_prenom= this.genererPrenom();
+        JFXTreeTableColumn<Client,String> client_groupe=this.genererGroupe();
+        JFXTreeTableColumn<Client,String> client_datenaissance=this.genererDateNaissance();
+        ObservableList<Client> clients = FXCollections.observableArrayList();
         List<Client> liste=clientDao.listeClient();
         for(Client client:liste){
-            rooms.add(client);
+            clients.add(client);
         }
-        final TreeItem<Client> root = new RecursiveTreeItem<Client>(rooms, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(room_id,duree,date_debut,date_fin,type,date);
+        final TreeItem<Client> root = new RecursiveTreeItem<Client>(clients, RecursiveTreeObject::getChildren);
+        treeView.getColumns().setAll(client_id,client_nom,client_prenom,client_groupe,client_datenaissance);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
@@ -166,7 +156,7 @@ public class ConsulterClient implements Initializable, Vue {
     public void initialize(URL location, ResourceBundle resources) {
 
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
-        loadAllClient("SELECT * FROM client");
+        loadAllClient();
     }
 
     public void close(javafx.scene.input.MouseEvent mouseEvent) {
@@ -217,7 +207,7 @@ public class ConsulterClient implements Initializable, Vue {
         if(res>0){
             Notification.affichageSucces("succes","client supprimer avec succes");
 
-            loadAllClient("SELECT * FROM `client` WHERE 1");
+            loadAllClient();
 
             //updateStatus();
         }else{
