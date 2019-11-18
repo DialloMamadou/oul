@@ -90,7 +90,7 @@ public class ConsulterInscription implements Initializable, Vue {
         inscription_observation.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Inscription, String> param) {
-                return param.getValue().getValue().observation;
+                return param.getValue().getValue().depart;
             }
         });
         return inscription_observation;
@@ -152,7 +152,7 @@ public class ConsulterInscription implements Initializable, Vue {
             Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
             String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
             String id_sejour=sejour.id.get();
-            Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),inscription1.observation.get()
+            Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),inscription1.depart.get()
             ,inscription1.dateinscription.get(),nom_client,id_sejour);
 
             inscriptions.add(inscription2);

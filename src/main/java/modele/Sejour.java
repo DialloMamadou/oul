@@ -7,6 +7,10 @@ import javafx.beans.property.StringProperty;
 public class Sejour extends RecursiveTreeObject<Sejour> {
 
 
+
+
+
+
     public StringProperty id;
     public StringProperty duree;
     public  StringProperty date_debut;
@@ -28,6 +32,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
 
 
 
+
     public Sejour(String duree, String datedebut, String datefin, String type,
                   String id, String prix, String min, String max, String capacite) {
 
@@ -43,7 +48,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
 
     }
 
-    public Sejour(String id, String duree, String date_debut, String date_fin,
+   public Sejour(String id, String duree, String date_debut, String date_fin,
                   String type, String nom_centre,
                   String ageMax, String ageMin, String capacite, String prix) {
         this.id = new SimpleStringProperty(id);

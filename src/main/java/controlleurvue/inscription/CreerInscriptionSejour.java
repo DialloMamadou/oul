@@ -3,10 +3,7 @@ package controlleurvue.inscription;
 import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
-import controlleurvue.centre.ConsulterCentre;
-import controlleurvue.sejour.CreerSejour;
 import daos.*;
 import daos.impl.*;
 import dto.CentreDto;
@@ -20,31 +17,21 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import javafx.util.Duration;
 import modele.*;
 import notification.Notification;
-import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class CreerInscriptionSejour implements Initializable, Vue {
 
@@ -195,7 +182,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         this.clients.setShowRoot(false);
 
         //qd utilisateur tape dans barre recherche element de l arbre se selectionne
-        optimiserRechercher();
+        optimiserrechercheclient();
 
         //qd on clique sur element arbre les donnes sont automatiquements remplis
         this.clients.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
@@ -206,7 +193,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
     }
 
-    private void optimiserRechercher() {
+    private void optimiserrechercheclient() {
         this.chercheClient.textProperty().addListener(new ChangeListener<String>() {
 
             @Override
@@ -337,29 +324,6 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         String[] args = date.split(" au ");
 
         List<Sejour>liste=sejourDao.getSejourParTypeEtDate((String)this.type.getValue(),args[0],args[1]);
-        /*String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND date_debut='"+args[0]+"' AND date_fin='"+
-                args[1]+"'";
-
-        System.out.println("requete sql "+sql);
-
-
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                System.out.println("right here right now");
-            this.prix.setText(String.valueOf(rs.getInt(7)));
-
-            }
-        }catch (Exception e){
-
-        }
-        System.out.println("right here right now");
-*/
 
         for(Sejour sejour:liste){
             this.prix.setText(sejour.prix.get());
@@ -378,23 +342,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         this.date.getItems().clear();
 
         List<Sejour>liste=sejourDao.getSejourParTypeEtDuree(type.getValue(),newItem);
-       // String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND duree ='"+newItem+"'";
-/*
-        System.out.println("sql "+sql);
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
 
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-
-                this.date.getItems().add(rs.getString(3)+" au "+rs.getString(4));
-            }
-        }catch (Exception e){
-
-        }*/
 for(Sejour sejour:liste){
     this.date.getItems().add(sejour.date_debut.get()+" au "+sejour.date_fin.get());
 }
@@ -440,54 +388,7 @@ for(Sejour sejour:liste){
         for(Sejour sejour1:sejour){
             listeSejour.add(sejour1.type.get());
         }
-      /* String sql = "SELECT * FROM centre WHERE nom_centre ='" + value + "'";
 
-        int id=-1;
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                 id=rs.getInt(1);
-
-            }
-        }catch (Exception e){
-
-        }
-
-
-
-
-
-        String sql2 = "SELECT * FROM sejour WHERE centre_id ='" + id + "'";
-
-        List<String> listeSejour=new ArrayList<>();
-
-        try {
-            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql2);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                listeSejour.add(rs.getString(5));
-            }
-        }catch (Exception e){
-
-        }
-
-
-
-        System.out.println(listeSejour.get(0));
-        System.out.println("combox box remplit");
-
-
-
-
-*/
         Set<String> set = new LinkedHashSet<String>();
 
         // Add the elements to set
@@ -543,6 +444,7 @@ for(Sejour sejour:liste){
     private InscriptionDao inscriptionDao;
     private CentreDao centreDao;
     private SejourDao sejourDao;
+    private ReservationDao reservationDao;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -551,6 +453,7 @@ for(Sejour sejour:liste){
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
+        reservationDao=new ReservationDaoImpl(DBconnexion.getConnection());
 
     }
 
@@ -566,135 +469,140 @@ for(Sejour sejour:liste){
 
         int x=Integer.parseInt(montant);
 
-        if(x<=0){
+        if(x>0){
 
+            lancerDemandeInscription();
 
-            JFXDialogLayout dialogLayout=new JFXDialogLayout();
-            dialogLayout.setHeading(new Text("ferme"));
-            dialogLayout.setBody(new Text("vous voulez finaliser cette reservation  ?"));
-
-            JFXButton ok=new JFXButton("ok");
-            JFXButton cancel=new JFXButton("annule");
-
-            final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
-
-            ok.setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(javafx.event.ActionEvent event) {
-                    enregistrerReservation();
-                    dialog.close();
-
-                }
-            });
-            cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-                public void handle(javafx.event.ActionEvent event) {
-                    dialog.close();
-                }
-            });
-            dialogLayout.setActions(ok,cancel);
-            dialog.show();
 
         }else{
+            lancerDemandeReservation();
 
         }
 
 
     }
 
+    private void lancerDemandeReservation() {
+        JFXDialogLayout dialogLayout=new JFXDialogLayout();
+        dialogLayout.setHeading(new Text("ferme"));
+        dialogLayout.setBody(new Text("vous voulez finaliser cette reservation  ?"));
 
-    public void enregistrerReservation(){
+        JFXButton ok=new JFXButton("ok");
+        JFXButton cancel=new JFXButton("annule");
 
+        final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
+
+        ok.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(javafx.event.ActionEvent event) {
+                enregistrerReservation();
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            public void handle(javafx.event.ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialogLayout.setActions(ok,cancel);
+        dialog.show();
+    }
+
+    private void enregistrerReservation() {
         String date=(String)this.date.getValue();
         String[] args = date.split(" au ");
 
-        String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND duree='"+this.duree.getValue()+
-                "' AND date_debut='"+args[0]+"' AND date_fin ='"+args[1]+"'";
 
 
 
         Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
-       /* int id_sejour=-1;
-        int id_client=-1;
 
+        Client client=clientDao.getClientParId(iduser.getText());
+        System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
 
-        try {
-            PreparedStatement ps = (PreparedStatement) DBconnexion.getConnection().prepareStatement(sql);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                id_sejour=rs.getInt(1);
-                System.out.println("id "+rs.getString(1));
-
-            }
-        }catch (Exception e){
-
-        }
-
-
-
-*/
-
-
-       /* String sql2="SELECT * FROM client WHERE  nom_client ='"+this.nom.getText()+"' AND prenom_client='"+this.prenom.getText()+
-                "' AND datenaissance='"+this.datenaissance.getText()+"'";
-
-
-        try {
-            PreparedStatement ps = (PreparedStatement) DBconnexion.getConnection().prepareStatement(sql2);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                id_client=rs.getInt(1);
-                System.out.println("id  depuis "+rs.getString(1));
-
-            }
-        }catch (Exception e){
-
-        }
-        System.out.println("ici:"+sql2);
-*/
-       Client client=clientDao.getClientParId(iduser.getText());
-       System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
+        System.out.println("sejour :"+sejour.type.get()+" "+sejour.capacite.get());
 
         String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
 
-        Inscription inscription=new Inscription();
+        String depart=(String)this.depart.getValue().toString();
+
+        Reservation reservation=new Reservation( aujourdhui,
+                client.id.get(),sejour.nom_centre.get(),depart) ;
 
 
-
-
-/*
-        String sql3="INSERT INTO inscription ( paiement, date_inscription, code_client, id_sejour, depart) VALUES (?,?,?,?,?)";
-
-
-
-        Connection connection= DBconnexion.getConnection();
-        int res=0;
-        try {
-
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql3);
-            ps.setString(1, this.accompte.getText().toString());
-            ps.setString(2, aujourdhui);
-            ps.setString(3, String.valueOf(id_client));
-            ps.setString(4, String.valueOf(id_sejour));
-            ps.setString(5,(String)this.depart.getValue().toString());
-
-
-            res=ps.executeUpdate();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CreerSejour.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        int res=reservationDao.insererReservation(reservation);
         if(res>0){
             Notification.affichageSucces("succes","reservation faite avec succes");
 
         }else{
             Notification.affichageEchec("erreur","echec dans la creation de la reservation");
 
-        }*/
+        }
+
+    }
+
+    private void lancerDemandeInscription() {
+
+        JFXDialogLayout dialogLayout=new JFXDialogLayout();
+        dialogLayout.setHeading(new Text("ferme"));
+        dialogLayout.setBody(new Text("vous voulez finaliser cette inscription  ?"));
+
+        JFXButton ok=new JFXButton("ok");
+        JFXButton cancel=new JFXButton("annule");
+
+        final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
+
+        ok.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(javafx.event.ActionEvent event) {
+                enrergistrerInscription();
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            public void handle(javafx.event.ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialogLayout.setActions(ok,cancel);
+        dialog.show();
+    }
+
+
+    public void enrergistrerInscription(){
+
+        String date=(String)this.date.getValue();
+        String[] args = date.split(" au ");
+
+
+
+
+        Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
+
+       Client client=clientDao.getClientParId(iduser.getText());
+       System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
+
+        System.out.println("sejour :"+sejour.type.get()+" "+sejour.capacite.get());
+
+        String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+
+        String depart=(String)this.depart.getValue().toString();
+
+        Inscription inscription=new Inscription(this.accompte.getText().toString(), aujourdhui,
+        client.id.get(),sejour.nom_centre.get(),depart) ;
+
+
+        int res=inscriptionDao.insererInscription(inscription);
+        if(res>0){
+            Notification.affichageSucces("succes","inscription faite avec succes");
+
+        }else{
+            Notification.affichageEchec("erreur","echec dans la creation de la reservation");
+
+        }
+
 
     }
 }

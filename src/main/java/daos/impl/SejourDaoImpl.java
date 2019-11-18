@@ -69,7 +69,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             while(rs.next()){
 
                 Centre centre=centreDao.getCentreParId(rs.getString(6));
-                liste.add(new Sejour(rs.getString(1),rs.getString(2),
+                liste.add(new Sejour(rs.getString(2),
                         rs.getString(3),
                         rs.getString(4)
                 ,rs.getString(5),
