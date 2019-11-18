@@ -75,20 +75,21 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Label fx:id="lnom" text="nom">
+                                    <Label fx:id="lnom" text="nom" GridPane.rowIndex="1">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="nom" GridPane.columnIndex="1" />
-                                    <Label fx:id="lprenom" text="prenom" GridPane.rowIndex="1" />
-                                    <Label fx:id="prenom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label fx:id="lage" text="age" GridPane.rowIndex="2" />
+                                    <Label fx:id="nom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label fx:id="lprenom" text="prenom" GridPane.rowIndex="2" />
+                                    <Label fx:id="prenom" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <Label fx:id="age" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <Label fx:id="lgroupe" text="groupe" GridPane.rowIndex="3" />
                                     <Label fx:id="groupe" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <Label text="annee" GridPane.rowIndex="4" />
-                                    <Label fx:id="datenaissance" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <Label fx:id="datenaissance" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <Label fx:id="id" text="id" />
+                                    <Label fx:id="iduser" GridPane.columnIndex="1" />
                                  </children>
                               </GridPane>
                            </children>

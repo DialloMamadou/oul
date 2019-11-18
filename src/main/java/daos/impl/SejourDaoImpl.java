@@ -145,4 +145,161 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
 
         return res;
     }
+
+    @Override
+    public List<Sejour> getSejourParType(String nom) {
+        String sql="SELECT * FROM sejour WHERE type_sejour ='"+nom+"'";
+        Sejour sejour=null;
+        List<Sejour>liste=new ArrayList<>();
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                sejour=new Sejour(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5)
+                        ,rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10));
+                liste.add(sejour);
+                System.out.println("trouvee");
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+
+        return liste;
+
+
+    }
+
+    @Override
+    public List<Sejour> getSejourParTypeEtDate(String value, String arg, String arg1) {
+
+
+        List<Sejour>list=new ArrayList<>();
+        String sql="SELECT * FROM sejour where type_sejour ='"+value+"' AND date_debut='"+arg+"' AND date_fin='"+
+                arg1+"'";
+
+        System.out.println("requete sql "+sql);
+
+
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Sejour sejour=new Sejour(rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6),
+                        rs.getString(7),rs.getString(8),rs.getString(9)
+                ,rs.getString(10));
+                list.add(sejour);
+
+                System.out.println("right here right now");
+
+            }
+        }catch (Exception e){
+
+        }
+        return list;
+    }
+
+    @Override
+    public List<Sejour> getSejourParCentre(String id) {
+
+        List<Sejour>list=new ArrayList<>();
+        String sql = "SELECT * FROM sejour WHERE centre_id ='" + id+ "'";
+
+
+        System.out.println("requete sql "+sql);
+
+
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Sejour sejour=new Sejour(rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6),
+                        rs.getString(7),rs.getString(8),rs.getString(9)
+                        ,rs.getString(10));
+                list.add(sejour);
+
+                System.out.println("right here right now");
+
+            }
+        }catch (Exception e){
+
+        }
+        return list;    }
+
+    @Override
+    public List<Sejour> getSejourParTypeEtDuree(Object value, String newItem) {
+        List<Sejour>list=new ArrayList<>();
+        String sql="SELECT * FROM sejour where type_sejour ='"+(String)value+"' AND duree ='"+newItem+"'";
+
+
+        System.out.println("requete sql "+sql);
+
+
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Sejour sejour=new Sejour(rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6),
+                        rs.getString(7),rs.getString(8),rs.getString(9)
+                        ,rs.getString(10));
+                list.add(sejour);
+
+                System.out.println("right here right now");
+
+            }
+        }catch (Exception e){
+
+        }
+        return list;     }
+
+    @Override
+    public Sejour getSejourPartypeetdureeetdate(Object value, Object value1, String arg, String arg1) {
+            Sejour sejour=null;
+
+        String sql="SELECT * FROM sejour where type_sejour ='"+value+"' AND duree='"+value1+
+                "' AND date_debut='"+arg+"' AND date_fin ='"+arg1+"'";
+
+        try {
+            PreparedStatement ps = (PreparedStatement) DBconnexion.getConnection().prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                 sejour=new Sejour(rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6),
+                        rs.getString(7),rs.getString(8),rs.getString(9)
+                        ,rs.getString(10));
+
+            }
+        }catch (Exception e){
+
+        }
+return sejour;
+
+    }
 }

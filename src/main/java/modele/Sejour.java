@@ -13,47 +13,23 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
     public StringProperty  date_fin;
     public StringProperty type;
     public StringProperty nom_centre;
-    public StringProperty ageMax;
-    public StringProperty ageMin;
-    public StringProperty capacite;
     public StringProperty prix;
+
+    public StringProperty ageMin;
+
+    public StringProperty ageMax;
+    public StringProperty capacite;
+
+
 
     public Sejour(){
         super();
     }
 
 
-    public Sejour(String id, String duree, String date_debut, String date_fin, String type, String nom_centre) {
-        this.id =new SimpleStringProperty( id);
-        this.duree = new SimpleStringProperty(duree);
-        this.date_debut =new SimpleStringProperty( date_debut);
-        this.date_fin = new SimpleStringProperty(date_fin);
-        this.type =new SimpleStringProperty( type);
-        this.nom_centre =new SimpleStringProperty( nom_centre);
-    }
-
-    public Sejour( String duree, String date_debut, String date_fin, String type, String nom_centre) {
-        this.duree = new SimpleStringProperty(duree);
-        this.date_debut =new SimpleStringProperty( date_debut);
-        this.date_fin = new SimpleStringProperty(date_fin);
-        this.type =new SimpleStringProperty( type);
-        this.nom_centre =new SimpleStringProperty( nom_centre);
-    }
-
-
-    public Sejour(String duree, String date_debut, String date_fin, String type, String nom_centre, String max, String min, String capacite) {
-        this.duree = new SimpleStringProperty(duree);
-        this.date_debut =new SimpleStringProperty( date_debut);
-        this.date_fin = new SimpleStringProperty(date_fin);
-        this.type =new SimpleStringProperty( type);
-        this.nom_centre =new SimpleStringProperty( nom_centre);
-        this.ageMax=new SimpleStringProperty(max);
-        this.ageMin=new SimpleStringProperty(min);
-        this.capacite=new SimpleStringProperty(capacite);
-    }
 
     public Sejour(String duree, String datedebut, String datefin, String type,
-                  String id, String max, String min, String capacite, String prix) {
+                  String id, String prix, String min, String max, String capacite) {
 
         this.duree = new SimpleStringProperty(duree);
         this.date_debut =new SimpleStringProperty( datedebut);

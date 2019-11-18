@@ -7,13 +7,18 @@ import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
 import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.sejour.CreerSejour;
+import daos.*;
+import daos.impl.*;
 import dto.CentreDto;
 import dto.ClientDto;
 import enumerations.Depart;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -22,9 +27,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import modele.Client;
+import modele.*;
+import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
@@ -75,33 +82,19 @@ public class CreerInscriptionSejour implements Initializable, Vue {
     public Label laccompte;
     public JFXTextField accompte;
     public Label datenaissance;
+    public Label id;
+    public Label iduser;
 
     private Controlleur controlleur;
 
 
     private void chargementClients(){
 
+
     }
 
 
-
-    @Override
-    public void setController(Controlleur controller) {
-
-
-
-
-
-        this.controlleur=controller;
-
-
-
-
-
-
-
-
-
+    public JFXTreeTableColumn<ClientDto,String> genererNom(){
         JFXTreeTableColumn<ClientDto,String> nom=new JFXTreeTableColumn<>("nom");
         nom.setPrefWidth(90);
         nom.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ClientDto, String>, ObservableValue<String>>() {
@@ -110,9 +103,12 @@ public class CreerInscriptionSejour implements Initializable, Vue {
                 return param.getValue().getValue().nom_client;
             }
         });
+        return nom;
+    }
 
 
 
+    public JFXTreeTableColumn<ClientDto,String> genererPrenom(){
         JFXTreeTableColumn<ClientDto,String> prenom=new JFXTreeTableColumn<>("prenom");
         prenom.setPrefWidth(90);
         prenom.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ClientDto, String>, ObservableValue<String>>() {
@@ -121,20 +117,16 @@ public class CreerInscriptionSejour implements Initializable, Vue {
                 return param.getValue().getValue().prenom_client;
             }
         });
-
-
-        JFXTreeTableColumn<ClientDto,String> age=new JFXTreeTableColumn<>("age");
-        age.setPrefWidth(90);
-        age.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ClientDto, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<ClientDto, String> param) {
-                return param.getValue().getValue().age_client;
-            }
-        });
+        return prenom;
+    }
 
 
 
-        JFXTreeTableColumn<ClientDto,String> datenaissance=new JFXTreeTableColumn<>("date");
+
+
+
+    public JFXTreeTableColumn<ClientDto,String> genererDateDenaissance(){
+        JFXTreeTableColumn<ClientDto,String> datenaissance=new JFXTreeTableColumn<>("date de naissance");
         datenaissance.setPrefWidth(90);
         datenaissance.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ClientDto, String>, ObservableValue<String>>() {
             @Override
@@ -142,10 +134,28 @@ public class CreerInscriptionSejour implements Initializable, Vue {
                 return param.getValue().getValue().datenaissance;
             }
         });
+        return datenaissance;
+    }
 
 
 
 
+    public JFXTreeTableColumn<ClientDto,String> genererId(){
+        JFXTreeTableColumn<ClientDto,String> id=new JFXTreeTableColumn<>("id");
+        id.setPrefWidth(90);
+        id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ClientDto, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<ClientDto, String> param) {
+                return param.getValue().getValue().id_client;
+            }
+        });
+        return id;
+    }
+
+
+
+
+    public JFXTreeTableColumn<ClientDto,String> genererGroupe(){
         JFXTreeTableColumn<ClientDto,String> groupe=new JFXTreeTableColumn<>(" groupe");
         groupe.setPrefWidth(90);
         groupe.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ClientDto, String>, ObservableValue<String>>() {
@@ -156,84 +166,66 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         });
 
 
+        return groupe;
+    }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-        ObservableList<ClientDto> rooms = FXCollections.observableArrayList();
+    @Override
+    public void setController(Controlleur controller) {
+        this.controlleur=controller;
+        JFXTreeTableColumn<ClientDto,String>id=this.genererId();
+        JFXTreeTableColumn<ClientDto,String> nom=this.genererNom();
+        JFXTreeTableColumn<ClientDto,String> prenom=this.genererPrenom();
+        JFXTreeTableColumn<ClientDto,String> datenaissance=this.genererDateDenaissance();
+        JFXTreeTableColumn<ClientDto,String> groupe=this.genererGroupe();
+        ObservableList<ClientDto> clients = FXCollections.observableArrayList();
         Connection connection= DBconnexion.getConnection();
-        String sql="SELECT * FROM client";
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-
-            ResultSet rs=ps.executeQuery();
-
-            while(rs.next()){
-
-
-                String sqql=             "SELECT * FROM groupe WHERE id_groupe ='" + rs.getString(5) + "'";
-
-                PreparedStatement pss=(PreparedStatement)connection.prepareStatement(sqql);
-
-                ResultSet res=pss.executeQuery();
-                String s="";
-                while(res.next()){
-
-                    s=res.getString(2);
-
-
-                }
-
-
-
-                rooms.add(new ClientDto(rs.getString(2),rs.getString(3),
-                        rs.getString(4),s,rs.getString(10)));
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
+        List<Client>liste= clientDao.listeClient();
+        for(Client client:liste){
+            System.out.println("nommm "+client.prenom_client.get());
+            System.out.println("iddd "+client.id.get());
+            clients.add(new ClientDto(client.id.get(),client.prenom_client.get(),client.nom_client.get(),
+                    client.groupe.get(),client.datenaissance.get()));
         }
 
+        final TreeItem<ClientDto> root = new RecursiveTreeItem<ClientDto>(clients, RecursiveTreeObject::getChildren);
+        this.clients.getColumns().setAll(id,nom,prenom,groupe,datenaissance);
+        this.clients.setRoot(root);
+        this.clients.setShowRoot(false);
 
-        final TreeItem<ClientDto> root = new RecursiveTreeItem<ClientDto>(rooms, RecursiveTreeObject::getChildren);
+        //qd utilisateur tape dans barre recherche element de l arbre se selectionne
+        optimiserRechercher();
 
-        clients.getColumns().setAll(nom,prenom,age,groupe,datenaissance);
+        //qd on clique sur element arbre les donnes sont automatiquements remplis
+        this.clients.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
+                ->
+                showDetails(newValue)
+        );
+        chargementCentre();
 
-        clients.setRoot(root);
-        clients.setShowRoot(false);
+    }
 
-
-
-
-
+    private void optimiserRechercher() {
         this.chercheClient.textProperty().addListener(new ChangeListener<String>() {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
-                clients.setPredicate(new Predicate<TreeItem<ClientDto>>() {
+                CreerInscriptionSejour.this.clients.setPredicate(new Predicate<TreeItem<ClientDto>>() {
 
                     @Override
                     public boolean test(TreeItem<ClientDto> t) {
 
-                        boolean flag = t.getValue().age_client.getValue().contains(newValue)
-                                || t.getValue().nom_client.getValue().contains(newValue)
-                                || t.getValue().prenom_client.getValue().contains(newValue)
-                                || t.getValue().groupe.getValue().contains(newValue)
-                                || t.getValue().datenaissance.getValue().equals(newValue);
-                               ;
+                        boolean flag =
+                                t.getValue().nom_client.getValue().contains(newValue)
+                                        || t.getValue().prenom_client.getValue().contains(newValue)
+                                        || t.getValue().groupe.getValue().contains(newValue)
+                                        || t.getValue().datenaissance.getValue().equals(newValue)
+                                ||t.getValue().id_client.getValue().equals(newValue);
+                        ;
                         if(flag)
-                        System.out.println("trouve");
+                            System.out.println("trouve");
 
                         return flag;
 
@@ -243,124 +235,71 @@ public class CreerInscriptionSejour implements Initializable, Vue {
             }
 
         });
-
-
-        clients.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
-                ->
-                showDetails(newValue)
-        );
-
-
-
-
-
-
-
-
-        chargementCentre();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
-    private void remplirDuree(Object selectedItem) {
-        String duree=(String)selectedItem;
 
-
-
-        this.type.getItems().clear();
-        this.prix.setText("");
-        String sql = "SELECT * FROM sejour WHERE type_sejour ='" + this.type.getSelectionModel().getSelectedItem() + "'";
-
-        List<String>listeDuree=new ArrayList<>();
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                String id=rs.getString(2);
-
-                listeDuree.add(id);
-            }
-        }catch (Exception e){
-
-        }
-
-
-
-
-
-
-    }
-
-    private void chargementCentre() {
-
-
-
-        JFXTreeTableColumn<CentreDto,String> type=new JFXTreeTableColumn<>(" centre");
-        type.setPrefWidth(90);
-        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<CentreDto, String>, ObservableValue<String>>() {
+    public JFXTreeTableColumn<CentreDto,String> genererCentre(){
+        JFXTreeTableColumn<CentreDto,String> centre=new JFXTreeTableColumn<>(" centre");
+        centre.setPrefWidth(90);
+        centre.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<CentreDto, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<CentreDto, String> param) {
                 return param.getValue().getValue().nom_centre;
             }
         });
 
+        return centre;
+    }
 
 
 
 
 
-        ObservableList<CentreDto> rooms = FXCollections.observableArrayList();
-        Connection connection= DBconnexion.getConnection();
-        String sql="SELECT * FROM centre";
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-
-            ResultSet rs=ps.executeQuery();
-
-            while(rs.next()){
 
 
 
 
+    private void chargementCentre() {
 
-                rooms.add(new CentreDto(rs.getString(2)));
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsulterCentre.class.getName()).log(Level.SEVERE, null, ex);
+        JFXTreeTableColumn<CentreDto,String> type=this.genererCentre();
+        ObservableList<CentreDto> centres = FXCollections.observableArrayList();
+        List<Centre>liste=centreDao.listeCentres();
+        for(Centre centre:liste){
+            centres.add(new CentreDto(centre.nom_centre.get()));
         }
-
-
-        final TreeItem<CentreDto> root = new RecursiveTreeItem<CentreDto>(rooms, RecursiveTreeObject::getChildren);
-
+        final TreeItem<CentreDto> root = new RecursiveTreeItem<CentreDto>(centres, RecursiveTreeObject::getChildren);
         vueCentre.getColumns().setAll(type);
-
         vueCentre.setRoot(root);
         vueCentre.setShowRoot(false);
+        optimiserRechercheCentre();
+
+        vueCentre.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
+                ->
+                showCentre(newValue)
+        );
 
 
 
+        this.type.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirtemp((String)newItem);
+            });
+
+        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirDate((String)newItem);
+        });
+
+        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirDepart();
+        });
+
+        this.depart.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirPrix();
+        });
 
 
+    }
+
+    private void optimiserRechercheCentre() {
         this.chercheCentre.textProperty().addListener(new ChangeListener<String>() {
 
             @Override
@@ -372,11 +311,11 @@ public class CreerInscriptionSejour implements Initializable, Vue {
                     public boolean test(TreeItem<CentreDto> t) {
 
                         boolean flag = t.getValue().nom_centre.getValue().contains(newValue);
-                                if(flag){
-                                    System.out.println("combox");
-                                    remplirCombo(t.getValue().nom_centre.getValue());
-                                }
-                                ;
+                        if(flag){
+                            System.out.println("combox");
+                            remplirCombo(t.getValue().nom_centre);
+                        }
+                        ;
 
                         return flag;
 
@@ -387,49 +326,18 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
         });
 
-
-
-
-
-
-        vueCentre.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
-                ->
-                showCentre(newValue)
-        );
-
-
-        this.type.valueProperty().addListener((obs, oldItem, newItem) -> {
-            System.out.println("nouvelle valeur = "+newItem);
-            remplirtemp((String)newItem);
-            });
-
-
-
-
-
-        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirDate((Integer)newItem);
-        });
-
-
-        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirDepart();
-        });
-
-
-        this.depart.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirPrix();
-        });
-
-
-        
     }
+
+
+
+
 
     private void remplirPrix() {
         String date=(String)this.date.getValue();
         String[] args = date.split(" au ");
 
-        String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND date_debut='"+args[0]+"' AND date_fin='"+
+        List<Sejour>liste=sejourDao.getSejourParTypeEtDate((String)this.type.getValue(),args[0],args[1]);
+        /*String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND date_debut='"+args[0]+"' AND date_fin='"+
                 args[1]+"'";
 
         System.out.println("requete sql "+sql);
@@ -451,7 +359,11 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
         }
         System.out.println("right here right now");
+*/
 
+        for(Sejour sejour:liste){
+            this.prix.setText(sejour.prix.get());
+        }
 
     }
 
@@ -462,10 +374,13 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         }
     }
 
-    private void remplirDate(int newItem) {
+    private void remplirDate(String newItem) {
         this.date.getItems().clear();
-        String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND duree ='"+String.valueOf(newItem)+"'";
 
+        List<Sejour>liste=sejourDao.getSejourParTypeEtDuree(type.getValue(),newItem);
+       // String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND duree ='"+newItem+"'";
+/*
+        System.out.println("sql "+sql);
         Connection connection= DBconnexion.getConnection();
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
@@ -479,7 +394,10 @@ public class CreerInscriptionSejour implements Initializable, Vue {
             }
         }catch (Exception e){
 
-        }
+        }*/
+for(Sejour sejour:liste){
+    this.date.getItems().add(sejour.date_debut.get()+" au "+sejour.date_fin.get());
+}
 
     }
 
@@ -489,42 +407,42 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         this.duree.getItems().clear();
         this.date.getItems().clear();
         this.prix.setText("");
+        List<Sejour> sejour=this.sejourDao.getSejourParType(nom);
+        System.out.println("taille liste"+sejour.size());
+        List<String>listeS=new ArrayList<>();
 
-
-        
-        
-        String sql="SELECT * from sejour where type_sejour ='"+nom+"'";
-
-        System.out.println("sql:"+sql);
-
-        List<String>liste=new ArrayList<>();
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-
-                this.duree.getItems().add(rs.getInt(2));
-                System.out.println("duree +"+rs.getInt(2));
-            }
-        }catch (Exception e){
-
+        for(Sejour sejour1:sejour){
+            System.out.println("une deux trois");
+            listeS.add(sejour1.duree.get());
         }
-
-
+        Set<String> set = new LinkedHashSet<String>();
+        set.addAll(listeS);
+        listeS.clear();
+        listeS.addAll(set);
+        for(String dures:listeS){
+            this.duree.getItems().add(dures);
+        }
     }
 
-    private void remplirCombo(String value) {
+
+
+    private void remplirCombo(StringProperty value) {
         this.type.getItems().clear();
         this.date.getItems().clear();
         this.prix.setText("");
         this.duree.getItems().clear();
-       String sql = "SELECT * FROM centre WHERE nom_centre ='" + value + "'";
+        Centre centre=centreDao.trouverParNomCentre(value.get());
+        System.out.println("centre ici "+centre.nom_centre);
+        List<Sejour> sejour=sejourDao.getSejourParCentre(centre.id.get());
+        System.out.println("liste sejour "+sejour.size());
+        List<String> listeSejour=new ArrayList<>();
 
-int id=-1;
+        for(Sejour sejour1:sejour){
+            listeSejour.add(sejour1.type.get());
+        }
+      /* String sql = "SELECT * FROM centre WHERE nom_centre ='" + value + "'";
+
+        int id=-1;
         Connection connection= DBconnexion.getConnection();
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
@@ -569,7 +487,7 @@ int id=-1;
 
 
 
-
+*/
         Set<String> set = new LinkedHashSet<String>();
 
         // Add the elements to set
@@ -598,16 +516,17 @@ int id=-1;
 
     private void showCentre(TreeItem<CentreDto> newValue) {
         centre.setText(newValue.getValue().nom_centre.getValue());
-        remplirCombo(newValue.getValue().nom_centre.getValue());
+        remplirCombo(newValue.getValue().nom_centre);
     }
 
     public void showDetails(TreeItem<ClientDto> pModel) {
 
         nom.setText(pModel.getValue().nom_client.getValue());
         prenom.setText(pModel.getValue().prenom_client.getValue());
-        age.setText(pModel.getValue().age_client.getValue());
         groupe.setText(pModel.getValue().groupe.getValue());
         datenaissance.setText(pModel.getValue().datenaissance.getValue());
+        iduser.setText(pModel.getValue().id_client.getValue());
+
     }
 
     public void back(MouseEvent mouseEvent) {
@@ -619,9 +538,19 @@ int id=-1;
 
 
 
+    private ClientDao clientDao;
+    private GroupeDao groupeDao;
+    private InscriptionDao inscriptionDao;
+    private CentreDao centreDao;
+    private SejourDao sejourDao;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        clientDao=new ClientDaoImpl(DBconnexion.getConnection());
+        groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
+        inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
+        centreDao=new CentreDaoImpl(DBconnexion.getConnection());
+        sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
 
     }
 
@@ -639,225 +568,66 @@ int id=-1;
 
         if(x<=0){
 
-            String date=(String)this.date.getValue();
-            String[] args = date.split(" au ");
 
-            String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND duree='"+this.duree.getValue()+
-                    "' AND date_debut='"+args[0]+"' AND date_fin ='"+args[1]+"'";
+            JFXDialogLayout dialogLayout=new JFXDialogLayout();
+            dialogLayout.setHeading(new Text("ferme"));
+            dialogLayout.setBody(new Text("vous voulez finaliser cette reservation  ?"));
 
+            JFXButton ok=new JFXButton("ok");
+            JFXButton cancel=new JFXButton("annule");
 
-            int id_sejour=-1;
-            int id_client=-1;
+            final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
 
-
-            try {
-                PreparedStatement ps = (PreparedStatement) DBconnexion.getConnection().prepareStatement(sql);
-
-                ResultSet rs = ps.executeQuery();
-
-                while (rs.next()) {
-                    id_sejour=rs.getInt(1);
-                    System.out.println("id "+rs.getString(1));
+            ok.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(javafx.event.ActionEvent event) {
+                    enregistrerReservation();
+                    dialog.close();
 
                 }
-            }catch (Exception e){
-
-            }
-
-
-
-
-
-
-            String sql2="SELECT * FROM client WHERE  nom_client ='"+this.nom.getText()+"' AND prenom_client='"+this.prenom.getText()+
-                    "' AND datenaissance='"+this.datenaissance.getText()+"'";
-
-
-            try {
-                PreparedStatement ps = (PreparedStatement) DBconnexion.getConnection().prepareStatement(sql2);
-
-                ResultSet rs = ps.executeQuery();
-
-                while (rs.next()) {
-                    id_client=rs.getInt(1);
-                    System.out.println("id  depuis "+rs.getString(1));
-
+            });
+            cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+                public void handle(javafx.event.ActionEvent event) {
+                    dialog.close();
                 }
-            }catch (Exception e){
-
-            }
-            System.out.println("ici:"+sql2);
-
-
-            String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-
-
-
-
-
-
-
-            String sql3="INSERT INTO inscription ( paiement, date_inscription, code_client, id_sejour, depart) VALUES (?,?,?,?,?)";
-
-
-
-            Connection connection= DBconnexion.getConnection();
-            int res=0;
-            try {
-
-                PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql3);
-                ps.setString(1, this.accompte.getText().toString());
-                ps.setString(2, aujourdhui);
-                ps.setString(3, String.valueOf(id_client));
-                ps.setString(4, String.valueOf(id_sejour));
-                ps.setString(5,(String)this.depart.getValue().toString());
-
-
-                 res=ps.executeUpdate();
-
-            } catch (SQLException ex) {
-                Logger.getLogger(CreerSejour.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            if(res>0){
-                Image image=new Image("img/mooo.png");
-                Notifications notification=Notifications.create()
-                        .title("Done")
-                        .text("Sejour creer avec succes")
-                        .hideAfter(Duration.seconds(3))
-                        .position(Pos.BOTTOM_LEFT)
-                        .graphic(new ImageView(image));
-                notification.darkStyle();
-                notification.show();
-                //   updateStatus();
-            }else{
-                Image image=new Image("img/delete.png");
-                Notifications notification=Notifications.create()
-                        .title("Error")
-                        .text("echec dans la creation du centre")
-                        .hideAfter(Duration.seconds(3))
-                        .position(Pos.BOTTOM_LEFT)
-                        .graphic(new ImageView(image));
-                notification.darkStyle();
-                notification.show();
-            }
-
-
-
-
-
-
-
-
-
+            });
+            dialogLayout.setActions(ok,cancel);
+            dialog.show();
 
         }else{
 
         }
 
 
+    }
+
+
+    public void enregistrerReservation(){
+
+        String date=(String)this.date.getValue();
+        String[] args = date.split(" au ");
+
+        String sql="SELECT * FROM sejour where type_sejour ='"+this.type.getValue()+"' AND duree='"+this.duree.getValue()+
+                "' AND date_debut='"+args[0]+"' AND date_fin ='"+args[1]+"'";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-        String sql3="INSERT INTO inscription (paiement,observation,date_inscription,code_client,id_sejour) VALUES (?,?,?,?,?)";
-
-
-
-        String sql2 = "SELECT * FROM sejour where type_sejour ='" +this.sejour.getValue().toString()+"'";
-
-
-
-        String sentence = this.client.getValue().toString();
-        String[] words = sentence.split(" ");
-
-
-        String sql = "SELECT * FROM client where nom_client ='" + words[0] + "' AND prenom_client ='"+words[1]+"'";
-
-        Connection connection = DBconnexion.getConnection();
-
-        int res=0;
-
+        Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
+       /* int id_sejour=-1;
+        int id_client=-1;
 
 
         try {
+            PreparedStatement ps = (PreparedStatement) DBconnexion.getConnection().prepareStatement(sql);
 
-            PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            int client=0;
-            while(resultSet.next()){
-                client=resultSet.getInt(1);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                id_sejour=rs.getInt(1);
+                System.out.println("id "+rs.getString(1));
+
             }
+        }catch (Exception e){
 
-
-
-
-            PreparedStatement preparedStatement1 = (PreparedStatement) connection.prepareStatement(sql2);
-            ResultSet resultSet1 = preparedStatement1.executeQuery();
-            int sejour=0;
-            while(resultSet1.next()){
-                sejour=resultSet1.getInt(1);
-            }
-
-
-
-
-
-
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql3);
-            ps.setString(1,this.paiement.getText().toString());
-            ps.setString(2, this.observation.getText().toString());
-            ps.setString(3, this.dateInscription.getValue().toString());
-            ps.setInt(4, client);
-            ps.setInt(5, sejour);
-
-
-            res=ps.executeUpdate();
-
-
-
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CreerSejour.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-
-        if(res>0){
-            Image image=new Image("img/mooo.png");
-            Notifications notification=Notifications.create()
-                    .title("Done")
-                    .text("INSCRIPTION creer avec succes")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
-            //   updateStatus();
-        }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
-                    .title("Error")
-                    .text("echec dans la reservation")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
         }
 
 
@@ -865,7 +635,66 @@ int id=-1;
 */
 
 
+       /* String sql2="SELECT * FROM client WHERE  nom_client ='"+this.nom.getText()+"' AND prenom_client='"+this.prenom.getText()+
+                "' AND datenaissance='"+this.datenaissance.getText()+"'";
 
+
+        try {
+            PreparedStatement ps = (PreparedStatement) DBconnexion.getConnection().prepareStatement(sql2);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                id_client=rs.getInt(1);
+                System.out.println("id  depuis "+rs.getString(1));
+
+            }
+        }catch (Exception e){
+
+        }
+        System.out.println("ici:"+sql2);
+*/
+       Client client=clientDao.getClientParId(iduser.getText());
+       System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
+
+        String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+
+        Inscription inscription=new Inscription();
+
+
+
+
+/*
+        String sql3="INSERT INTO inscription ( paiement, date_inscription, code_client, id_sejour, depart) VALUES (?,?,?,?,?)";
+
+
+
+        Connection connection= DBconnexion.getConnection();
+        int res=0;
+        try {
+
+            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql3);
+            ps.setString(1, this.accompte.getText().toString());
+            ps.setString(2, aujourdhui);
+            ps.setString(3, String.valueOf(id_client));
+            ps.setString(4, String.valueOf(id_sejour));
+            ps.setString(5,(String)this.depart.getValue().toString());
+
+
+            res=ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CreerSejour.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if(res>0){
+            Notification.affichageSucces("succes","reservation faite avec succes");
+
+        }else{
+            Notification.affichageEchec("erreur","echec dans la creation de la reservation");
+
+        }*/
 
     }
 }

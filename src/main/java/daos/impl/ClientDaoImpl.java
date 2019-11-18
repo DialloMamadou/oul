@@ -7,6 +7,7 @@ import daos.ClientDao;
 import daos.GroupeDao;
 import modele.Client;
 import modele.Groupe;
+import modele.Sejour;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -84,7 +85,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
                 System.out.println("xxxx1");
                 Groupe groupe=groupeDao.getGroupeParId(rs.getString(4));
-                liste.add(new Client(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                liste.add(new Client(rs.getString(1),rs.getString(2),rs.getString(3),
                         groupe.nom_groupe.get(),rs.getString(5),
                         rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),
                         rs.getString(10)));
@@ -131,4 +132,33 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
         return client;
 }
+
+    @Override
+    public Client getClientParNomPrenomAnneeNaissance(String text, String text1, String text2) {
+        Client Client=null;
+
+        String sql="SELECT * FROM client where nom_client ='"+text+"' AND prenom_client='"+text1+
+                "' AND datenaissance='"+text2;
+
+        System.out.println("sql "+sql);
+
+        try {
+            PreparedStatement ps = (PreparedStatement) DBconnexion.getConnection().prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            System.out.println("requete execute");
+
+            while (rs.next()) {
+                Client=new Client(rs.getString(1),rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6),
+                        rs.getString(7),rs.getString(8),rs.getString(9)
+                        ,rs.getString(10));
+
+            }
+        }catch (Exception e){
+
+        }
+        return Client;
+
+    }
 }
