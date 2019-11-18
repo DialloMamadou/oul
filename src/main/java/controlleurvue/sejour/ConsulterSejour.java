@@ -243,7 +243,7 @@ public class ConsulterSejour implements Initializable, Vue {
         this.lcentre.setText(newValue.getValue().nom_centre.get());
         this.lprix.setText(newValue.getValue().prix.get());
         this.lsejour.setText(newValue.getValue().type.get());
-        this.lsejour.setText(newValue.getValue().date_debut.get()+" au "+newValue.getValue().date_fin.get());
+        this.ldate.setText(newValue.getValue().date_debut.get()+" au "+newValue.getValue().date_fin.get());
     }
 
 
