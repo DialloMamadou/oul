@@ -40,6 +40,7 @@ public class ConsulterInscription implements Initializable, Vue {
      * Initializes the controller class.
      */
 
+
     private Controlleur controlleur;
 
 

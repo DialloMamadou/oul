@@ -189,6 +189,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
                 ->
                 showDetails(newValue)
         );
+
         chargementCentre();
 
     }

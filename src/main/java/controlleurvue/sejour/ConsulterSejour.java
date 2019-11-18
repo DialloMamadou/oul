@@ -310,5 +310,6 @@ public class ConsulterSejour implements Initializable, Vue {
 
     public void genereliste(MouseEvent mouseEvent) {
 
+
     }
 }
