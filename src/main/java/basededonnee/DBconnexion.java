@@ -12,7 +12,7 @@ public class DBconnexion {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost/reservation";
-            connection=DriverManager.getConnection(url,"root","");
+            connection=DriverManager.getConnection(url,"root","root");
             System.out.println("Connected");
 
         } catch (Exception e) {

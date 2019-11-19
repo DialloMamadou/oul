@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
 import controlleurvue.centre.CreerCentre;
+import daos.GroupeDao;
+import daos.impl.GroupeDaoImpl;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,52 +33,55 @@ public class CreerGroupe implements Vue {
     public void close(MouseEvent mouseEvent) {
     }
 
+
+
+    private void messageSuccess(){
+        Image image=new Image("img/mooo.png");
+        Notifications notification=Notifications.create()
+                .title("finit")
+                .text("groupe creer avec succss ")
+                .hideAfter(Duration.seconds(3))
+                .position(Pos.BOTTOM_LEFT)
+                .graphic(new ImageView(image));
+        notification.darkStyle();
+        notification.show();
+
+    }
+
+    private void messageErreur(){
+        Image image=new Image("img/delete.png");
+        Notifications notification=Notifications.create()
+                .title("Error")
+                .text("il y a eu une erreur dans la creation")
+                .hideAfter(Duration.seconds(3))
+                .position(Pos.BOTTOM_LEFT)
+                .graphic(new ImageView(image));
+        notification.darkStyle();
+        notification.show();
+
+    }
     public void book(MouseEvent mouseEvent) {
 
         int res=0;
-        String sql="INSERT INTO groupe (nom_groupe) VALUES (?)";
-        Connection connection= DBconnexion.getConnection();
-        try {
-            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-            if(nom.getText().length()!=0) {
-                ps.setString(1, nom.getText().toString());
-                res=ps.executeUpdate();
-
-            }
-
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
+        if(nom.getText().length()!=0) {
+            res= groupeDao.inserrerGroupe(nom.getText());
         }
 
         if(res>0){
-            Image image=new Image("img/mooo.png");
-            Notifications notification=Notifications.create()
-                    .title("finit")
-                    .text("centre creer avec succss")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
-            //updateStatus();
+            messageSuccess();
         }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
-                    .title("Error")
-                    .text("il y a eu une erreur dans la creation")
-                    .hideAfter(Duration.seconds(3))
-                    .position(Pos.BOTTOM_LEFT)
-                    .graphic(new ImageView(image));
-            notification.darkStyle();
-            notification.show();
+            messageErreur();
         }
 
 
     }
 
+    private GroupeDao groupeDao;
+
+
     public void setController(Controlleur controller) {
 
+        groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         this.controlleur=controller;
     }
 }
