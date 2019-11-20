@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.inscription.ConsulterReservation">
+    <children>
+        <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
+            <children>
+                <JFXTreeTableView fx:id="treeView" layoutX="445.0" layoutY="21.0" maxWidth="-Infinity" opacity="0.7" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                <Pane layoutX="29.0" layoutY="22.0" opacity="0.7" prefHeight="700.0" prefWidth="421.0" style="-fx-background-color: #fff; -fx-background-radius: 6 px;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="930.0" AnchorPane.topAnchor="15.0">
+                    <children>
+                        <Pane layoutX="21.0" layoutY="48.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                            <children>
+                                <JFXTextField fx:id="search_text" focusColor="#09e2a7" labelFloat="true" layoutX="34.0" layoutY="29.0" prefHeight="25.0" prefWidth="313.0" promptText="chercher une reservation" />
+                                <JFXButton buttonType="RAISED" layoutX="79.0" layoutY="77.0" onMouseClicked="#cherchecentreparid" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="chercher" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+
+                            </children>
+                        </Pane>
+
+
+
+                        <Pane layoutX="21.0" layoutY="531.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                            <children>
+                                <JFXButton buttonType="RAISED" layoutX="83.0" layoutY="51.0" onMouseClicked="#goBack" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Back" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                                <JFXButton buttonType="RAISED" layoutX="218.0" layoutY="51.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Close" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                            </children>
+                        </Pane>
+                        <Label layoutX="34.0" layoutY="14.0" text="vous pouvez chercher les&#10;  donner d une reservation&#10;">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+
+
+
+
+                        <Pane layoutX="22.0" layoutY="181.0" prefHeight="337.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                            <children>
+                                <JFXTextField fx:id="search_text2" focusColor="#09e2a7" labelFloat="true" layoutX="33.0" layoutY="245.0" prefHeight="25.0" prefWidth="313.0" promptText="Editer ou supprimer par id " />
+                                <JFXButton buttonType="RAISED" layoutX="78.0" layoutY="293.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Editer" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                                <JFXButton buttonType="RAISED" layoutX="226.0" layoutY="293.0" onMouseClicked="#SupprimerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Supprimer" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                        <GridPane layoutX="14.0" layoutY="48.0" prefHeight="150.0" prefWidth="141.0">
+
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="61.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label fx:id="lnom" text="nom">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="nom" GridPane.columnIndex="1" />
+                                <Label fx:id="lprenom" text="prenom" GridPane.rowIndex="1" />
+                                <Label fx:id="prenom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Label fx:id="age" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Label fx:id="lgroupe" text="groupe" GridPane.rowIndex="2" />
+                                <Label fx:id="groupe" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <Label text="annee" GridPane.rowIndex="3" />
+                                <Label fx:id="datenaissance" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            </children>
+                        </GridPane>
+                        <GridPane layoutX="178.0" layoutY="48.0" prefHeight="150.0" prefWidth="200.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                        <Label layoutX="278.0" layoutY="21.0" text="Sejour">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="78.0" layoutY="21.0" text="Client">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                            </children>
+                        </Pane>
+
+
+
+
+
+                    </children>
+                </Pane>
+            </children>
+
+
+
+
+
+
+
+        </AnchorPane>
+
+
+
+
+    </children>
+
+
+</StackPane>

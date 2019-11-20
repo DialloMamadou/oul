@@ -16,7 +16,7 @@
     <children>
         <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
             <children>
-                <JFXTreeTableView fx:id="treeView" layoutX="451.0" layoutY="47.0" maxWidth="-Infinity" opacity="0.7" prefHeight="700.0" prefWidth="443.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="-17.0" AnchorPane.rightAnchor="472.0" AnchorPane.topAnchor="47.0" />
+                <JFXTreeTableView fx:id="treeView" layoutX="451.0" layoutY="47.0" maxWidth="-Infinity" opacity="0.7" prefHeight="700.0" prefWidth="524.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="-17.0" AnchorPane.rightAnchor="391.0" AnchorPane.topAnchor="47.0" />
                 <Pane layoutX="14.0" layoutY="47.0" opacity="0.7" prefHeight="700.0" prefWidth="421.0" style="-fx-background-color: #fff; -fx-background-radius: 6 px;" AnchorPane.bottomAnchor="-17.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="931.0" AnchorPane.topAnchor="47.0">
                     <children>
 
@@ -103,7 +103,7 @@
 
                     </children>
                 </Pane>
-            <JFXTreeTableView layoutX="936.0" layoutY="47.0" prefHeight="666.0" prefWidth="378.0" />
+            <JFXTreeTableView layoutX="986.0" layoutY="47.0" prefHeight="666.0" prefWidth="328.0" />
             <Pane layoutX="936.0" layoutY="-3.0" opacity="0.7" style="-fx-background-color: #FFF;">
                <children>
                   <JFXTextField layoutY="11.0" prefHeight="25.0" prefWidth="249.0" promptText="chercher client" style="-fx-background-color: #FFF;" />

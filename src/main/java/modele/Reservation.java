@@ -1,9 +1,10 @@
 package modele;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Reservation {
+public class Reservation  extends RecursiveTreeObject<Reservation> {
 
     public StringProperty id;
     public StringProperty  dateinscription;

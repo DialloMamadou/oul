@@ -11,6 +11,7 @@ import controlleurvue.groupe.ConsulterGroupe;
 import controlleurvue.groupe.CreerGroupe;
 import controlleurvue.groupe.GroupeScreen;
 import controlleurvue.inscription.ConsulterInscription;
+import controlleurvue.inscription.ConsulterReservation;
 import controlleurvue.inscription.CreerInscriptionSejour;
 import controlleurvue.inscription.InscriptionScreen;
 import controlleurvue.sejour.ConsulterSejour;
@@ -42,6 +43,9 @@ public class FabriqueVue{
 
 
     public void creerLoginVue(){
+        //load(ConsulterSejour.class.getResource("/vue/consulterSejour.fxml"), "ecran.");
+
+
         load(Loginscreen.class.getResource("/vue/loginscreen.fxml"), "LOGIN.");
     }
 
@@ -190,6 +194,11 @@ public class FabriqueVue{
 
     public void creerConsulterInscriptionVue() {
         load(ConsulterInscription.class.getResource("/vue/consulterInscription.fxml"), "ecran.");
+
+    }
+
+    public void creerVueConsulterReservation() {
+        load(ConsulterReservation.class.getResource("/vue/consulterReservation.fxml"), "ecran.");
 
     }
 }

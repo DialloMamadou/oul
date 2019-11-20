@@ -10,6 +10,7 @@ import daos.SejourDao;
 import daos.impl.ClientDaoImpl;
 import daos.impl.InscriptionDaoImpl;
 import daos.impl.SejourDaoImpl;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -153,8 +154,10 @@ public class ConsulterInscription implements Initializable, Vue {
             Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
             String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
             String id_sejour=sejour.id.get();
-            Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),inscription1.depart.get()
-            ,inscription1.dateinscription.get(),nom_client,id_sejour);
+         
+            Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),
+                    inscription1.dateinscription.get(),  nom_client,id_sejour,  inscription1.depart.get()
+            );
 
             inscriptions.add(inscription2);
         }

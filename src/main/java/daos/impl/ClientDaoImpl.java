@@ -161,4 +161,31 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
         return Client;
 
     }
+
+    @Override
+    public Client getClientParNomEtPrenom(String arg, String arg1) {
+        Client Client=null;
+
+        String sql="SELECT * FROM Client WHERE nom_client ='"+arg+"' AND prenom_client ='"+arg1+"'";
+
+        System.out.println("sql "+sql);
+
+        try {
+            PreparedStatement ps = (PreparedStatement)this.connect.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            System.out.println("requete execute");
+
+            while (rs.next()) {
+                Client=new Client(rs.getString(1),rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6),
+                        rs.getString(7),rs.getString(8),rs.getString(9)
+                        ,rs.getString(10));
+
+            }
+        }catch (Exception e){
+
+        }
+        return Client;
+    }
 }

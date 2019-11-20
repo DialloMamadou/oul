@@ -20,4 +20,6 @@ public interface ClientDao {
     Client getClientParId(String id);
 
     Client getClientParNomPrenomAnneeNaissance(String text, String text1, String text2);
+
+    Client getClientParNomEtPrenom(String arg, String arg1);
 }
