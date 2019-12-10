@@ -24,6 +24,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +41,7 @@ import principale.Controlleur;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -58,6 +60,7 @@ public class ConsulterInscription implements Initializable, Vue {
     public Label lnumero;
     public Label lemail;
     public Label lreste;
+    public Label idinscription;
     /**
      * Initializes the controller class.
      */
@@ -206,6 +209,7 @@ public class ConsulterInscription implements Initializable, Vue {
 
     private void showDetailsSejour(TreeItem<Inscription> newValue) {
 
+        this.idinscription.setText(newValue.getValue().id.get());
         Sejour sejour=sejourDao.getSejourParId(newValue.getValue().getTriche());
         System.out.println(sejour.toString());
         Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
@@ -331,15 +335,28 @@ public class ConsulterInscription implements Initializable, Vue {
     public void EditerCentre(MouseEvent mouseEvent) {
     }
 
-    public void SupprimerCentre(MouseEvent mouseEvent) {
-        int res=inscriptionDao.supperimerParId(search_text2.getText().toString());
-        if(res>0){
-            Notification.affichageSucces("sucess","inscription supprimer avec succes");
-            chargertouslesinscriptions();
-        }else{
-            Notification.affichageEchec("echec","il y a eu un erreur dans la supresion de lisncription");
+    public void paiement(MouseEvent mouseEvent) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("barre de paiement");
+        dialog.setHeaderText("mettre a jour paiement ");
+        dialog.setContentText("somme paye:");
 
+// Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+               int x= inscriptionDao.mettreAjourPaiement(this.idinscription.getText(),result.get());
+                if(x!=0){
+                    String s=this.lreste.getText();
+                    System.out.println("valeur paye "+s);
+                    System.out.println("valeur vient paye "+result.get());
+                    int valeur=Integer.parseInt(s)-Integer.parseInt(result.get());
+                    System.out.println("valeur valeur = "+valeur);
+                    this.lreste.setText(String.valueOf(valeur));
+
+                }
         }
+
+// The Java 8 way to get the response value (with lambda expression).
     }
 
     public void registAction(ActionEvent actionEvent) {
@@ -348,3 +365,4 @@ public class ConsulterInscription implements Initializable, Vue {
     public void hideSignupPane(ActionEvent actionEvent) {
     }
 }
+
