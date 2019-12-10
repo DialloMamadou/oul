@@ -4,13 +4,18 @@ import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
+import daos.CentreDao;
 import daos.ClientDao;
 import daos.InscriptionDao;
 import daos.SejourDao;
+import daos.impl.CentreDaoImpl;
 import daos.impl.ClientDaoImpl;
 import daos.impl.InscriptionDaoImpl;
 import daos.impl.SejourDaoImpl;
+import dto.CentreDto;
+import dto.ClientDto;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,12 +23,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import modele.Centre;
 import modele.Client;
 import modele.Inscription;
 import modele.Sejour;
@@ -33,10 +41,23 @@ import principale.Controlleur;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class ConsulterInscription implements Initializable, Vue {
     public JFXTextField search_text2;
     public JFXTextField search_text3;
+
+    public Label ldates;
+    public Label ltype;
+    public Label lcentre;
+    public Label lcapacite;
+    public Label lprix;
+    public Label lnom;
+    public Label lprenom;
+    public Label ldate;
+    public Label lnumero;
+    public Label lemail;
+    public Label lreste;
     /**
      * Initializes the controller class.
      */
@@ -86,17 +107,22 @@ public class ConsulterInscription implements Initializable, Vue {
     }
 
 
-    public JFXTreeTableColumn<Inscription,String> genererInscriptionObservation(){
-        JFXTreeTableColumn<Inscription,String> inscription_observation=new JFXTreeTableColumn<>("observation");
-        inscription_observation.setPrefWidth(110);
-        inscription_observation.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
+    public JFXTreeTableColumn<Inscription,String> genererDepart(){
+        JFXTreeTableColumn<Inscription,String> inscription_paiement=new JFXTreeTableColumn<>("depart");
+        inscription_paiement.setPrefWidth(100);
+        inscription_paiement.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Inscription, String> param) {
                 return param.getValue().getValue().depart;
             }
         });
-        return inscription_observation;
+        return inscription_paiement;
+
+
     }
+
+
+
 
 
     public JFXTreeTableColumn<Inscription,String> genererDataInscriptioninscription(){
@@ -140,10 +166,10 @@ public class ConsulterInscription implements Initializable, Vue {
     public void chargertouslesinscriptions(){
         JFXTreeTableColumn<Inscription,String> inscription_id=this.genererInscriptionId();
         JFXTreeTableColumn<Inscription,String> inscription_paiement=this.genererInscriptionPaiement();
-        JFXTreeTableColumn<Inscription,String> inscription_observation=this.genererInscriptionObservation();
         JFXTreeTableColumn<Inscription,String> inscription_dateinscription=this.genererDataInscriptioninscription();
         JFXTreeTableColumn<Inscription,String> inscription_client=this.genererInscriptionClient();
         JFXTreeTableColumn<Inscription,String> inscription_sejour=this.genererInscriptionSejour();
+        JFXTreeTableColumn<Inscription,String> inscription_depart=this.genererDepart();
         ObservableList<Inscription> inscriptions = FXCollections.observableArrayList();
         List<Inscription> inscription=inscriptionDao.getInscriptions();
         for(Inscription inscription1: inscription){
@@ -154,36 +180,109 @@ public class ConsulterInscription implements Initializable, Vue {
             Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
             String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
             String id_sejour=sejour.id.get();
-         
+
+            Sejour sejour1=sejourDao.getSejourParId(id_sejour);
             Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),
-                    inscription1.dateinscription.get(),  nom_client,id_sejour,  inscription1.depart.get()
+                    inscription1.dateinscription.get(),  nom_client,sejour1.type.get(),  inscription1.depart.get()
             );
 
+            inscription2.setTriche(sejour1.id.get());
+            inscription2.setTriche2(client.id.get());
             inscriptions.add(inscription2);
         }
         final TreeItem<Inscription> root = new RecursiveTreeItem<Inscription>(inscriptions, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(inscription_id,inscription_paiement,inscription_observation,inscription_dateinscription,inscription_client,inscription_sejour);
+        treeView.getColumns().setAll(inscription_id,inscription_paiement,inscription_dateinscription,inscription_client,inscription_sejour,inscription_depart);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
 
+        optimiserRechercheSejour();
+        treeView.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
+                ->
+                showDetailsSejour(newValue)
+        );
+
     }
 
+    private void showDetailsSejour(TreeItem<Inscription> newValue) {
+
+        Sejour sejour=sejourDao.getSejourParId(newValue.getValue().getTriche());
+        System.out.println(sejour.toString());
+        Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
+        this.lprix.setText(sejour.prix.get());
+        this.ldates.setText(sejour.date_debut.get()+" "+sejour.date_fin.get());
+        this.ltype.setText(sejour.type.get());
+        this.lcentre.setText(centre.nom_centre.get());
+        this.lcapacite.setText(centre.capacite_centre.get());
+
+        System.out.println("code client "+newValue.getValue().code_client.get());
+
+        Client client=clientDao.getClientParId(newValue.getValue().getTriche2());
+        this.lnom.setText(client.nom_client.get());
+        this.lprenom.setText(client.prenom_client.get());
+        this.ldate.setText(client.datenaissance.get());
+        this.lemail.setText(client.email.get());
+        this.lnumero.setText(client.numero.get());
+
+        int x=Integer.parseInt(sejour.prix.get());
+        x=x-Integer.parseInt(newValue.getValue().paiement.get());
+        this.lreste.setText(String.valueOf(x));
+        if(x>0){
+            this.lreste.setTextFill(Color.web("#ff0000"));
+        }else if(x==0){
+            this.lreste.setTextFill(Color.web("#00ff00"));
+
+        }
+    }
+
+    private void optimiserRechercheSejour() {
+        search_text.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                treeView.setPredicate(new Predicate<TreeItem<Inscription>>() {
+
+                    @Override
+                    public boolean test(TreeItem<Inscription> t) {
+
+                        boolean flag =
+                                t.getValue().depart.getValue().contains(newValue)
+                                        || t.getValue().code_client.getValue().contains(newValue)
+                                        || t.getValue().dateinscription.getValue().contains(newValue)
+                                        || t.getValue().id.getValue().equals(newValue)
+                                        ||t.getValue().paiement.getValue().equals(newValue);
+                        ;
+                        if(flag)
+                            remplirGrideSejour(t);
+                            System.out.println("trouve");
 
 
+                        return flag;
 
 
+                    }
+                });
+            }
+
+        });
+    }
+
+    private void remplirGrideSejour(TreeItem<Inscription> t) {
+    }
 
 
     private ClientDao clientDao;
     private InscriptionDao inscriptionDao;
     private SejourDao sejourDao;
+    private CentreDao centreDao;
 
 
     public void initialize(URL location, ResourceBundle resources) {
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
+        centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         chargertouslesinscriptions();
     }
 

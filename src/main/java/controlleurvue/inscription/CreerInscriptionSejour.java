@@ -222,6 +222,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
                 });
             }
 
+
         });
     }
 
@@ -389,30 +390,14 @@ for(Sejour sejour:liste){
         for(Sejour sejour1:sejour){
             listeSejour.add(sejour1.type.get());
         }
-
         Set<String> set = new LinkedHashSet<String>();
-
-        // Add the elements to set
         set.addAll(listeSejour);
-
-        // Clear the list
         listeSejour.clear();
-
         // add the elements of set
         // with no duplicates to the list
         listeSejour.addAll(set);
-
-
-
-
-
-
-
-
         for(String chaine:listeSejour){
-
             this.type.getItems().add(chaine);
-
         }
     }
 
@@ -422,13 +407,11 @@ for(Sejour sejour:liste){
     }
 
     public void showDetails(TreeItem<ClientDto> pModel) {
-
         nom.setText(pModel.getValue().nom_client.getValue());
         prenom.setText(pModel.getValue().prenom_client.getValue());
         groupe.setText(pModel.getValue().groupe.getValue());
         datenaissance.setText(pModel.getValue().datenaissance.getValue());
         iduser.setText(pModel.getValue().id_client.getValue());
-
     }
 
     public void back(MouseEvent mouseEvent) {
@@ -467,17 +450,11 @@ for(Sejour sejour:liste){
 
         String montant=this.accompte.getText();
         System.out.println("accompte :"+montant);
-
         int x=Integer.parseInt(montant);
-
         if(x>0){
-
             lancerDemandeInscription();
-
-
         }else{
             lancerDemandeReservation();
-
         }
 
 
@@ -487,10 +464,8 @@ for(Sejour sejour:liste){
         JFXDialogLayout dialogLayout=new JFXDialogLayout();
         dialogLayout.setHeading(new Text("ferme"));
         dialogLayout.setBody(new Text("vous voulez finaliser cette reservation  ?"));
-
         JFXButton ok=new JFXButton("ok");
         JFXButton cancel=new JFXButton("annule");
-
         final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
 
         ok.setOnAction(new EventHandler<ActionEvent>() {
@@ -512,20 +487,11 @@ for(Sejour sejour:liste){
     private void enregistrerReservation() {
         String date=(String)this.date.getValue();
         String[] args = date.split(" au ");
-
-
-
-
         Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
-
         Client client=clientDao.getClientParId(iduser.getText());
         System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
-
         System.out.println("sejour :"+sejour.type.get()+" "+sejour.capacite.get());
-
         String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-
-
         String depart=(String)this.depart.getValue().toString();
 
         Reservation reservation=new Reservation( aujourdhui,
@@ -572,38 +538,21 @@ for(Sejour sejour:liste){
 
 
     public void enrergistrerInscription(){
-
         String date=(String)this.date.getValue();
         String[] args = date.split(" au ");
-
-
-
-
         Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
-
        Client client=clientDao.getClientParId(iduser.getText());
        System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
-
         System.out.println("sejour :"+sejour.type.get()+" "+sejour.capacite.get());
-
         String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-
-
         String depart=(String)this.depart.getValue().toString();
-
         Inscription inscription=new Inscription(this.accompte.getText().toString(), aujourdhui,
         client.id.get(),sejour.nom_centre.get(),depart) ;
-
-
         int res=inscriptionDao.insererInscription(inscription);
         if(res>0){
             Notification.affichageSucces("succes","inscription faite avec succes");
-
         }else{
             Notification.affichageEchec("erreur","echec dans la creation de la reservation");
-
         }
-
-
     }
 }

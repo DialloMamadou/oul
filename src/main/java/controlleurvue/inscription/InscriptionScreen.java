@@ -69,7 +69,7 @@ public class InscriptionScreen implements Vue {
     }
 
     public void consulterLesReservations(MouseEvent mouseEvent) {
-        this.controlleur.lancerPageConsulterReservation();
+        this.controlleur.lancerPageSejour();
     }
 
     public void souris_sort_reservationconsulter(MouseEvent mouseEvent) {
