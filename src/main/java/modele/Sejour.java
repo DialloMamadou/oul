@@ -18,9 +18,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
     public StringProperty type;
     public StringProperty nom_centre;
     public StringProperty prix;
-
     public StringProperty ageMin;
-
     public StringProperty ageMax;
     public StringProperty capacite;
 
@@ -29,6 +27,8 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
     public Sejour(){
         super();
     }
+
+
 
 
 
@@ -49,8 +49,8 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
     }
 
    public Sejour(String id, String duree, String date_debut, String date_fin,
-                  String type, String nom_centre,
-                  String ageMax, String ageMin, String capacite, String prix) {
+                  String type, String nom_centre,String prix,
+                  String ageMax, String ageMin, String capacite) {
         this.id = new SimpleStringProperty(id);
         this.duree = new SimpleStringProperty(duree);
         this.date_debut =new SimpleStringProperty( date_debut);
@@ -61,5 +61,21 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
         this.ageMin =new SimpleStringProperty( ageMin);
         this.capacite =new SimpleStringProperty( capacite);
         this.prix = new SimpleStringProperty(prix);
+    }
+
+    @Override
+    public String toString() {
+        return "Sejour{" +
+                "id=" + id +
+                ", duree=" + duree +
+                ", date_debut=" + date_debut +
+                ", date_fin=" + date_fin +
+                ", type=" + type +
+                ", nom_centre=" + nom_centre +
+                ", prix=" + prix +
+                ", ageMin=" + ageMin +
+                ", ageMax=" + ageMax +
+                ", capacite=" + capacite +
+                '}';
     }
 }
