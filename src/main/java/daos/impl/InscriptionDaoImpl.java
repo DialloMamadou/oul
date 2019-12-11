@@ -6,6 +6,7 @@ import controlleurvue.centre.CreerCentre;
 import controlleurvue.sejour.CreerSejour;
 import daos.InscriptionDao;
 import modele.Centre;
+import modele.Client;
 import modele.Inscription;
 import modele.Sejour;
 
@@ -130,6 +131,57 @@ try {
             e.printStackTrace();
         }
 return x;
+    }
+
+    @Override
+    public List<Inscription> getInscriptionsParIdSejour(String s) {
+        String sql="SELECT * FROM inscription WHERE id_sejour ='"+s+"'";
+        List<Inscription>liste=new ArrayList<>();
+
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste.add(new Inscription(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6)));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;
+
+    }
+
+    @Override
+    public Inscription getInscriptionsParIdSejourEtIdClient(String text, String s) {
+        String sql="SELECT * FROM inscription WHERE id_sejour ='"+text+"' AND code_client="+s;
+        Inscription inscription =null;
+
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                inscription=new Inscription(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return inscription;
     }
 
 
