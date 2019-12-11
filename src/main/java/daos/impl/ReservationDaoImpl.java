@@ -6,6 +6,7 @@ import controlleurvue.centre.CreerCentre;
 import controlleurvue.sejour.CreerSejour;
 import daos.InscriptionDao;
 import daos.ReservationDao;
+import modele.Centre;
 import modele.Inscription;
 import modele.Reservation;
 
@@ -73,13 +74,12 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
     public int supprimerParId(String toString) {
 
         int res=0;
-        String sql="DELETE FROM reservation WHERE id_reservation=?";
+        String sql="DELETE FROM reservation WHERE id_reservation="+toString;
+        System.out.println("sql supprime "+sql);
         Connection connection= DBconnexion.getConnection();
         try {
             PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
-            if(toString.length()!=0) {
-                ps.setString(1, toString);
-            }
+
 
             res=ps.executeUpdate();
 
@@ -87,5 +87,28 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
             Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
         }
         return res;
+    }
+
+    @Override
+    public Reservation getReservationParId(String id) {
+        String sql="SELECT * FROM reservation WHERE id_reservation ='"+id+"'";
+        Reservation liste=null;
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste=new Reservation(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;
     }
 }

@@ -6,6 +6,8 @@ import javafx.beans.property.StringProperty;
 
 public class Reservation  extends RecursiveTreeObject<Reservation> {
 
+    private  String triche="";
+    private String triche2="";
     public StringProperty id;
     public StringProperty  dateinscription;
     public StringProperty code_client;
@@ -33,4 +35,19 @@ public class Reservation  extends RecursiveTreeObject<Reservation> {
     }
 
 
+    public String getTriche() {
+        return triche;
+    }
+
+    public void setTriche(String triche) {
+        this.triche = triche;
+    }
+
+    public String getTriche2() {
+        return triche2;
+    }
+
+    public void setTriche2(String triche2) {
+        this.triche2 = triche2;
+    }
 }

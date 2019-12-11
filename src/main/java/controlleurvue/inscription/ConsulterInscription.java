@@ -352,6 +352,7 @@ public class ConsulterInscription implements Initializable, Vue {
                     int valeur=Integer.parseInt(s)-Integer.parseInt(result.get());
                     System.out.println("valeur valeur = "+valeur);
                     this.lreste.setText(String.valueOf(valeur));
+                    chargertouslesinscriptions();
 
                 }
         }
