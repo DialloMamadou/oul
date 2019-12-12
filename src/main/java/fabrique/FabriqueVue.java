@@ -204,6 +204,6 @@ public class FabriqueVue{
     }
 
     public void creerVueHistorique() {
-        //load(HistoriqueClient)
+        load(HistoriqueClient.class.getResource("/vue/historiqueClient.fxml"),"client historique");
     }
 }

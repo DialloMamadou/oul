@@ -1,16 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXTreeView?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vue.HistoriqueClient">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.client.HistoriqueClient">
    <children>
       <AnchorPane prefHeight="730.0" prefWidth="1366.0">
          <children>
-            <Pane layoutY="6.0" prefHeight="721.0" prefWidth="200.0" />
-            <JFXTreeView layoutX="200.0" prefHeight="730.0" prefWidth="1168.0" />
+            <Pane layoutY="6.0" prefHeight="721.0" prefWidth="239.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="68.0" text="nom" />
+                  <Label fx:id="lnom" layoutX="78.0" layoutY="68.0" />
+                  <Label layoutX="14.0" layoutY="100.0" text="prenom" />
+                  <Label fx:id="lprenom" layoutX="78.0" layoutY="100.0" />
+                  <Label layoutX="14.0" layoutY="130.0" text="date naissance" />
+                  <Label fx:id="ldatenaissance" layoutX="113.0" layoutY="130.0" />
+                  <Label layoutX="14.0" layoutY="173.0" text="groupe" />
+                  <Label fx:id="lgroupe" layoutX="78.0" layoutY="173.0" />
+                  <Label layoutX="14.0" layoutY="209.0" text="numero" />
+                  <Label fx:id="lnumero" layoutX="78.0" layoutY="209.0" />
+                  <Label layoutX="14.0" layoutY="249.0" text="observation" />
+                  <Label fx:id="lobservation" layoutX="78.0" layoutY="249.0" />
+                  <Label layoutX="14.0" layoutY="292.0" text="email" />
+                  <Label fx:id="lemail" layoutX="78.0" layoutY="292.0" />
+                  <Label layoutX="14.0" layoutY="352.0" text="adresse" />
+                  <Label fx:id="ladresse" layoutX="78.0" layoutY="352.0" />
+                  <Label layoutX="14.0" layoutY="391.0" text="code postale" />
+                  <Label fx:id="lcodepostale" layoutX="92.0" layoutY="391.0" />
+                  <Label layoutX="78.0" layoutY="437.0" />
+                  <Button layoutX="28.0" layoutY="536.0" mnemonicParsing="false" onMouseClicked="#retourmenuclient" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #09e2a7;" text="retour" textFill="WHITE" />
+                  <JFXRadioButton fx:id="btninscription" layoutX="13.0" layoutY="454.0" onMouseClicked="#visualiserinscription" text="inscription" />
+                  <JFXRadioButton fx:id="btnreservation" layoutX="14.0" layoutY="420.0" onMouseClicked="#visualiserReservation" text="reservation" />
+                  <JFXRadioButton fx:id="btnannulation" layoutX="14.0" layoutY="487.0" onMouseClicked="#visualiserannulation" text="annulation" />
+               </children></Pane>
+            <Pane layoutX="239.0" layoutY="-3.0" prefHeight="730.0" prefWidth="1127.0">
+               <children>
+                  <JFXTreeTableView fx:id="annulations" layoutX="6.0" layoutY="6.0" prefHeight="721.0" prefWidth="1121.0" visible="false" />
+                  <JFXTreeTableView fx:id="reservations" prefHeight="730.0" prefWidth="1127.0" visible="false" />
+                  <JFXTreeTableView fx:id="inscriptions" layoutX="6.0" layoutY="6.0" prefHeight="721.0" prefWidth="1121.0" />
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
    </children>

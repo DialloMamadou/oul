@@ -289,6 +289,7 @@ public class ConsulterClient implements Initializable, Vue {
 
     public void historiqueClient(MouseEvent mouseEvent) {
 
+
         controlleur.lancerPageSejourHistoriqueClient(this.idclient.getText());
     }
 }
