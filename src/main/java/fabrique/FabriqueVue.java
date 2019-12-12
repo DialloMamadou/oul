@@ -7,6 +7,7 @@ import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.client.ClientScreen;
 import controlleurvue.client.ConsulterClient;
 import controlleurvue.client.CreerClient;
+import controlleurvue.client.HistoriqueClient;
 import controlleurvue.groupe.ConsulterGroupe;
 import controlleurvue.groupe.CreerGroupe;
 import controlleurvue.groupe.GroupeScreen;
@@ -200,5 +201,9 @@ public class FabriqueVue{
     public void creerVueConsulterReservation() {
         load(ConsulterReservation.class.getResource("/vue/consulterReservation.fxml"), "ecran.");
 
+    }
+
+    public void creerVueHistorique() {
+        //load(HistoriqueClient)
     }
 }

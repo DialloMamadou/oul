@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.control.Label?>
@@ -9,18 +9,14 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
-<?import javafx.geometry.Insets?>
-<?import com.jfoenix.controls.JFXPasswordField?>
-<?import javafx.scene.effect.DropShadow?>
-<StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.client.ConsulterClient">
+<StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.client.ConsulterClient">
     <children>
         <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
             <children>
                 <JFXTreeTableView fx:id="treeView" layoutX="445.0" layoutY="21.0" maxWidth="-Infinity" opacity="0.7" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                 <Pane layoutX="29.0" layoutY="22.0" opacity="0.7" prefHeight="700.0" prefWidth="421.0" style="-fx-background-color: #fff; -fx-background-radius: 6 px;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="930.0" AnchorPane.topAnchor="15.0">
                     <children>
-                        <Pane layoutX="21.0" layoutY="117.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                        <Pane layoutX="14.0" layoutY="7.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
                                 <JFXTextField fx:id="search_text" focusColor="#09e2a7" labelFloat="true" layoutX="34.0" layoutY="29.0" prefHeight="25.0" prefWidth="313.0" promptText="chercher un sejour par id " />
                                 <JFXButton buttonType="RAISED" layoutX="79.0" layoutY="77.0" onMouseClicked="#cherchecentreparid" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="chercher" textFill="WHITE">
@@ -48,28 +44,47 @@
                                 </JFXButton>
                             </children>
                         </Pane>
-                        <Label layoutX="68.0" layoutY="64.0" text="vous pouvez chercher les&#10;  donner d un sejour">
-                            <font>
-                                <Font name="System Bold" size="12.0" />
-                            </font>
-                        </Label>
 
 
 
 
-                        <Pane  layoutX="21.0" layoutY="320.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                        <Pane layoutX="14.0" layoutY="141.0" prefHeight="407.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXTextField fx:id="search_text2" focusColor="#09e2a7" labelFloat="true" layoutX="34.0" layoutY="29.0" prefHeight="25.0" prefWidth="313.0" promptText="Editer ou supprimer par id " />
-                                <JFXButton buttonType="RAISED" layoutX="79.0" layoutY="77.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Editer" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="22.0" layoutY="324.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Editer" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
-                                <JFXButton buttonType="RAISED" layoutX="227.0" layoutY="77.0" onMouseClicked="#SupprimerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Supprimer" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="125.0" layoutY="324.0" onMouseClicked="#SupprimerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Supprimer" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
+                        <JFXButton buttonType="RAISED" layoutX="249.0" layoutY="328.0" onMouseClicked="#historiqueClient" prefHeight="30.0" prefWidth="101.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="historique" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <Label layoutX="14.0" layoutY="18.0" text="nom" />
+                        <Label layoutX="14.0" layoutY="70.0" text="prenom" />
+                        <Label layoutX="14.0" layoutY="124.0" text="adresse" />
+                        <Label layoutX="14.0" layoutY="215.0" text="portable" />
+                        <Label layoutX="205.0" layoutY="18.0" text="observation" />
+                        <Label layoutX="205.0" layoutY="70.0" text="email" />
+                        <Label layoutX="205.0" layoutY="124.0" text="code" />
+                        <Label layoutX="205.0" layoutY="166.0" text="groupe" />
+                        <Label layoutX="14.0" layoutY="166.0" text="date" />
+                        <Label fx:id="lnom" layoutX="62.0" layoutY="18.0" />
+                        <Label fx:id="lprenom" layoutX="62.0" layoutY="70.0" />
+                        <Label fx:id="ladresse" layoutX="62.0" layoutY="124.0" />
+                        <Label fx:id="ldate" layoutX="62.0" layoutY="166.0" />
+                        <Label fx:id="lportable" layoutX="76.0" layoutY="215.0" />
+                        <Label fx:id="lobservation" layoutX="272.0" layoutY="18.0" />
+                        <Label fx:id="lemail" layoutX="272.0" layoutY="70.0" />
+                        <Label fx:id="lcode" layoutX="272.0" layoutY="124.0" />
+                        <Label fx:id="lgroupe" layoutX="272.0" layoutY="166.0" />
+                        <Label layoutX="203.0" layoutY="215.0" text="id client" />
+                        <Label fx:id="idclient" layoutX="293.0" layoutY="215.0" />
                             </children>
                         </Pane>
 

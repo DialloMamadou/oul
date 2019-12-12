@@ -9,6 +9,7 @@ import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.centre.CreerCentre;
 import daos.ClientDao;
 import daos.impl.ClientDaoImpl;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.image.Image;
@@ -28,6 +30,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import modele.Client;
 import modele.Groupe;
+import modele.Inscription;
 import modele.Sejour;
 import notification.Notification;
 import org.controlsfx.control.Notifications;
@@ -39,6 +42,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,6 +51,16 @@ public class ConsulterClient implements Initializable, Vue {
 
     public JFXTextField search_text2;
     public JFXTextField search_text3;
+    public Label lnom;
+    public Label lprenom;
+    public Label ladresse;
+    public Label ldate;
+    public Label lportable;
+    public Label lobservation;
+    public Label lemail;
+    public Label lcode;
+    public Label lgroupe;
+    public Label idclient;
     /**
      * Initializes the controller class.
      */
@@ -151,7 +165,57 @@ public class ConsulterClient implements Initializable, Vue {
         treeView.setShowRoot(false);
 
 
+        optimiserRecherClient();
+        treeView.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
+                ->
+                showDetailsClient(newValue));
 
+
+
+    }
+
+    private void optimiserRecherClient() {
+        this.search_text.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                treeView.setPredicate(new Predicate<TreeItem<Client>>() {
+
+                    @Override
+                    public boolean test(TreeItem<Client> t) {
+/*
+                        boolean flag =
+                                t.getValue()..getValue().contains(newValue)
+                                        || t.getValue().code_client.getValue().contains(newValue)
+                                        || t.getValue().dateinscription.getValue().contains(newValue)
+                                        || t.getValue().id.getValue().equals(newValue)
+                                        ||t.getValue().paiement.getValue().equals(newValue);
+                        ;*/
+                        System.out.println("trouve");
+
+
+                        return true ;
+
+
+                    }
+                });
+            }
+
+        });
+    }
+
+    private void showDetailsClient(TreeItem<Client> newValue) {
+        this.ldate.setText(newValue.getValue().datenaissance.get());
+        this.lemail.setText(newValue.getValue().email.get());
+        this.lgroupe.setText(newValue.getValue().groupe.get());
+        this.lnom.setText(newValue.getValue().nom_client.get());
+        this.lprenom.setText(newValue.getValue().prenom_client.get());
+        this.ladresse.setText(newValue.getValue().adresse.get());
+        this.lobservation.setText(newValue.getValue().observation.get());
+        this.lcode.setText(newValue.getValue().codePostale.get());
+        this.idclient.setText(newValue.getValue().id.get());
+        this.lportable.setText(newValue.getValue().numero.get());
     }
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -223,4 +287,8 @@ public class ConsulterClient implements Initializable, Vue {
     public void hideSignupPane(ActionEvent actionEvent) {
     }
 
+    public void historiqueClient(MouseEvent mouseEvent) {
+
+        controlleur.lancerPageSejourHistoriqueClient(this.idclient.getText());
+    }
 }
