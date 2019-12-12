@@ -69,6 +69,7 @@ public class HistoriqueClient implements Initializable, Vue {
         this.lobservation.setText(client.observation.get());
         this.lemail.setText(client.email.get());
 
+
         this.btninscription.setSelected(true);
         this.btnannulation.setSelected(false);
         this.btnreservation.setSelected(false);

@@ -39,6 +39,7 @@
                   <JFXRadioButton fx:id="btnannulation" layoutX="14.0" layoutY="487.0" onMouseClicked="#visualiserannulation" text="annulation" />
                </children></Pane>
             <Pane layoutX="239.0" layoutY="-3.0" prefHeight="730.0" prefWidth="1127.0">
+
                <children>
                   <JFXTreeTableView fx:id="annulations" layoutX="6.0" layoutY="6.0" prefHeight="721.0" prefWidth="1121.0" visible="false" />
                   <JFXTreeTableView fx:id="reservations" prefHeight="730.0" prefWidth="1127.0" visible="false" />

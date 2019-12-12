@@ -68,6 +68,7 @@ public class FabriqueVue{
             Vue view = loader.getController();
             view.setController(controlleur);
 
+
             stage.setTitle(title);
             Scene scene=new Scene(root);
 
