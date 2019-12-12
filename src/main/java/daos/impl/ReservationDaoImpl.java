@@ -111,4 +111,29 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
 
         return liste;
     }
+
+    @Override
+    public List<Reservation> getReservationsParIdClient(int id) {
+        String sql="SELECT * FROM reservation WHERE codeClient ='"+id+"'";
+        List<Reservation>liste=new ArrayList<>();
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste.add(new Reservation(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5)));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;
+
+    }
 }

@@ -19,4 +19,6 @@ public interface InscriptionDao {
     List<Inscription> getInscriptionsParIdSejour(String s);
 
     Inscription getInscriptionsParIdSejourEtIdClient(String text, String s);
+
+    List<Inscription> getInscriptiosnParIdClient(int id);
 }

@@ -184,5 +184,29 @@ return x;
         return inscription;
     }
 
+    @Override
+    public List<Inscription> getInscriptiosnParIdClient(int id) {
+        String sql="SELECT * FROM inscription WHERE code_client ='"+id+"'";
+        List<Inscription>liste=new ArrayList<>();
+
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste.add(new Inscription(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6)));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;    }
+
 
 }

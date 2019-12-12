@@ -13,5 +13,7 @@ public interface ReservationDao {
     int supprimerParId(String toString);
 
     Reservation getReservationParId(String id);
+
+    List<Reservation> getReservationsParIdClient(int id);
 }
 
