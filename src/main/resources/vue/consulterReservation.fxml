@@ -136,6 +136,13 @@
                         <Label layoutX="187.0" layoutY="262.0" />
                         <Label fx:id="lidclient" layoutX="244.0" layoutY="238.0" />
                         <Label fx:id="lidsejour" layoutX="244.0" layoutY="262.0" />
+                        <JFXButton buttonType="RAISED" layoutX="221.0" layoutY="300.0" onMouseClicked="#annuler" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="annuler" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <Label layoutX="154.0" layoutY="262.0" text="id sejour" />
+                        <Label layoutX="148.0" layoutY="238.0" text="id client" />
                             </children>
                         </Pane>
 

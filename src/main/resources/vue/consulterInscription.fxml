@@ -132,6 +132,11 @@
                         <Label fx:id="lreste" layoutX="114.0" layoutY="262.0" prefHeight="17.0" prefWidth="55.0" />
                         <Label layoutX="14.0" layoutY="238.0" text="id inscription" />
                         <Label fx:id="idinscription" layoutX="114.0" layoutY="238.0" />
+                        <JFXButton buttonType="RAISED" layoutX="230.0" layoutY="300.0" onMouseClicked="#annuler" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="annuler" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
                             </children>
                         </Pane>
 
