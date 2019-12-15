@@ -6,8 +6,6 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
 import daos.*;
 import daos.impl.*;
-import dto.CentreDto;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -35,7 +33,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
-public class ConsulterReservation implements Initializable, Vue {
+public class ConsulterAnnulation implements Initializable, Vue {
     public JFXTextField search_text2;
     public JFXTextField search_text3;
 
@@ -65,7 +63,7 @@ public class ConsulterReservation implements Initializable, Vue {
 
     String status=null;
     @FXML
-    private JFXTreeTableView<Reservation> treeView;
+    private JFXTreeTableView<Annulation> treeView;
     @FXML
     private JFXTextField search_text;
 
@@ -75,13 +73,13 @@ public class ConsulterReservation implements Initializable, Vue {
 
 
 
-    public JFXTreeTableColumn<Reservation,String>genererInscriptionId(){
+    public JFXTreeTableColumn<Annulation,String> genererInscriptionId(){
 
-        JFXTreeTableColumn<Reservation,String> inscription_id=new JFXTreeTableColumn<>(" Id");
+        JFXTreeTableColumn<Annulation,String> inscription_id=new JFXTreeTableColumn<>(" Id");
         inscription_id.setPrefWidth(100);
-        inscription_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Reservation, String>, ObservableValue<String>>() {
+        inscription_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Reservation, String> param) {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Annulation, String> param) {
                 return param.getValue().getValue().id;
             }
         });
@@ -91,13 +89,13 @@ public class ConsulterReservation implements Initializable, Vue {
 
 
 
-    public JFXTreeTableColumn<Reservation,String> genererDepart(){
-        JFXTreeTableColumn<Reservation,String> inscription_paiement=new JFXTreeTableColumn<>("depart");
+    public JFXTreeTableColumn<Annulation,String> geenererIdSejour(){
+        JFXTreeTableColumn<Annulation,String> inscription_paiement=new JFXTreeTableColumn<>("depart");
         inscription_paiement.setPrefWidth(100);
-        inscription_paiement.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Reservation, String>, ObservableValue<String>>() {
+        inscription_paiement.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Reservation, String> param) {
-                return param.getValue().getValue().depart;
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Annulation, String> param) {
+                return param.getValue().getValue().idsejour;
             }
         });
         return inscription_paiement;
@@ -109,72 +107,59 @@ public class ConsulterReservation implements Initializable, Vue {
 
 
 
-    public JFXTreeTableColumn<Reservation,String> genererDataInscriptioninscription(){
-        JFXTreeTableColumn<Reservation,String> inscription_dateinscription=new JFXTreeTableColumn<>("date inscription");
+    public JFXTreeTableColumn<Annulation,String> genererIdClient(){
+        JFXTreeTableColumn<Annulation,String> inscription_dateinscription=new JFXTreeTableColumn<>("date inscription");
         inscription_dateinscription.setPrefWidth(110);
-        inscription_dateinscription.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Reservation, String>, ObservableValue<String>>() {
+        inscription_dateinscription.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Reservation, String> param) {
-                return param.getValue().getValue().dateinscription;
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Annulation, String> param) {
+                return param.getValue().getValue().idclient;
             }
         });
         return  inscription_dateinscription;
     }
 
 
-    public JFXTreeTableColumn<Reservation,String> genererInscriptionClient(){
-        JFXTreeTableColumn<Reservation,String> inscription_client=new JFXTreeTableColumn<>(" Client");
+    public JFXTreeTableColumn<Annulation,String> genererInscriptionClient(){
+        JFXTreeTableColumn<Annulation,String> inscription_client=new JFXTreeTableColumn<>(" Client");
         inscription_client.setPrefWidth(110);
-        inscription_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Reservation, String>, ObservableValue<String>>() {
+        inscription_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Reservation, String> param) {
-                return param.getValue().getValue().code_client;
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Annulation, String> param) {
+                return param.getValue().getValue().motif;
             }
         });
         return inscription_client;
     }
 
-    public  JFXTreeTableColumn<Reservation,String> genererInscriptionSejour(){
 
-        JFXTreeTableColumn<Reservation,String> inscription_sejour=new JFXTreeTableColumn<>(" Sejour");
-        inscription_sejour.setPrefWidth(110);
-        inscription_sejour.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Reservation, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Reservation, String> param) {
-                return param.getValue().getValue().id_sejour;
-            }
-        });
-        return  inscription_sejour;
-    }
 
     public void chargertouslesinscriptions(){
-        JFXTreeTableColumn<Reservation,String> inscription_id=this.genererInscriptionId();
-        JFXTreeTableColumn<Reservation,String> inscription_dateinscription=this.genererDataInscriptioninscription();
-        JFXTreeTableColumn<Reservation,String> inscription_client=this.genererInscriptionClient();
-        JFXTreeTableColumn<Reservation,String> inscription_sejour=this.genererInscriptionSejour();
-        JFXTreeTableColumn<Reservation,String> inscription_depart=this.genererDepart();
-        ObservableList<Reservation> inscriptions = FXCollections.observableArrayList();
-        List<Reservation> reservations=reservationDao.getReservations();
-        for(Reservation reservation: reservations){
+        JFXTreeTableColumn<Annulation,String> inscription_id=this.genererInscriptionId();
+        JFXTreeTableColumn<Annulation,String> inscription_dateinscription=this.geenererIdSejour();
+        JFXTreeTableColumn<Annulation,String> inscription_client=this.genererIdClient();
+        JFXTreeTableColumn<Annulation,String> inscription_sejour=this.genererInscriptionClient();
+        ObservableList<Annulation> inscriptions = FXCollections.observableArrayList();
+        List<Annulation> reservations=annulationDao.getAnnulartions();
+        for(Annulation annulation: reservations){
 
 
-            Client client=clientDao.getClientParId(reservation.code_client.get());
-            System.out.println("id sejour :"+reservation.id_sejour.get());
-            Sejour sejour=sejourDao.getSejourParId(reservation.id_sejour.get());
+            Client client=clientDao.getClientParId(annulation.idclient.get());
+            Sejour sejour=sejourDao.getSejourParId(annulation.idsejour.get());
             String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
             String id_sejour=sejour.id.get();
 
             Sejour sejour1=sejourDao.getSejourParId(id_sejour);
-            Reservation reservation1=new Reservation(reservation.id.get(),reservation.dateinscription.get(),
-                    nom_client,sejour1.type.get(),reservation.depart.get());
+            Annulation reservation1=new Annulation(annulation.id.get(),annulation.motif.get(),sejour.type.get(),
+                    nom_client);
 
 
             reservation1.setTriche(sejour1.id.get());
             reservation1.setTriche2(client.id.get());
             inscriptions.add(reservation1);
         }
-        final TreeItem<Reservation> root = new RecursiveTreeItem<Reservation>(inscriptions, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(inscription_id,inscription_dateinscription,inscription_client,inscription_sejour,inscription_depart);
+        final TreeItem<Annulation> root = new RecursiveTreeItem<Annulation>(inscriptions, RecursiveTreeObject::getChildren);
+        treeView.getColumns().setAll(inscription_id,inscription_dateinscription,inscription_client,inscription_sejour);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
@@ -187,7 +172,7 @@ public class ConsulterReservation implements Initializable, Vue {
 
     }
 
-    private void showDetailsSejour(TreeItem<Reservation> newValue) {
+    private void showDetailsSejour(TreeItem<Annulation> newValue) {
 
         this.idinscription.setText(newValue.getValue().id.get());
         Sejour sejour=sejourDao.getSejourParId(newValue.getValue().getTriche());
@@ -199,7 +184,6 @@ public class ConsulterReservation implements Initializable, Vue {
         this.lcentre.setText(centre.nom_centre.get());
         this.lcapacite.setText(centre.capacite_centre.get());
 
-        System.out.println("code client "+newValue.getValue().code_client.get());
 
         Client client=clientDao.getClientParId(newValue.getValue().getTriche2());
         this.lnom.setText(client.nom_client.get());
@@ -210,16 +194,11 @@ public class ConsulterReservation implements Initializable, Vue {
 
         this.lidclient.setText(client.id.get());
         this.lidsejour.setText(sejour.id.get());
+        this.lmotif.setText(newValue.getValue().motif.get());
 
         int x=Integer.parseInt(sejour.prix.get());
 
-        this.lreste.setText(String.valueOf(x));
-        if(x>0){
-            this.lreste.setTextFill(Color.web("#ff0000"));
-        }else if(x==0){
-            this.lreste.setTextFill(Color.web("#00ff00"));
 
-        }
     }
 
     private void optimiserRechercheSejour() {
@@ -228,18 +207,17 @@ public class ConsulterReservation implements Initializable, Vue {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
-                treeView.setPredicate(new Predicate<TreeItem<Reservation>>() {
+                treeView.setPredicate(new Predicate<TreeItem<Annulation>>() {
 
                     @Override
-                    public boolean test(TreeItem<Reservation> t) {
+                    public boolean test(TreeItem<Annulation> t) {
 
                         boolean flag =
-                                t.getValue().depart.getValue().contains(newValue)
-                                        || t.getValue().code_client.getValue().contains(newValue)
-                                        || t.getValue().dateinscription.getValue().contains(newValue)
-                                        || t.getValue().id.getValue().equals(newValue);
+                                t.getValue().id.getValue().contains(newValue)
+                                        || t.getValue().idclient.getValue().contains(newValue)
+                                        || t.getValue().idsejour.getValue().contains(newValue)
+                                        || t.getValue().motif.equals(newValue);
                         if(flag)
-                            remplirGrideSejour(t);
                         System.out.println("trouve");
 
 
@@ -253,8 +231,6 @@ public class ConsulterReservation implements Initializable, Vue {
         });
     }
 
-    private void remplirGrideSejour(TreeItem<Reservation> t) {
-    }
 
 
     private ClientDao clientDao;

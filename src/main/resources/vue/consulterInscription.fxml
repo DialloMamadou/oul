@@ -137,6 +137,10 @@
                               <Font size="14.0" />
                            </font>
                         </JFXButton>
+                        <Label layoutX="247.0" layoutY="238.0" text="id sejour" />
+                        <Label id="idsejour" fx:id="idsejour" layoutX="353.0" layoutY="238.0" />
+                        <Label layoutX="247.0" layoutY="271.0" text="id client" />
+                        <Label fx:id="idclient" layoutX="333.0" layoutY="271.0" />
                             </children>
                         </Pane>
 

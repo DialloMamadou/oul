@@ -12,6 +12,7 @@ public class InscriptionScreen implements Vue {
     public Pane pane_2;
     public Pane pane_3;
     public Pane pane_111;
+    public Pane pane_21;
 
     private Controlleur controlleur;
 
@@ -68,6 +69,11 @@ public class InscriptionScreen implements Vue {
 
     }
 
+
+    public void consulterAnnulation(MouseEvent mouseEvent) {
+        this.controlleur.creerVueConsulterAnnulation();
+    }
+
     public void consulterLesReservations(MouseEvent mouseEvent) {
         this.controlleur.creerVueConsulterReservation();
     }
@@ -81,4 +87,17 @@ public class InscriptionScreen implements Vue {
         pane_111.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
 
     }
+
+    public void souris_dessus_5(MouseEvent mouseEvent) {
+        pane_21.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
+
+    }
+
+    public void souris_sort_5(MouseEvent mouseEvent) {
+        pane_21.setStyle("-fx-background-color: white; -fx-background-radius: 6px;");
+
+    }
+
+
+
 }

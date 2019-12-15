@@ -4,14 +4,8 @@ import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
-import daos.CentreDao;
-import daos.ClientDao;
-import daos.InscriptionDao;
-import daos.SejourDao;
-import daos.impl.CentreDaoImpl;
-import daos.impl.ClientDaoImpl;
-import daos.impl.InscriptionDaoImpl;
-import daos.impl.SejourDaoImpl;
+import daos.*;
+import daos.impl.*;
 import dto.CentreDto;
 import dto.ClientDto;
 import javafx.beans.property.StringProperty;
@@ -32,10 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import modele.Centre;
-import modele.Client;
-import modele.Inscription;
-import modele.Sejour;
+import modele.*;
 import notification.Notification;
 import principale.Controlleur;
 
@@ -61,6 +52,8 @@ public class ConsulterInscription implements Initializable, Vue {
     public Label lemail;
     public Label lreste;
     public Label idinscription;
+    public Label idclient;
+    public Label idsejour;
     /**
      * Initializes the controller class.
      */
@@ -211,6 +204,7 @@ public class ConsulterInscription implements Initializable, Vue {
 
         this.idinscription.setText(newValue.getValue().id.get());
         Sejour sejour=sejourDao.getSejourParId(newValue.getValue().getTriche());
+        this.idsejour.setText(sejour.id.get());
         System.out.println(sejour.toString());
         Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
         this.lprix.setText(sejour.prix.get());
@@ -222,6 +216,8 @@ public class ConsulterInscription implements Initializable, Vue {
         System.out.println("code client "+newValue.getValue().code_client.get());
 
         Client client=clientDao.getClientParId(newValue.getValue().getTriche2());
+        this.idclient.setText(client.id.get());
+
         this.lnom.setText(client.nom_client.get());
         this.lprenom.setText(client.prenom_client.get());
         this.ldate.setText(client.datenaissance.get());
@@ -280,6 +276,7 @@ public class ConsulterInscription implements Initializable, Vue {
     private InscriptionDao inscriptionDao;
     private SejourDao sejourDao;
     private CentreDao centreDao;
+    private AnnulationDao annulationDao;
 
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -287,6 +284,7 @@ public class ConsulterInscription implements Initializable, Vue {
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
+        annulationDao=new AnnulationDaoImpl(DBconnexion.getConnection());
         chargertouslesinscriptions();
     }
 
@@ -364,6 +362,60 @@ public class ConsulterInscription implements Initializable, Vue {
     }
 
     public void hideSignupPane(ActionEvent actionEvent) {
+    }
+
+    public void annuler(MouseEvent mouseEvent) {
+
+        JFXDialogLayout dialogLayout=new JFXDialogLayout();
+        dialogLayout.setHeading(new Text("ferme"));
+        dialogLayout.setBody(new Text("vous voulez vraiment annuler cette inscription ?"));
+
+        JFXButton ok=new JFXButton("oui");
+        JFXButton cancel=new JFXButton("non");
+
+        final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
+
+        ok.setOnAction(MouseEvent ->annulerReservation(mouseEvent,dialog));
+        cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            public void handle(javafx.event.ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialogLayout.setActions(ok,cancel);
+        dialog.show();
+
+    }
+
+
+    private void annulerReservation(MouseEvent mouseEvent,JFXDialog dialogLayout) {
+
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("annulation reservation");
+        dialog.setHeaderText("indiquer la raison ");
+        dialog.setContentText("motif:");
+
+// Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if(result.isPresent()){
+            System.out.println("motif "+result.get());
+
+            Annulation annulation=new Annulation(result.get(),this.idsejour.getText(),this.idclient.getText());
+            int res=annulationDao.insererAnnulation(annulation);
+            if(res==0){
+                Notification.affichageEchec("echec annulation ", "il y a eu une erreur ");
+
+            }else{
+                Notification.affichageSucces("annulation","l annulation a bien ete effectue");
+                int bis=inscriptionDao.supperimerParId(this.idinscription.getText());
+                this.chargertouslesinscriptions();
+
+            }
+        }
+
+
+        dialogLayout.close();
+
+
     }
 }
 

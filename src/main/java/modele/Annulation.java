@@ -12,6 +12,9 @@ public class Annulation extends RecursiveTreeObject<Annulation> {
     public StringProperty  idsejour;
     public StringProperty idclient;
 
+    private  String triche="";
+    private String triche2="";
+
     public Annulation(StringProperty id, StringProperty motif, StringProperty idsejour, StringProperty idclient) {
         this.id = id;
         this.motif = motif;
@@ -29,4 +32,27 @@ public class Annulation extends RecursiveTreeObject<Annulation> {
     }
 
 
+    public Annulation(String s, String string, String string1, String string2) {
+        this.id=new SimpleStringProperty(s);
+        this.motif=new SimpleStringProperty(string);
+        this.idsejour=new SimpleStringProperty(string1);
+        this.idclient=new SimpleStringProperty(string2);
+
+    }
+
+    public String getTriche() {
+        return triche;
+    }
+
+    public void setTriche(String triche) {
+        this.triche = triche;
+    }
+
+    public String getTriche2() {
+        return triche2;
+    }
+
+    public void setTriche2(String triche2) {
+        this.triche2 = triche2;
+    }
 }

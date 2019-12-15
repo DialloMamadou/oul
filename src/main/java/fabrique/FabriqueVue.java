@@ -11,10 +11,7 @@ import controlleurvue.client.HistoriqueClient;
 import controlleurvue.groupe.ConsulterGroupe;
 import controlleurvue.groupe.CreerGroupe;
 import controlleurvue.groupe.GroupeScreen;
-import controlleurvue.inscription.ConsulterInscription;
-import controlleurvue.inscription.ConsulterReservation;
-import controlleurvue.inscription.CreerInscriptionSejour;
-import controlleurvue.inscription.InscriptionScreen;
+import controlleurvue.inscription.*;
 import controlleurvue.sejour.ConsulterSejour;
 import controlleurvue.sejour.CreerSejour;
 import controlleurvue.sejour.SejourScreen;
@@ -206,5 +203,9 @@ public class FabriqueVue{
 
     public void creerVueHistorique() {
         load(HistoriqueClient.class.getResource("/vue/historiqueClient.fxml"),"client historique");
+    }
+
+    public void creerVueConsulterAnnulation() {
+        load(ConsulterAnnulation.class.getResource("/vue/consulterAnnulation.fxml"),"consulter annulation");
     }
 }
