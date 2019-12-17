@@ -129,13 +129,12 @@
                                     </children>
                                 </GridPane>
                                 <Label layoutX="14.0" layoutY="262.0" prefHeight="17.0" prefWidth="80.0" text="reste a payer" />
-                                <Label fx:id="lreste" layoutX="114.0" layoutY="262.0" prefHeight="17.0" prefWidth="55.0" />
+                                <Label id="llresteapayer" fx:id="lreste" layoutX="114.0" layoutY="262.0" prefHeight="17.0" prefWidth="55.0" />
                                 <Label layoutX="14.0" layoutY="238.0" text="id reservation" />
-                                <Label fx:id="idinscription" layoutX="114.0" layoutY="238.0" />
-                        <Label layoutX="187.0" layoutY="238.0" />
-                        <Label layoutX="187.0" layoutY="262.0" />
-                        <Label fx:id="lidclient" layoutX="244.0" layoutY="238.0" />
-                        <Label fx:id="lidsejour" layoutX="244.0" layoutY="262.0" />
+                                <Label id="llidreservation" fx:id="idinscription" layoutX="114.0" layoutY="238.0" />
+
+                        <Label id="lllidclient" fx:id="lidclient" layoutX="244.0" layoutY="238.0" />
+                        <Label id="lllidsejour" fx:id="lidsejour" layoutX="244.0" layoutY="262.0" />
                         <JFXButton buttonType="RAISED" layoutX="221.0" layoutY="300.0" onMouseClicked="#annuler" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="annuler" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
