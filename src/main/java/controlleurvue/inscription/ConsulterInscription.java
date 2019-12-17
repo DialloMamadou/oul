@@ -31,6 +31,7 @@ import notification.Notification;
 import principale.Controlleur;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -277,6 +278,7 @@ public class ConsulterInscription implements Initializable, Vue {
     private SejourDao sejourDao;
     private CentreDao centreDao;
     private AnnulationDao annulationDao;
+    private EvenementDao evenementDao;
 
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -285,6 +287,7 @@ public class ConsulterInscription implements Initializable, Vue {
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         annulationDao=new AnnulationDaoImpl(DBconnexion.getConnection());
+        evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
         chargertouslesinscriptions();
     }
 
@@ -341,22 +344,62 @@ public class ConsulterInscription implements Initializable, Vue {
 
 // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-               int x= inscriptionDao.mettreAjourPaiement(this.idinscription.getText(),result.get());
-                if(x!=0){
-                    String s=this.lreste.getText();
-                    System.out.println("valeur paye "+s);
-                    System.out.println("valeur vient paye "+result.get());
-                    int valeur=Integer.parseInt(s)-Integer.parseInt(result.get());
-                    System.out.println("valeur valeur = "+valeur);
-                    this.lreste.setText(String.valueOf(valeur));
-                    chargertouslesinscriptions();
+        if (result.isPresent()) {
 
-                }
+            int x = inscriptionDao.mettreAjourPaiement(this.idinscription.getText(), result.get());
+            if (x != 0) {
+                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "paiement-reservation", result.get(), new Date().toString());
+                evenementDao.insererEvenement(evenement);
+                String s = this.lreste.getText();
+                System.out.println("valeur paye " + s);
+                System.out.println("valeur vient paye " + result.get());
+                int valeur = Integer.parseInt(s) - Integer.parseInt(result.get());
+                System.out.println("valeur valeur = " + valeur);
+                this.lreste.setText(String.valueOf(valeur));
+                genererBis();
+
+
+            }
+        }
+    }
+
+
+        public void genererBis () {
+
+            JFXTreeTableColumn<Inscription,String> inscription_id=this.genererInscriptionId();
+            JFXTreeTableColumn<Inscription,String> inscription_paiement=this.genererInscriptionPaiement();
+            JFXTreeTableColumn<Inscription,String> inscription_dateinscription=this.genererDataInscriptioninscription();
+            JFXTreeTableColumn<Inscription,String> inscription_client=this.genererInscriptionClient();
+            JFXTreeTableColumn<Inscription,String> inscription_sejour=this.genererInscriptionSejour();
+            JFXTreeTableColumn<Inscription,String> inscription_depart=this.genererDepart();
+            ObservableList<Inscription> inscriptions = FXCollections.observableArrayList();
+            List<Inscription> inscription=inscriptionDao.getInscriptions();
+            for(Inscription inscription1: inscription){
+
+
+                Client client=clientDao.getClientParId(inscription1.code_client.get());
+                System.out.println("id sejour :"+inscription1.id_sejour.get());
+                Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
+                String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
+                String id_sejour=sejour.id.get();
+
+                Sejour sejour1=sejourDao.getSejourParId(id_sejour);
+                Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),
+                        inscription1.dateinscription.get(),  nom_client,sejour1.type.get(),  inscription1.depart.get()
+                );
+
+                inscription2.setTriche(sejour1.id.get());
+                inscription2.setTriche2(client.id.get());
+                inscriptions.add(inscription2);
+            }
+            final TreeItem<Inscription> root = new RecursiveTreeItem<Inscription>(inscriptions, RecursiveTreeObject::getChildren);
+            treeView.getColumns().setAll(inscription_id,inscription_paiement,inscription_dateinscription,inscription_client,inscription_sejour,inscription_depart);
+            treeView.setRoot(root);
+            treeView.setShowRoot(false);
         }
 
 // The Java 8 way to get the response value (with lambda expression).
-    }
+
 
     public void registAction(ActionEvent actionEvent) {
     }
@@ -397,6 +440,8 @@ public class ConsulterInscription implements Initializable, Vue {
 // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if(result.isPresent()){
+
+
             System.out.println("motif "+result.get());
 
             Annulation annulation=new Annulation(result.get(),this.idsejour.getText(),this.idclient.getText());
@@ -405,6 +450,9 @@ public class ConsulterInscription implements Initializable, Vue {
                 Notification.affichageEchec("echec annulation ", "il y a eu une erreur ");
 
             }else{
+
+                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "paiement-inscription", result.get(), new Date().toString());
+                evenementDao.insererEvenement(evenement);
                 Notification.affichageSucces("annulation","l annulation a bien ete effectue");
                 int bis=inscriptionDao.supperimerParId(this.idinscription.getText());
                 this.chargertouslesinscriptions();

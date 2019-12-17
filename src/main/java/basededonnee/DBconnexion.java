@@ -3,12 +3,7 @@ package basededonnee;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-/**
- *
- * @author malik
- *
- * cette classe gere la connection a la base de donne
- */
+
 public class DBconnexion {
     public static Connection connexion=null;
 

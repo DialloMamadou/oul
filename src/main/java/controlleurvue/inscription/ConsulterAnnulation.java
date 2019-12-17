@@ -28,6 +28,7 @@ import notification.Notification;
 import principale.Controlleur;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -239,6 +240,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
     private SejourDao sejourDao;
     private CentreDao centreDao;
     private AnnulationDao annulationDao;
+    private EvenementDao evenementDao;
 
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -248,6 +250,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
         reservationDao=new ReservationDaoImpl(DBconnexion.getConnection());
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         annulationDao=new AnnulationDaoImpl(DBconnexion.getConnection());
+        evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
         chargertouslesinscriptions();
     }
 
@@ -366,7 +369,12 @@ public class ConsulterAnnulation implements Initializable, Vue {
                 Notification.affichageEchec("echec annulation ", "il y a eu une erreur ");
 
             }else{
+
+
                 Notification.affichageSucces("annulation","l annulation a bien ete effectue");
+                Evenement evenement=new Evenement("1",this.lidclient.getText(),this.lidsejour.getText(),
+                        "annulation","0",new Date().toString());
+                evenementDao.insererEvenement(evenement);
                 int bis=reservationDao.supprimerParId(this.idinscription.getText());
                 this.chargertouslesinscriptions();
 

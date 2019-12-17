@@ -1,16 +1,17 @@
 package principale;
 
+import controlleurvue.client.HistoriqueClient;
 import fabrique.FabriqueVue;
 import javafx.stage.Stage;
+
+
 
 public class Controlleur {
 
     private FabriqueVue fabriqueVue;
 
     public Controlleur(Stage stage){
-
         this. fabriqueVue= new FabriqueVue(stage, this);
-
         this.fabriqueVue.creerLoginVue();
     }
 
@@ -22,7 +23,6 @@ public class Controlleur {
         this.fabriqueVue.creerEcranVue();
     }
 
-
     public void creerCentre() {
         this.fabriqueVue.creerCentreVue();
     }
@@ -31,13 +31,8 @@ public class Controlleur {
         this.fabriqueVue.creerConsulterCentreVue();
     }
 
-
     public void lancerPageGroupe() {
         this.fabriqueVue.creerVueGroupe();
-    }
-
-    public void creerGroupe() {
-        this.fabriqueVue.creerVueCreeGroupe(this);
     }
 
     public void creerVueGroupeCreation() {
@@ -83,5 +78,18 @@ public class Controlleur {
     public void consulterInscription() {
         this.fabriqueVue.creerConsulterInscriptionVue();
 
+    }
+
+    public void creerVueConsulterReservation() {
+        this.fabriqueVue.creerVueConsulterReservation();
+    }
+
+    public void lancerPageSejourHistoriqueClient(String text) {
+        HistoriqueClient.id=Integer.parseInt(text);
+        fabriqueVue.creerVueHistorique();
+    }
+
+    public void creerVueConsulterAnnulation() {
+        this.fabriqueVue.creerVueConsulterAnnulation();
     }
 }

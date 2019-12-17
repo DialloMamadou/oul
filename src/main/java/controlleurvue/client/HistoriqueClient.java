@@ -7,14 +7,8 @@ import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
-import daos.ClientDao;
-import daos.InscriptionDao;
-import daos.ReservationDao;
-import daos.SejourDao;
-import daos.impl.ClientDaoImpl;
-import daos.impl.InscriptionDaoImpl;
-import daos.impl.ReservationDaoImpl;
-import daos.impl.SejourDaoImpl;
+import daos.*;
+import daos.impl.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,10 +20,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import modele.Client;
-import modele.Inscription;
-import modele.Reservation;
-import modele.Sejour;
+import modele.*;
 import principale.Controlleur;
 
 import java.net.URL;
@@ -38,7 +29,7 @@ import java.util.ResourceBundle;
 
 public class HistoriqueClient implements Initializable, Vue {
 
-    public JFXTreeTableView annulations;
+    public JFXTreeTableView<Annulation> annulations;
     public JFXTreeTableView <Reservation>reservations;
     public JFXTreeTableView <Inscription>inscriptions;
     public JFXRadioButton btnannulation;
@@ -59,6 +50,7 @@ public class HistoriqueClient implements Initializable, Vue {
 
     private ReservationDao reservationDao;
     private InscriptionDao inscriptionDao;
+    private AnnulationDao annulationDao;
     private SejourDao sejourDao;
 
 
@@ -70,6 +62,7 @@ public class HistoriqueClient implements Initializable, Vue {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        annulationDao=new AnnulationDaoImpl(DBconnexion.getConnection());
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
@@ -134,8 +127,97 @@ public class HistoriqueClient implements Initializable, Vue {
         remplirInscription();
         remplirReservation();
 
+        remplirAnnulation();
 
     }
+
+    private void remplirAnnulation() {
+
+        JFXTreeTableColumn<Annulation,String> inscription_id=this.genererIdAnnulation();
+        JFXTreeTableColumn<Annulation,String> inscription_dateinscription=this.genererMotifAnnulation();
+        JFXTreeTableColumn<Annulation,String> inscription_client=this.genererIdSejour();
+        JFXTreeTableColumn<Annulation,String> inscription_sejour=this.genererIdClient();
+        ObservableList<Annulation> inscriptions = FXCollections.observableArrayList();
+        List<Annulation> reservations=annulationDao.getAnnulationsParId(HistoriqueClient.id);
+        for(Annulation annulation: reservations){
+
+
+            Client client=clientDao.getClientParId(annulation.idclient.get());
+            Sejour sejour=sejourDao.getSejourParId(annulation.idsejour.get());
+            String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
+            String id_sejour=sejour.id.get();
+
+            Sejour sejour1=sejourDao.getSejourParId(id_sejour);
+            System.out.println("nom client :"+nom_client);
+
+
+            Annulation annulation1=new Annulation(annulation.id.get(),annulation.motif.get(),nom_client,sejour1.type.get());
+            inscriptions.add(annulation1);
+        }
+        final TreeItem<Annulation> root = new RecursiveTreeItem<Annulation>(inscriptions, RecursiveTreeObject::getChildren);
+        this.annulations.getColumns().setAll(inscription_id,inscription_dateinscription,inscription_client,inscription_sejour);
+        this.annulations.setRoot(root);
+        this.annulations.setShowRoot(false);
+
+    }
+
+
+    public JFXTreeTableColumn<Annulation,String>genererIdAnnulation(){
+
+        JFXTreeTableColumn<Annulation,String> inscription_id=new JFXTreeTableColumn<>(" Id");
+        inscription_id.setPrefWidth(100);
+        inscription_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Annulation, String> param) {
+                return param.getValue().getValue().id;
+            }
+        });
+        return inscription_id;
+    }
+
+
+    public JFXTreeTableColumn<Annulation,String>genererMotifAnnulation(){
+
+        JFXTreeTableColumn<Annulation,String> inscription_id=new JFXTreeTableColumn<>(" motif");
+        inscription_id.setPrefWidth(100);
+        inscription_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Annulation, String> param) {
+                return param.getValue().getValue().motif;
+            }
+        });
+        return inscription_id;
+    }
+
+
+
+    public JFXTreeTableColumn<Annulation,String>genererIdSejour (){
+
+        JFXTreeTableColumn<Annulation,String> inscription_id=new JFXTreeTableColumn<>(" sejour");
+        inscription_id.setPrefWidth(100);
+        inscription_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Annulation, String> param) {
+                return param.getValue().getValue().idclient;
+            }
+        });
+        return inscription_id;
+    }
+
+
+    public JFXTreeTableColumn<Annulation,String>genererIdClient(){
+
+        JFXTreeTableColumn<Annulation,String> inscription_id=new JFXTreeTableColumn<>(" client");
+        inscription_id.setPrefWidth(100);
+        inscription_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Annulation, String> param) {
+                return param.getValue().getValue().idclient;
+            }
+        });
+        return inscription_id;
+    }
+
 
 
     public JFXTreeTableColumn<Reservation,String>genererInscriptionIdR(){
