@@ -451,7 +451,7 @@ public class ConsulterInscription implements Initializable, Vue {
 
             }else{
 
-                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "paiement-inscription", result.get(), new Date().toString());
+                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "annulation inscription",String.valueOf(0), new Date().toString());
                 evenementDao.insererEvenement(evenement);
                 Notification.affichageSucces("annulation","l annulation a bien ete effectue");
                 int bis=inscriptionDao.supperimerParId(this.idinscription.getText());

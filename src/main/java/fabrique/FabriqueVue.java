@@ -202,7 +202,7 @@ public class FabriqueVue{
     }
 
     public void creerVueHistorique() {
-        load(HistoriqueClient.class.getResource("/vue/historiqueClient.fxml"),"client historique");
+        load(HistoriqueClient.class.getResource(    "/vue/historiqueClient.fxml"),"client historique");
     }
 
     public void creerVueConsulterAnnulation() {

@@ -61,6 +61,7 @@ public class ConsulterClient implements Initializable, Vue {
     public Label lcode;
     public Label lgroupe;
     public Label idclient;
+    public JFXTextField chercherclient;
     /**
      * Initializes the controller class.
      */
@@ -134,12 +135,12 @@ public class ConsulterClient implements Initializable, Vue {
 
     public JFXTreeTableColumn<Client ,String> genererDateNaissance(){
 
-        JFXTreeTableColumn<Client,String> client_datenaissance=new JFXTreeTableColumn<>(" groupe");
+        JFXTreeTableColumn<Client,String> client_datenaissance=new JFXTreeTableColumn<>(" date naissance");
         client_datenaissance.setPrefWidth(110);
         client_datenaissance.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
-                return param.getValue().getValue().groupe;
+                return param.getValue().getValue().datenaissance;
             }
         });
         return client_datenaissance;
@@ -174,8 +175,23 @@ public class ConsulterClient implements Initializable, Vue {
 
     }
 
+
+    private void showDetailsClient(TreeItem<Client> newValue) {
+        if(newValue!=null) {
+            this.ldate.setText(newValue.getValue().datenaissance.get());
+            this.lemail.setText(newValue.getValue().email.get());
+            this.lgroupe.setText(newValue.getValue().groupe.get());
+            this.lnom.setText(newValue.getValue().nom_client.get());
+            this.lprenom.setText(newValue.getValue().prenom_client.get());
+            this.ladresse.setText(newValue.getValue().adresse.get());
+            this.lobservation.setText(newValue.getValue().observation.get());
+            this.lcode.setText(newValue.getValue().codePostale.get());
+            this.idclient.setText(newValue.getValue().id.get());
+            this.lportable.setText(newValue.getValue().numero.get());
+        }
+    }
     private void optimiserRecherClient() {
-        this.search_text.textProperty().addListener(new ChangeListener<String>() {
+        this.chercherclient.textProperty().addListener(new ChangeListener<String>() {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -184,18 +200,14 @@ public class ConsulterClient implements Initializable, Vue {
 
                     @Override
                     public boolean test(TreeItem<Client> t) {
-/*
-                        boolean flag =
-                                t.getValue()..getValue().contains(newValue)
-                                        || t.getValue().code_client.getValue().contains(newValue)
-                                        || t.getValue().dateinscription.getValue().contains(newValue)
-                                        || t.getValue().id.getValue().equals(newValue)
-                                        ||t.getValue().paiement.getValue().equals(newValue);
-                        ;*/
-                        System.out.println("trouve");
+                        boolean flag=t.getValue().prenom_client.getValue().contains(newValue)
+                                || t.getValue().nom_client.getValue().contains(newValue)
+                                || t.getValue().groupe.getValue().contains(newValue)
+                                || t.getValue().datenaissance.getValue().contains(newValue)
+                                || t.getValue().id.getValue().contains(newValue);
 
 
-                        return true ;
+                        return flag ;
 
 
                     }
@@ -205,18 +217,7 @@ public class ConsulterClient implements Initializable, Vue {
         });
     }
 
-    private void showDetailsClient(TreeItem<Client> newValue) {
-        this.ldate.setText(newValue.getValue().datenaissance.get());
-        this.lemail.setText(newValue.getValue().email.get());
-        this.lgroupe.setText(newValue.getValue().groupe.get());
-        this.lnom.setText(newValue.getValue().nom_client.get());
-        this.lprenom.setText(newValue.getValue().prenom_client.get());
-        this.ladresse.setText(newValue.getValue().adresse.get());
-        this.lobservation.setText(newValue.getValue().observation.get());
-        this.lcode.setText(newValue.getValue().codePostale.get());
-        this.idclient.setText(newValue.getValue().id.get());
-        this.lportable.setText(newValue.getValue().numero.get());
-    }
+
 
     public void initialize(URL location, ResourceBundle resources) {
 

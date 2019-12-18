@@ -18,7 +18,7 @@
                     <children>
                         <Pane layoutX="14.0" layoutY="7.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXTextField fx:id="search_text" focusColor="#09e2a7" labelFloat="true" layoutX="34.0" layoutY="29.0" prefHeight="25.0" prefWidth="313.0" promptText="chercher un sejour par id " />
+                                <JFXTextField fx:id="chercherclient"  focusColor="#09e2a7" labelFloat="true" layoutX="34.0" layoutY="29.0" prefHeight="25.0" prefWidth="313.0" promptText="chercher client" />
                                 <JFXButton buttonType="RAISED" layoutX="79.0" layoutY="77.0" onMouseClicked="#cherchecentreparid" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="chercher" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
