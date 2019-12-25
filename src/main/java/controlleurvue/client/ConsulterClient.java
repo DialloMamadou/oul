@@ -9,8 +9,7 @@ import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.centre.CreerCentre;
 import daos.ClientDao;
 import daos.impl.ClientDaoImpl;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.image.Image;
@@ -30,6 +30,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import modele.Client;
 import modele.Groupe;
+import modele.Inscription;
 import modele.Sejour;
 import notification.Notification;
 import org.controlsfx.control.Notifications;
@@ -39,10 +40,9 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +51,17 @@ public class ConsulterClient implements Initializable, Vue {
 
     public JFXTextField search_text2;
     public JFXTextField search_text3;
+    public Label lnom;
+    public Label lprenom;
+    public Label ladresse;
+    public Label ldate;
+    public Label lportable;
+    public Label lobservation;
+    public Label lemail;
+    public Label lcode;
+    public Label lgroupe;
+    public Label idclient;
+    public JFXTextField chercherclient;
     /**
      * Initializes the controller class.
      */
@@ -61,7 +72,6 @@ public class ConsulterClient implements Initializable, Vue {
     private JFXTextField search_text;
     @FXML
     private StackPane stackepane;
-
     private ClientDao clientDao;
 
 
@@ -79,7 +89,7 @@ public class ConsulterClient implements Initializable, Vue {
     }
 
     public JFXTreeTableColumn<Client ,String> genererNom(){
-        JFXTreeTableColumn<Client,String> nom_client=new JFXTreeTableColumn<>("Nom");
+        JFXTreeTableColumn<Client,String> nom_client=new JFXTreeTableColumn<>("nom");
         nom_client.setPrefWidth(100);
         nom_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
@@ -93,7 +103,7 @@ public class ConsulterClient implements Initializable, Vue {
 
     public JFXTreeTableColumn<Client ,String> genererPrenom(){
 
-        JFXTreeTableColumn<Client,String> prenom_client=new JFXTreeTableColumn<>("Prenom");
+        JFXTreeTableColumn<Client,String> prenom_client=new JFXTreeTableColumn<>("prenom");
         prenom_client.setPrefWidth(110);
         prenom_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
@@ -106,41 +116,12 @@ public class ConsulterClient implements Initializable, Vue {
     }
 
 
-    public JFXTreeTableColumn<Client ,String> genererDateNaissance(){
 
-        JFXTreeTableColumn<Client,String> client_Date_naiss=new JFXTreeTableColumn<>(" Date_naiss");
-        client_Date_naiss.setPrefWidth(110);
-        client_Date_naiss.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
-                return param.getValue().getValue().datenaissance;
-            }
-        });
-        return client_Date_naiss;
-    }
-
-    public JFXTreeTableColumn<Client ,String> genererAge(){
-
-        JFXTreeTableColumn<Client,String> client_age=new JFXTreeTableColumn<>(" Age(ans)");
-        client_age.setPrefWidth(110);
-        client_age.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
-                ObservableValue<String> d_n = param.getValue().getValue().datenaissance;
-                String dt=d_n.getValue().toString();
-                LocalDate date_naiss= LocalDate.parse(dt);
-                int age = Period.between(date_naiss, LocalDate.now()).getYears();
-                StringProperty agee= new SimpleStringProperty(String.valueOf(age));
-                return agee;
-            }
-        });
-        return client_age;
-    }
 
 
     public JFXTreeTableColumn<Client ,String> genererGroupe(){
 
-        JFXTreeTableColumn<Client,String> client_groupe=new JFXTreeTableColumn<>(" Groupe");
+        JFXTreeTableColumn<Client,String> client_groupe=new JFXTreeTableColumn<>(" groupe");
         client_groupe.setPrefWidth(110);
         client_groupe.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
@@ -152,6 +133,19 @@ public class ConsulterClient implements Initializable, Vue {
     }
 
 
+    public JFXTreeTableColumn<Client ,String> genererDateNaissance(){
+
+        JFXTreeTableColumn<Client,String> client_datenaissance=new JFXTreeTableColumn<>(" date naissance");
+        client_datenaissance.setPrefWidth(110);
+        client_datenaissance.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
+                return param.getValue().getValue().datenaissance;
+            }
+        });
+        return client_datenaissance;
+    }
+
 
 
     public void loadAllClient(){
@@ -160,8 +154,6 @@ public class ConsulterClient implements Initializable, Vue {
         JFXTreeTableColumn<Client,String> client_prenom= this.genererPrenom();
         JFXTreeTableColumn<Client,String> client_groupe=this.genererGroupe();
         JFXTreeTableColumn<Client,String> client_datenaissance=this.genererDateNaissance();
-        JFXTreeTableColumn<Client,String> client_age=this.genererAge();
-
         ObservableList<Client> clients = FXCollections.observableArrayList();
         List<Client> liste=clientDao.listeClient();
         System.out.println("nb clients "+liste.size());
@@ -169,13 +161,63 @@ public class ConsulterClient implements Initializable, Vue {
             clients.add(client);
         }
         final TreeItem<Client> root = new RecursiveTreeItem<Client>(clients, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(client_id,client_nom,client_prenom,client_groupe,client_datenaissance,client_age);
+        treeView.getColumns().setAll(client_id,client_nom,client_prenom,client_groupe,client_datenaissance);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
 
+        optimiserRecherClient();
+        treeView.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
+                ->
+                showDetailsClient(newValue));
+
+
 
     }
+
+
+    private void showDetailsClient(TreeItem<Client> newValue) {
+        if(newValue!=null) {
+            this.ldate.setText(newValue.getValue().datenaissance.get());
+            this.lemail.setText(newValue.getValue().email.get());
+            this.lgroupe.setText(newValue.getValue().groupe.get());
+            this.lnom.setText(newValue.getValue().nom_client.get());
+            this.lprenom.setText(newValue.getValue().prenom_client.get());
+            this.ladresse.setText(newValue.getValue().adresse.get());
+            this.lobservation.setText(newValue.getValue().observation.get());
+            this.lcode.setText(newValue.getValue().codePostale.get());
+            this.idclient.setText(newValue.getValue().id.get());
+            this.lportable.setText(newValue.getValue().numero.get());
+        }
+    }
+    private void optimiserRecherClient() {
+        this.chercherclient.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                treeView.setPredicate(new Predicate<TreeItem<Client>>() {
+
+                    @Override
+                    public boolean test(TreeItem<Client> t) {
+                        boolean flag=t.getValue().prenom_client.getValue().contains(newValue)
+                                || t.getValue().nom_client.getValue().contains(newValue)
+                                || t.getValue().groupe.getValue().contains(newValue)
+                                || t.getValue().datenaissance.getValue().contains(newValue)
+                                || t.getValue().id.getValue().contains(newValue);
+
+
+                        return flag ;
+
+
+                    }
+                });
+            }
+
+        });
+    }
+
+
 
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -246,4 +288,9 @@ public class ConsulterClient implements Initializable, Vue {
     public void hideSignupPane(ActionEvent actionEvent) {
     }
 
+    public void historiqueClient(MouseEvent mouseEvent) {
+
+
+        controlleur.lancerPageSejourHistoriqueClient(this.idclient.getText());
+    }
 }

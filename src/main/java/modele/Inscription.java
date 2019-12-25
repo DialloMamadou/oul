@@ -7,6 +7,8 @@ import javafx.beans.property.StringProperty;
 
 public class Inscription extends RecursiveTreeObject<Inscription> {
 
+    private  String triche="";
+    private String triche2="";
 
     public StringProperty id;
     public StringProperty paiement;
@@ -37,5 +39,21 @@ public class Inscription extends RecursiveTreeObject<Inscription> {
         this.dateinscription = new SimpleStringProperty(dateinscription);
         this.code_client = new SimpleStringProperty(code_client);
         this.id_sejour = new SimpleStringProperty(id_sejour);
+    }
+
+    public String getTriche() {
+        return triche;
+    }
+
+    public void setTriche(String triche) {
+        this.triche = triche;
+    }
+
+    public String getTriche2() {
+        return triche2;
+    }
+
+    public void setTriche2(String triche2) {
+        this.triche2 = triche2;
     }
 }

@@ -42,7 +42,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             ps.setString(7,sejour.ageMin.get() );
             ps.setString(8,sejour.ageMax.get() );
             ps.setString(9,sejour.capacite.get() );
-            ps.setString(5,sejour.id_centre.get() );
+            ps.setString(5,sejour.nom_centre.get() );
 
 
 
@@ -68,17 +68,15 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
 
             while(rs.next()){
 
-                //Centre centre=centreDao.getCentreParId(rs.getString(1));
-                liste.add(new Sejour(
-                        rs.getString(1),
-                        rs.getString(2),
+                Centre centre=centreDao.getCentreParId(rs.getString(6));
+                liste.add(new Sejour(rs.getString(1),rs.getString(2),
                         rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
+                        rs.getString(4)
+                ,rs.getString(5),
+                        centre.nom_centre.get(),
                         rs.getString(7),
                         rs.getString(8),
-                        rs.getString(9),
+                      rs.getString(9),
                         rs.getString(10)  ));
 
             }
@@ -105,8 +103,8 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
+                        rs.getString(5)
+                        ,rs.getString(6),
                         rs.getString(7),
                         rs.getString(8),
                         rs.getString(9),
@@ -203,7 +201,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Sejour sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
+                Sejour sejour=new Sejour(rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
                 ,rs.getString(10));
@@ -235,7 +233,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Sejour sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
+                Sejour sejour=new Sejour(rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
                         ,rs.getString(10));
@@ -265,7 +263,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Sejour sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
+                Sejour sejour=new Sejour(rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
                         ,rs.getString(10));
@@ -292,7 +290,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                 sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
+                 sejour=new Sejour(rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
                         ,rs.getString(10));

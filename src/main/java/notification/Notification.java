@@ -6,7 +6,10 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
+
 public class Notification {
+
+
 
     public static void affichageSucces(String titre,String text){
         Image image=new Image("img/mooo.png");

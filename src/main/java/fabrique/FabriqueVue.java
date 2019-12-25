@@ -7,12 +7,11 @@ import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.client.ClientScreen;
 import controlleurvue.client.ConsulterClient;
 import controlleurvue.client.CreerClient;
+import controlleurvue.client.HistoriqueClient;
 import controlleurvue.groupe.ConsulterGroupe;
 import controlleurvue.groupe.CreerGroupe;
 import controlleurvue.groupe.GroupeScreen;
-import controlleurvue.inscription.ConsulterInscription;
-import controlleurvue.inscription.CreerInscriptionSejour;
-import controlleurvue.inscription.InscriptionScreen;
+import controlleurvue.inscription.*;
 import controlleurvue.sejour.ConsulterSejour;
 import controlleurvue.sejour.CreerSejour;
 import controlleurvue.sejour.SejourScreen;
@@ -42,10 +41,10 @@ public class FabriqueVue{
 
 
     public void creerLoginVue(){
-        load(AccueilScreen.class.getResource("/vue/pageAcceuil.fxml"), "Accueil.");
+        //load(ConsulterSejour.class.getResource("/vue/consulterSejour.fxml"), "ecran.");
 
 
-        //load(Loginscreen.class.getResource("/vue/loginscreen.fxml"), "LOGIN.");
+        load(Loginscreen.class.getResource("/vue/loginscreen.fxml"), "LOGIN.");
     }
 
 
@@ -66,6 +65,7 @@ public class FabriqueVue{
             Vue view = loader.getController();
             view.setController(controlleur);
 
+
             stage.setTitle(title);
             Scene scene=new Scene(root);
 
@@ -79,7 +79,7 @@ public class FabriqueVue{
         }
 
     public void creerPageAcceuil() {
-        load(AccueilScreen.class.getResource("/vue/pageAcceuil.fxml"), "Accueil.");
+        load(AccueilScreen.class.getResource("/vue/pageAcceuil.fxml"), "LOGIN.");
 
     }
 
@@ -194,5 +194,18 @@ public class FabriqueVue{
     public void creerConsulterInscriptionVue() {
         load(ConsulterInscription.class.getResource("/vue/consulterInscription.fxml"), "ecran.");
 
+    }
+
+    public void creerVueConsulterReservation() {
+        load(ConsulterReservation.class.getResource("/vue/consulterReservation.fxml"), "ecran.");
+
+    }
+
+    public void creerVueHistorique() {
+        load(HistoriqueClient.class.getResource(    "/vue/historiqueClient.fxml"),"client historique");
+    }
+
+    public void creerVueConsulterAnnulation() {
+        load(ConsulterAnnulation.class.getResource("/vue/consulterAnnulation.fxml"),"consulter annulation");
     }
 }

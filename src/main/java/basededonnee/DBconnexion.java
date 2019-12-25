@@ -3,6 +3,7 @@ package basededonnee;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+
 public class DBconnexion {
     public static Connection connexion=null;
 
@@ -12,8 +13,9 @@ public class DBconnexion {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost/reservation";
-            connection=DriverManager.getConnection(url,"root","root");
-            System.out.println("Connected");
+            connection=DriverManager.getConnection(url,"root","");
+            System.out.println("connexion a la base de donne reussi");
+
 
         } catch (Exception e) {
         }

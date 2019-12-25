@@ -21,7 +21,5 @@ public interface ClientDao {
 
     Client getClientParNomPrenomAnneeNaissance(String text, String text1, String text2);
 
-    List<Client> getClientsBySejour(String id);
-
-    Centre getCentreBySejour(String id_sejour);
+    Client getClientParNomEtPrenom(String arg, String arg1);
 }

@@ -76,30 +76,31 @@ public class CreerClient  implements Initializable, Vue {
 
 
     public void book(MouseEvent mouseEvent) {
-        Groupe groupe=groupeDao.trouverGroupeParNomGroupe(this.groupe.getValue().toString().trim());
+        if(this.prenom.getText()==null || this.groupe.getValue()==null || this.nom.getText()==null ||
+        this.nom.getText()==null || this.poste.getText()==null || this.adresse.getText()==null || this.portable.getText()==null
+        || this.observation.getText()==null){
+            Notification.affichageEchec("champ manquant","vous devez remplir tous les champs");
+        }else {
+            Groupe groupe = groupeDao.trouverGroupeParNomGroupe(this.groupe.getValue().toString().trim());
 
-        String prenom=this.prenom.getText();
-        String nom=this.nom.getText();
-        String id_group=groupe.id.get();
-        String portable=this.portable.getText();
-        String observation=this.observation.getText();
-        String email=this.email.getText();
-        String adresse=this.adresse.getText();
-        String poste=this.poste.getText();
-        System.out.println("poste =="+poste);
-        String dateNaissance=this.annee.getValue().toString();
+            String prenom = this.prenom.getText();
+            String nom = this.nom.getText();
+            String id_group = groupe.id.get();
+            String portable = this.portable.getText();
+            String observation = this.observation.getText();
+            String email = this.email.getText();
+            String adresse = this.adresse.getText();
+            String poste = this.poste.getText();
+            System.out.println("poste ==" + poste);
+            String dateNaissance = this.annee.getValue().toString();
+            Client client = new Client("", nom, prenom, id_group, dateNaissance, portable, observation, email, adresse, poste);
+            int res = this.clientDao.insererClient(client);
+            if (res > 0) {
+                Notification.affichageSucces("succes", "client creer avec succes");
+            } else {
+                Notification.affichageEchec("erreur", "il y a eu une erreur au moment de la creation");
 
-
-        Client client=new Client("",nom,prenom,id_group,dateNaissance,portable,observation,email,adresse,poste);
-
-        int res=this.clientDao.insererClient(client);
-
-        if(res>0){
-            Notification.affichageSucces("succes","client creer avec succes");
-
-        }else{
-            Notification.affichageEchec("erreur","il y a eu une erreur au moment de la creation");
-
+            }
         }
 
     }

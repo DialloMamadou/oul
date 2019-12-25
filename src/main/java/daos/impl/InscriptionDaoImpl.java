@@ -5,13 +5,18 @@ import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.centre.CreerCentre;
 import controlleurvue.sejour.CreerSejour;
 import daos.InscriptionDao;
+import modele.Centre;
+import modele.Client;
 import modele.Inscription;
+import modele.Sejour;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -87,4 +92,121 @@ public class InscriptionDaoImpl extends Dao<Inscription> implements InscriptionD
         }
         return res;
     }
+
+    @Override
+    public int mettreAjourPaiement(String idInscription, String result) {
+
+        String sql="SELECT * FROM inscription WHERE id_inscription ='"+idInscription+"'";
+        Inscription liste=null;
+        int s=0;
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+             s=0;
+            int paiement=0;
+            while(rs.next()){
+                 paiement=Integer.parseInt(rs.getString(2));
+
+
+            }
+
+            s=paiement+Integer.parseInt(result);
+
+
+
+        }catch (Exception e){
+
+        }
+
+        int x=0;
+        String sql2 = "update inscription set paiement="+s+" where id_inscription="+idInscription+"";
+        System.out.println(sql2);
+try {
+             Statement stmt = DBconnexion.getConnection().createStatement() ;
+
+            x=stmt.executeUpdate(sql2);
+            System.out.println("Database updated successfully ");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+return x;
+    }
+
+    @Override
+    public List<Inscription> getInscriptionsParIdSejour(String s) {
+        String sql="SELECT * FROM inscription WHERE id_sejour ='"+s+"'";
+        List<Inscription>liste=new ArrayList<>();
+
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste.add(new Inscription(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6)));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;
+
+    }
+
+    @Override
+    public Inscription getInscriptionsParIdSejourEtIdClient(String text, String s) {
+        String sql="SELECT * FROM inscription WHERE id_sejour ='"+text+"' AND code_client="+s;
+        Inscription inscription =null;
+
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                inscription=new Inscription(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return inscription;
+    }
+
+    @Override
+    public List<Inscription> getInscriptiosnParIdClient(int id) {
+        String sql="SELECT * FROM inscription WHERE code_client ='"+id+"'";
+        List<Inscription>liste=new ArrayList<>();
+
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste.add(new Inscription(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6)));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;    }
+
+
 }

@@ -37,9 +37,6 @@ public class CreerSejour implements Initializable, Vue {
 
 
     public StackPane stack;
-    public TextField id_sejour;
-    public TextField nom_sejour;
-
     public TextField type;
     public DatePicker dateD;
     public DatePicker dateF;
@@ -80,8 +77,7 @@ public class CreerSejour implements Initializable, Vue {
 
 
         Centre centre=centreDao.trouverParNomCentre(this.centre.getValue().toString());
-        String id_centre=centre.id.get();
-        String id_sejour=this.id_sejour.getText().toString();
+        String id=centre.id.get();
         String duree= this.duree.getText().toString();
         String datedebut= this.dateD.getValue().toString();
        String datefin= this.dateF.getValue().toString();
@@ -90,7 +86,7 @@ public class CreerSejour implements Initializable, Vue {
         String min=this.agemin.getText().toString();
         String prix=this.prix.getText().toString();
         String capacite=this.capacite.getText().toString();
-        Sejour sejour=new Sejour(id_sejour,duree,datedebut,datefin,type,id_centre,max,min,capacite,prix);
+        Sejour sejour=new Sejour(duree,datedebut,datefin,type,id,max,min,capacite,prix);
         int res=sejourDao.insererSejour(sejour);
         if(res>0){
             Notification.affichageSucces("succes","Sejour creer avec succes");

@@ -11,5 +11,9 @@ public interface ReservationDao {
     int insererReservation(Reservation reservation);
 
     int supprimerParId(String toString);
+
+    Reservation getReservationParId(String id);
+
+    List<Reservation> getReservationsParIdClient(int id);
 }
 

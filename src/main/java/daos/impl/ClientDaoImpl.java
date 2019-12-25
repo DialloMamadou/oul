@@ -3,11 +3,8 @@ package daos.impl;
 import basededonnee.DBconnexion;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.sejour.CreerSejour;
-import daos.CentreDao;
 import daos.ClientDao;
 import daos.GroupeDao;
-import daos.SejourDao;
-import modele.Centre;
 import modele.Client;
 import modele.Groupe;
 import modele.Sejour;
@@ -83,6 +80,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
 
+
             while(rs.next()){
 
                 System.out.println("xxxx1");
@@ -91,6 +89,9 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
                         groupe.nom_groupe.get(),rs.getString(5),
                         rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),
                         rs.getString(10)));
+
+
+
             }
 
 
@@ -115,8 +116,8 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
                     rs.getString(2),
                     rs.getString(3),
                     rs.getString(4),
-                    rs.getString(5),
-                    rs.getString(6),
+                    rs.getString(5)
+            ,rs.getString(6),
                     rs.getString(7),
                     rs.getString(8),
                     rs.getString(9),
@@ -142,7 +143,6 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
         System.out.println("sql "+sql);
 
         try {
-
             PreparedStatement ps = (PreparedStatement) DBconnexion.getConnection().prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
@@ -163,63 +163,29 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
     }
 
     @Override
-    public List<Client> getClientsBySejour(String id) {
+    public Client getClientParNomEtPrenom(String arg, String arg1) {
+        Client Client=null;
 
-        Centre centre = this.getCentreBySejour(id);
+        String sql="SELECT * FROM Client WHERE nom_client ='"+arg+"' AND prenom_client ='"+arg1+"'";
 
-        String sql="SELECT * FROM client WHERE id_sejour="+Integer.parseInt(id);
-        List<Client> liste=new ArrayList<>();
+        System.out.println("sql "+sql);
 
-        GroupeDao groupeDao=new GroupeDaoImpl(connect);
+        try {
+            PreparedStatement ps = (PreparedStatement)this.connect.prepareStatement(sql);
 
+            ResultSet rs = ps.executeQuery();
+            System.out.println("requete execute");
 
-        try{
-            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
-            ResultSet rs=ps.executeQuery();
+            while (rs.next()) {
+                Client=new Client(rs.getString(1),rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6),
+                        rs.getString(7),rs.getString(8),rs.getString(9)
+                        ,rs.getString(10));
 
-            while(rs.next()){
-
-                Groupe groupe=groupeDao.getGroupeParId(rs.getString(4));
-                System.out.println("est cente = "+centre.nom_centre.get());
-
-                liste.add(new Client(rs.getString(1),rs.getString(2),rs.getString(3),
-                        groupe.nom_groupe.get(),rs.getString(5),
-                        centre.nom_centre.get(),rs.getString(7),rs.getString(8),rs.getString(9),
-                        rs.getString(10)));
             }
-
-
         }catch (Exception e){
 
         }
-
-        return liste;
-    }
-
-    @Override
-    public Centre getCentreBySejour(String id_sejour) {
-        String sqlCentre="SELECT * FROM centre INNER JOIN sejour ON centre.id_centre=sejour.id_sejour WHERE id_sejour="+Integer.parseInt(id_sejour);
-        Centre centre = null;
-
-        try {
-
-
-            PreparedStatement psCentre = (PreparedStatement) connect.prepareStatement(sqlCentre);
-            ResultSet rsCentre = psCentre.executeQuery();
-
-            if (rsCentre.next()) {
-                System.out.println("Nom Centre:  " + rsCentre.getString(2));
-
-                centre= new Centre(
-                        rsCentre.getString(1),
-                        rsCentre.getString(2),
-                        rsCentre.getString(3)
-                        );
-            }
-        }catch (SQLException e) {
-            e.printStackTrace();
-        } ;
-            return centre;
-
+        return Client;
     }
 }
