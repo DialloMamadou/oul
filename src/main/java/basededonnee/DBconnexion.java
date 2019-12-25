@@ -16,7 +16,6 @@ public class DBconnexion {
             connection=DriverManager.getConnection(url,"root","");
             System.out.println("connexion a la base de donne reussi");
 
-
         } catch (Exception e) {
         }
 
