@@ -125,13 +125,15 @@ public class ConsulterCentre  implements Initializable, Vue {
     public void loadallcentreParId(){
         JFXTreeTableColumn<Centre,String> centre_id=this.creationTableColumCentreI();
         JFXTreeTableColumn<Centre,String> centre_nom=this.creationTableColumnomcentre();
+        JFXTreeTableColumn<Centre,String> centre_capacite=this.creationTableColumnomcCapacite();
+
         ObservableList<Centre> centres = FXCollections.observableArrayList();
         Centre centre=centreDao.getCentreParId(search_text.getText().toString());
         if(centre!=null) {
             centres.add(centre);
 
             final TreeItem<Centre> root = new RecursiveTreeItem<Centre>(centres, RecursiveTreeObject::getChildren);
-            treeView.getColumns().setAll(centre_id, centre_nom);
+            treeView.getColumns().setAll(centre_id, centre_nom,centre_capacite);
             treeView.setRoot(root);
             treeView.setShowRoot(false);
         }else {
