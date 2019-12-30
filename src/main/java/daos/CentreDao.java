@@ -1,5 +1,7 @@
 package daos;
 
+import exceptions.centre.CapaciteException;
+import exceptions.centre.NomDejaPresentException;
 import modele.Centre;
 
 import java.util.List;
@@ -18,4 +20,6 @@ public interface CentreDao {
     Centre trouverParNomCentre(String nom);
 
     Centre getCentreParId(String id);
+
+    int mettreAjourCentre(String id, Centre centre);
 }
