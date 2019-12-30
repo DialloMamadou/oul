@@ -429,9 +429,11 @@ for(Sejour sejour:liste){
     private CentreDao centreDao;
     private SejourDao sejourDao;
     private ReservationDao reservationDao;
+    private EvenementDao evenementDao;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
@@ -541,6 +543,7 @@ for(Sejour sejour:liste){
         String date=(String)this.date.getValue();
         String[] args = date.split(" au ");
         Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
+        System.out.println("sejour ="+sejour);
        Client client=clientDao.getClientParId(iduser.getText());
        System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
         System.out.println("sejour :"+sejour.type.get()+" "+sejour.capacite.get());
@@ -550,6 +553,17 @@ for(Sejour sejour:liste){
         client.id.get(),sejour.nom_centre.get(),depart) ;
         int res=inscriptionDao.insererInscription(inscription);
         if(res>0){
+            if(client==null || client.id.get()==null){
+                System.out.println("client null");
+            }
+            if(sejour==null || sejour.id.get()==null){
+                System.out.println("sejour null");
+            }
+            if(this.accompte.getText()==null){
+                System.out.println("accompte null");
+            }
+            Evenement evenement=new Evenement(client.id.get(),sejour.id.get(),"paiement inscription",this.accompte.getText(),aujourdhui);
+            evenementDao.insererEvenement(evenement);
             Notification.affichageSucces("succes","inscription faite avec succes");
         }else{
             Notification.affichageEchec("erreur","echec dans la creation de la reservation");
