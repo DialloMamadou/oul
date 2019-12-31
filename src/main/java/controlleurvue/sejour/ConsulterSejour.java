@@ -451,4 +451,7 @@ public class ConsulterSejour implements Initializable, Vue {
             System.out.println(client.prenom_client.get()+" "+client.nom_client.get());
         }
     }
+
+    public void back(MouseEvent mouseEvent) {this.controlleur.lancerPageSejour();
+    }
 }

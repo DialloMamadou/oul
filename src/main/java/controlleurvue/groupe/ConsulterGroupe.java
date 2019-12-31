@@ -41,8 +41,7 @@ public class ConsulterGroupe implements Initializable, Vue {
     private Controlleur controlleur;
 
 
-
-    String status=null;
+    String status = null;
     @FXML
     private JFXTreeTableView<Groupe> treeView;
     @FXML
@@ -53,8 +52,8 @@ public class ConsulterGroupe implements Initializable, Vue {
     private StackPane stackepane;
 
 
-    private JFXTreeTableColumn<Groupe,String> creerGroupeId(){
-        JFXTreeTableColumn<Groupe,String> groupe_id=new JFXTreeTableColumn<>("groupe Id");
+    private JFXTreeTableColumn<Groupe, String> creerGroupeId() {
+        JFXTreeTableColumn<Groupe, String> groupe_id = new JFXTreeTableColumn<>("groupe Id");
         groupe_id.setPrefWidth(100);
         groupe_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
             @Override
@@ -66,8 +65,8 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
 
-    private JFXTreeTableColumn<Groupe,String> creernomgroupe(){
-        JFXTreeTableColumn<Groupe,String> groupe_nom=new JFXTreeTableColumn<>("nom du groupe");
+    private JFXTreeTableColumn<Groupe, String> creernomgroupe() {
+        JFXTreeTableColumn<Groupe, String> groupe_nom = new JFXTreeTableColumn<>("nom du groupe");
         groupe_nom.setPrefWidth(110);
         groupe_nom.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
             @Override
@@ -80,19 +79,18 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
 
+    public void loadallgroupe() {
 
-    public void loadallgroupe(){
 
-
-        JFXTreeTableColumn<Groupe,String> groupe_id=this.creerGroupeId();
-        JFXTreeTableColumn<Groupe,String> groupe_nom=this.creernomgroupe();
+        JFXTreeTableColumn<Groupe, String> groupe_id = this.creerGroupeId();
+        JFXTreeTableColumn<Groupe, String> groupe_nom = this.creernomgroupe();
         ObservableList<Groupe> groupes = FXCollections.observableArrayList();
-        List<Groupe> liste=groupeDao.listeGroupes();
-        for(Groupe groupe:liste){
+        List<Groupe> liste = groupeDao.listeGroupes();
+        for (Groupe groupe : liste) {
             groupes.add(groupe);
         }
         final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(groupes, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(groupe_id,groupe_nom);
+        treeView.getColumns().setAll(groupe_id, groupe_nom);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
@@ -100,34 +98,25 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
 
-
-
-
-
     private GroupeDao groupeDao;
 
 
-
     public void initialize(URL location, ResourceBundle resources) {
-        this.groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
+        this.groupeDao = new GroupeDaoImpl(DBconnexion.getConnection());
 
         loadallgroupe();
     }
 
 
-
-
-
-
     public void close(javafx.scene.input.MouseEvent mouseEvent) {
-        JFXDialogLayout dialogLayout=new JFXDialogLayout();
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
         dialogLayout.setHeading(new Text("ferme"));
         dialogLayout.setBody(new Text("vous voulez partir ?"));
 
-        JFXButton ok=new JFXButton("ok");
-        JFXButton cancel=new JFXButton("annule");
+        JFXButton ok = new JFXButton("ok");
+        JFXButton cancel = new JFXButton("annule");
 
-        final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
+        final JFXDialog dialog = new JFXDialog(stackepane, dialogLayout, JFXDialog.DialogTransition.CENTER);
 
         ok.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(javafx.event.ActionEvent event) {
@@ -139,7 +128,7 @@ public class ConsulterGroupe implements Initializable, Vue {
                 dialog.close();
             }
         });
-        dialogLayout.setActions(ok,cancel);
+        dialogLayout.setActions(ok, cancel);
         dialog.show();
     }
 
@@ -149,13 +138,13 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
     public void setController(Controlleur controller) {
-        this.controlleur=controller;
+        this.controlleur = controller;
     }
 
     public void cherchecentreparid(MouseEvent mouseEvent) {
 
 
-        if(search_text.getText().length()==0){
+        if (search_text.getText().length() == 0) {
             loadallgroupe();
         }
         loadAllgroupeParId();
@@ -164,21 +153,21 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
     private void loadAllgroupeParId() {
-        JFXTreeTableColumn<Groupe,String> groupe_id=this.creerGroupeId();
-        JFXTreeTableColumn<Groupe,String> groupe_nom=this.creernomgroupe();
+        JFXTreeTableColumn<Groupe, String> groupe_id = this.creerGroupeId();
+        JFXTreeTableColumn<Groupe, String> groupe_nom = this.creernomgroupe();
         ObservableList<Groupe> groupes = FXCollections.observableArrayList();
-        Groupe groupe=this.groupeDao.getGroupeParId(search_text.getText().toString());
+        Groupe groupe = this.groupeDao.getGroupeParId(search_text.getText().toString());
 
-        if(groupe!=null) {
+        if (groupe != null) {
             groupes.add(groupe);
 
             final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(groupes, RecursiveTreeObject::getChildren);
             treeView.getColumns().setAll(groupe_id, groupe_nom);
             treeView.setRoot(root);
             treeView.setShowRoot(false);
-        }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
+        } else {
+            Image image = new Image("img/delete.png");
+            Notifications notification = Notifications.create()
                     .title("Error")
                     .text("aucun centre avec cette id en base")
                     .hideAfter(Duration.seconds(3))
@@ -196,19 +185,17 @@ public class ConsulterGroupe implements Initializable, Vue {
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
 
-        int res=0;
+        int res = 0;
 
-        if(search_text2.getText().length()!=0) {
+        if (search_text2.getText().length() != 0) {
 
-            res=groupeDao.supprimerGroupe(search_text2.getText().toString());
+            res = groupeDao.supprimerGroupe(search_text2.getText().toString());
         }
 
 
-
-
-        if(res>0){
-            Image image=new Image("img/mooo.png");
-            Notifications notification=Notifications.create()
+        if (res > 0) {
+            Image image = new Image("img/mooo.png");
+            Notifications notification = Notifications.create()
                     .title("finit")
                     .text("groupe supprimer avec succss")
                     .hideAfter(Duration.seconds(3))
@@ -219,9 +206,9 @@ public class ConsulterGroupe implements Initializable, Vue {
             loadallgroupe();
 
             //updateStatus();
-        }else{
-            Image image=new Image("img/delete.png");
-            Notifications notification=Notifications.create()
+        } else {
+            Image image = new Image("img/delete.png");
+            Notifications notification = Notifications.create()
                     .title("Error " +
                             "")
                     .text("il y a eu une erreur dans la suppression")
@@ -238,4 +225,10 @@ public class ConsulterGroupe implements Initializable, Vue {
 
     public void hideSignupPane(ActionEvent actionEvent) {
     }
+
+    public void back(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageGroupe();
+
+    }
+
 }

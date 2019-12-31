@@ -51,4 +51,6 @@ public class CreerCentre implements Vue {
         this.controlleur=controller;
 
     }
+
+
 }

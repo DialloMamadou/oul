@@ -465,5 +465,9 @@ public class ConsulterInscription implements Initializable, Vue {
 
 
     }
+
+    public void back(MouseEvent mouseEvent) { this.controlleur.lancerPageInscription();
+
+    }
 }
 

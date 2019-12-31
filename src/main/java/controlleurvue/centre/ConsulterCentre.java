@@ -222,4 +222,10 @@ public class ConsulterCentre  implements Initializable, Vue {
 
     public void hideSignupPane(ActionEvent actionEvent) {
     }
+
+    public void back(MouseEvent mouseEvent) {
+
+            this.controlleur.lancerPageCentre();
+
+    }
 }
