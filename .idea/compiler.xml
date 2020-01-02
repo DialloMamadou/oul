@@ -9,7 +9,7 @@
         <module name="oulFinishh" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="8">
       <module name="oulFinishh" target="8" />
     </bytecodeTargetLevel>
   </component>
