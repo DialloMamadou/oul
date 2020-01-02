@@ -92,4 +92,13 @@ public class Controlleur {
     public void creerVueConsulterAnnulation() {
         this.fabriqueVue.creerVueConsulterAnnulation();
     }
+
+    public void lancerLogin() {
+        this.fabriqueVue.creerLoginVue();
+    }
+
+    public void envoyerEmail(String text) {
+
+        fabriqueVue.creerVueEmail();
+    }
 }

@@ -16,6 +16,7 @@ import controlleurvue.sejour.ConsulterSejour;
 import controlleurvue.sejour.CreerSejour;
 import controlleurvue.sejour.SejourScreen;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -207,5 +208,11 @@ public class FabriqueVue{
 
     public void creerVueConsulterAnnulation() {
         load(ConsulterAnnulation.class.getResource("/vue/consulterAnnulation.fxml"),"consulter annulation");
+    }
+
+    public void creerVueEmail() {
+        load(Email.class.getResource("/vue/email.fxml")," email");
+
+
     }
 }

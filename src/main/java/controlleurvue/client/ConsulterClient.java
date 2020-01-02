@@ -4,6 +4,7 @@ import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.mysql.jdbc.PreparedStatement;
+import controlleurvue.Email;
 import controlleurvue.Vue;
 import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.centre.CreerCentre;
@@ -16,8 +17,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -26,6 +29,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import modele.Client;
@@ -36,6 +40,7 @@ import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -292,5 +297,27 @@ public class ConsulterClient implements Initializable, Vue {
 
 
         controlleur.lancerPageSejourHistoriqueClient(this.idclient.getText());
+    }
+
+    public void envoieEmail(MouseEvent mouseEvent) {
+        //this.controlleur.envoyerEmail(this.idclient.getText());
+        Email.idclient=this.idclient.getText();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
+            /*
+             * if "fx:controller" is not set in fxml
+             * fxmlLoader.setController(NewWindowController);
+             */
+            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            Stage stage = new Stage();
+            stage.setTitle("email");
+            stage.setScene(scene);
+            Email.stage=stage;
+            stage.show();
+        } catch (IOException e) {
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.log(Level.SEVERE, "Failed to create new Window.", e);
+        }
     }
 }
