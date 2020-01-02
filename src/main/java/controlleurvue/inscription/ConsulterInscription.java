@@ -1,6 +1,10 @@
 package controlleurvue.inscription;
 
 import basededonnee.DBconnexion;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
@@ -30,11 +34,10 @@ import modele.*;
 import notification.Notification;
 import principale.Controlleur;
 
+import java.io.FileOutputStream;
 import java.net.URL;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 public class ConsulterInscription implements Initializable, Vue {

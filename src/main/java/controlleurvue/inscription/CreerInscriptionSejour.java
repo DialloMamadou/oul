@@ -1,6 +1,10 @@
 package controlleurvue.inscription;
 
 import basededonnee.DBconnexion;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
@@ -27,10 +31,13 @@ import modele.*;
 import notification.Notification;
 import principale.Controlleur;
 
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.sql.Connection;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class CreerInscriptionSejour implements Initializable, Vue {
@@ -551,8 +558,111 @@ for(Sejour sejour:liste){
         int res=inscriptionDao.insererInscription(inscription);
         if(res>0){
             Notification.affichageSucces("succes","inscription faite avec succes");
+            confirmationInscriptionPDF(client,sejour);
+
         }else{
             Notification.affichageEchec("erreur","echec dans la creation de la reservation");
+        }
+    }
+
+    public void confirmationInscriptionPDF(Client client,Sejour sejour){
+        Document doc = new Document();
+
+        try {
+            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/Inscription_"+client.prenom_client.get()+".pdf"));
+            doc.open();
+
+            //Add Image
+            Image img = Image.getInstance("src/main/resources/img/oul.jpg");
+            //Fixed Positioning
+            img.setAbsolutePosition(30f, 700f);
+            //Scale to new height and new width of image
+            img.scaleAbsolute(100, 80);
+            //Add to document
+            doc.add(img);
+            //doc.add(Chunk.SPACETABBING);
+            doc.add(new Paragraph("\n\n\n\n\n"));
+            Font font =FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD);
+            font.setColor(BaseColor.BLUE);
+            Font font1 =FontFactory.getFont(FontFactory.HELVETICA, 10);
+            font1.setColor(BaseColor.BLUE);
+
+            Font font2 =FontFactory.getFont(FontFactory.HELVETICA, 8);
+
+
+            doc.add(new Phrase("ŒUVRE UNIVERSITAIRE DU LOIRET\n",font));
+            doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61\n",font2));
+            doc.add(new Phrase("siege.asso@ouloiret.fr\nwww.ouloiret.fr \n",font1));
+            doc.add(new Phrase("SIRET : 77550821100072 \nAPE : 552 E",font2));
+
+            DateFormat fullDateFormat = DateFormat.getDateInstance(DateFormat.FULL);
+            Paragraph jour = new Paragraph("Le "+fullDateFormat.format(new Date()));
+            jour.setAlignment(Element.ALIGN_CENTER);
+            doc.add(jour);
+
+            Paragraph dest = new Paragraph("Mme ou M. "+client.observation.get()+"\n\n"+client.codePostale.get()+" "+client.adresse.get()+"\n");
+            dest.setAlignment(Element.ALIGN_RIGHT);
+            doc.add(dest);
+
+            doc.add(new Paragraph("Référence à rappeler :( 159297 / 1112 - 8V0)"));
+            Image alerte = Image.getInstance("src/main/resources/img/alerte.jpg");
+
+            alerte.setAbsolutePosition(30f, 492f);
+
+            alerte.scaleAbsolute(10, 10);
+            doc.add(alerte);
+
+            font.setColor(BaseColor.BLACK);
+            doc.add(new Paragraph("    (votre dossier ne pourra être pris en compte sans cette référence)\n\n",font));
+            Paragraph titre = new Paragraph("CONFIRMATION D’INSCRIPTION",font);
+            titre.setAlignment(Element.ALIGN_CENTER);
+            doc.add(titre);
+
+            Paragraph par = new Paragraph("       Madame, Monsieur,\n\n " +
+                    "     Nous avons le plaisir de vous confirmer l’inscription de votre enfant " + client.prenom_client.get()+" "+client.nom_client.get()+"\n"+
+                    "     •  au centre de vacances de CV INGRANNES,\n     •  pour le séjour du"+date.getValue()+"\n     •  pour une durée de 6  jours.\n\n"+
+                    "     Les frais de séjour et de voyage s’élèvent  à : "+sejour.prix.get()+" €, auxquels s’ajoute le montant de l’adhésion, soit 3,00 € par famille et par année.\n\n"+
+                    "     Vous avez versé des arrhes pour un montant de  50 € ainsi que l’adhésion de 3 € (sauf si elle a déjà été réglée lors d’un précédent séjour). Le solde est à régler entre trois et quatre semaines avant le départ. Nous vous rappelons que notre association est habilitée pour accepter les paiements par Chèques-Vacances.\n");
+
+                  /*
+
+    •
+                  Deux à trois semaines avant le départ, une fois le séjour soldé, nous vous ferons parvenir les documents suivants :
+    ► la convocation avec les lieux et heures de départ et retour
+    ► le dossier du jeune ou de l’enfant à compléter
+    ► la lettre du directeur vous donnant des informations sur le déroulement du séjour.
+
+                    Nous vous rappelons que pour toutes les activités nautiques (voile, kayak, canyoning, surf, plongée…) le test de natation est obligatoire (le brevet de 25 ou 50 m est non valable).
+            Attention : Pour la plongée un certificat médical est également demandé.
+
+                    Si vous êtes en possession de Bons-Vacances CAF ou MSA et si vous ne nous les avez pas encore transmis, veuillez nous les adresser dans les meilleurs délais (ou votre numéro d’allocataire pour les VACAF).
+
+                    En souhaitant que votre enfant passe un agréable séjour en Centre de Vacances, nous vous adressons nos respectueuses salutations.
+
+            ");
+                    Le directeur.
+                    M. JOBERT
+
+
+
+            PAPILLON à DETACHER ET à RETOURNER A L’O.U.L.AVEC VOTRE REGLEMENT
+                    (si séjour NON SOLDÉ ou non pris en charge)
+
+            NOM : AUDIER ISAAC
+
+            REFERENCE : 159297 /  1112 - 8V0 /  CV INGRANNES du 20/08/2018 au 25/08/2018
+            (votre dossier ne pourra être pris en compte sans cette référence)
+
+
+            Le transport n’est pas compris pour les centres du Loiret, (INGRANNES, LES CAILLETTES, L’ETANG DU PUITS) 
+            vous devez conduire votre enfant sur place. Cependant un départ d’ORLEANS est possible (20 € ALLER/RETOUR),        le nombre de places étant limité, veuillez nous en informer par téléphone ou par courrier.
+*/
+                  doc.add(par);
+            doc.close();
+            writer.close();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }

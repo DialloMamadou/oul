@@ -12,7 +12,7 @@ public class Controlleur {
 
     public Controlleur(Stage stage){
         this. fabriqueVue= new FabriqueVue(stage, this);
-        this.fabriqueVue.creerLoginVue();
+        this.fabriqueVue.creerPageAcceuil();//creerLoginVue();
     }
 
     public void lancerPageAccueil() {

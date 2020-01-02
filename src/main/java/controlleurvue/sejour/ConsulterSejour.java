@@ -1,6 +1,10 @@
 package controlleurvue.sejour;
 
 import basededonnee.DBconnexion;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
@@ -20,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -31,6 +36,7 @@ import modele.Sejour;
 import notification.Notification;
 import principale.Controlleur;
 
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -449,6 +455,102 @@ public class ConsulterSejour implements Initializable, Vue {
         System.out.println("*************************************");
         for(Client client:clients){
             System.out.println(client.prenom_client.get()+" "+client.nom_client.get());
+        }
+
+        Document doc = new Document();
+
+        try {
+            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/DocCentre.pdf"));
+            doc.open();
+
+            //Add Image
+            Image img = Image.getInstance("src/main/resources/img/oul.jpg");
+            //Fixed Positioning
+            img.setAbsolutePosition(30f, 700f);
+            //Scale to new height and new width of image
+            img.scaleAbsolute(100, 100);
+            //Add to document
+            doc.add(img);
+            //doc.add(Chunk.SPACETABBING);
+            doc.add(new Paragraph("\n\n\n\n\n"));
+            Font font =FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD);
+            font.setColor(BaseColor.BLUE);
+
+            doc.add(new Phrase("ŒUVRE UNIVERSITAIRE DU LOIRET\n",font));
+            doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61"+
+                    "\n"+"siege.asso@ouloiret.fr\n www.ouloiret.fr \nSIRET : 77550821100072 \nAPE : 552 E"));
+
+            //doc.add(new Paragraph("\n\n\n\n\n\n"));
+
+            Paragraph pCentre = new Paragraph("CENTRE"+"    " +centre.nom_centre.get()+" avec capacite "+centre.capacite_centre.get());
+            Paragraph pdateSejour = new Paragraph("DATES DU SEJOUR"+"     "+ldate.getText());
+            pCentre.setAlignment(Element.ALIGN_CENTER);
+            pdateSejour.setAlignment(Element.ALIGN_CENTER);
+
+            doc.add(pCentre);
+            doc.add(pdateSejour);
+
+
+            Paragraph titre =new Paragraph(" \nListe des enfants inscritent à ce sejour:\n");
+            titre.setAlignment(Element.ALIGN_CENTER);
+            doc.add(titre);
+
+            doc.add(new Paragraph(" "));
+
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+
+            PdfPCell cell;
+
+            cell = new PdfPCell(new Phrase("id", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("nom", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("prenom", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("groupe", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+            for (Client client : clients){
+                cell = new PdfPCell(new Phrase(client.id.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(client.nom_client.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(client.prenom_client.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(client.groupe.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+            }
+
+            doc.add(table);
+
+            doc.close();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
