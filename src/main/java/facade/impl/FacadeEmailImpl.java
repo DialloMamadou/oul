@@ -1,6 +1,7 @@
 package facade.impl;
 
 import facade.facadeEmail;
+import notification.Notification;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -78,10 +79,12 @@ public class FacadeEmailImpl implements facadeEmail {
             transport.close();
         }
         catch (AddressException ae) {
-            ae.printStackTrace();
+            Notification.affichageEchec("echec envoie message","l adresse n a pas ete trouve");
+
         }
         catch (MessagingException me) {
-            me.printStackTrace();
+            Notification.affichageEchec("echec envoie message","l adresse n a pas ete trouve");
+
         }
     }
 

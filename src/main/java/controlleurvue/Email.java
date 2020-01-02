@@ -7,11 +7,9 @@ import daos.ClientDao;
 import daos.impl.ClientDaoImpl;
 import facade.facadeEmail;
 import facade.impl.FacadeEmailImpl;
-import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import modele.Client;
 import principale.Controlleur;
 
@@ -19,14 +17,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Email implements Initializable ,Vue{
-    public  static Stage stage;
-    public static Label emeteur;
-    public static Label recepteur;
+    public Label emeteur;
+    public Label recepteur;
    public static  String idclient;
-    public static JFXTextField sujet;
-    public  static JFXTextArea message;
+    public JFXTextField sujet;
+    public JFXTextArea message;
     private Controlleur controlleur;
-    private  static facadeEmail facadeEmail;
+    private facadeEmail facadeEmail;
 
     @Override
     public void setController(Controlleur controller) {
@@ -38,26 +35,16 @@ public class Email implements Initializable ,Vue{
     public void initialize(URL location, ResourceBundle resources) {
         ClientDao clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         Client client=clientDao.getClientParId(idclient);
-       Email.emeteur.setText("malikabdallah75019@gmail.com");
-        Email.recepteur.setText(client.adresse.get());
-
-        stage.close();
-
-    }
-
-    public static void envoieEmail(MouseEvent mouseEvent) {
+        this.emeteur.setText("malikabdallah75019@gmail.com");
+        this.recepteur.setText(client.adresse.get());
         facadeEmail=new FacadeEmailImpl();
-        String[]tab=new String[1];
-        tab[0]=Email.recepteur.getText();
-        Email.facadeEmail.sendFromGMail("malikabdallah75019","Selamwait04",tab,sujet.getText(),message.getText());
+
 
     }
 
-    public void envoyerEmail(MouseEvent mouseEvent) {
-        facadeEmail=new FacadeEmailImpl();
+    public void envoieEmail(MouseEvent mouseEvent) {
         String[]tab=new String[1];
-        tab[0]=Email.recepteur.getText();
-        Email.facadeEmail.sendFromGMail("malikabdallah75019","Selamwait04",tab,sujet.getText(),message.getText());
+        tab[0]=this.recepteur.getText();
+        this.facadeEmail.sendFromGMail("malikabdallah75019","Selamwait04",tab,sujet.getText(),message.getText());
     }
-
 }
