@@ -156,9 +156,9 @@ public class ConsulterCentre  implements Initializable, Vue {
                     public boolean test(TreeItem<Centre> t) {
 
                         boolean flag =
-                                t.getValue().id.getValue().contains(newValue)
-                                        || t.getValue().capacite_centre.getValue().contains(newValue)
-                                        || t.getValue().nom_centre.getValue().contains(newValue);
+                                t.getValue().id.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().capacite_centre.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().nom_centre.getValue().toLowerCase().contains(newValue.toLowerCase());
 
                         return flag;
 

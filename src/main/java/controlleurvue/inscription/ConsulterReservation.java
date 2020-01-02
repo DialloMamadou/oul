@@ -207,10 +207,10 @@ public class ConsulterReservation implements Initializable, Vue {
                     public boolean test(TreeItem<Reservation> t) {
 
                         boolean flag =
-                                t.getValue().depart.getValue().contains(newValue)
-                                        || t.getValue().code_client.getValue().contains(newValue)
-                                        || t.getValue().dateinscription.getValue().contains(newValue)
-                                        || t.getValue().id.getValue().equals(newValue);
+                                t.getValue().depart.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().code_client.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().dateinscription.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().id.getValue().toLowerCase().equals(newValue.toLowerCase());
 
 
                         return flag;

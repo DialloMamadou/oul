@@ -214,10 +214,10 @@ public class ConsulterAnnulation implements Initializable, Vue {
                     public boolean test(TreeItem<Annulation> t) {
 
                         boolean flag =
-                                t.getValue().id.getValue().contains(newValue)
-                                        || t.getValue().idclient.getValue().contains(newValue)
-                                        || t.getValue().idsejour.getValue().contains(newValue)
-                                        || t.getValue().motif.equals(newValue);
+                                t.getValue().id.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().idclient.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().idsejour.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().motif.getValue().toLowerCase().contains(newValue.toLowerCase());
                         if(flag)
                         System.out.println("trouve");
 

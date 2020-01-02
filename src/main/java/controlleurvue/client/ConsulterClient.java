@@ -200,11 +200,11 @@ public class ConsulterClient implements Initializable, Vue {
 
                     @Override
                     public boolean test(TreeItem<Client> t) {
-                        boolean flag=t.getValue().prenom_client.getValue().contains(newValue)
-                                || t.getValue().nom_client.getValue().contains(newValue)
-                                || t.getValue().groupe.getValue().contains(newValue)
-                                || t.getValue().datenaissance.getValue().contains(newValue)
-                                || t.getValue().id.getValue().contains(newValue);
+                        boolean flag=t.getValue().prenom_client.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().nom_client.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().groupe.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().datenaissance.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().id.getValue().toLowerCase().contains(newValue.toLowerCase());
 
 
                         return flag ;

@@ -248,11 +248,11 @@ public class ConsulterInscription implements Initializable, Vue {
                     public boolean test(TreeItem<Inscription> t) {
 
                         boolean flag =
-                                t.getValue().depart.getValue().contains(newValue)
-                                        || t.getValue().code_client.getValue().contains(newValue)
-                                        || t.getValue().dateinscription.getValue().contains(newValue)
-                                        || t.getValue().id.getValue().equals(newValue)
-                                        ||t.getValue().paiement.getValue().equals(newValue);
+                                t.getValue().depart.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().code_client.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().dateinscription.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().id.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        ||t.getValue().paiement.getValue().toLowerCase().contains(newValue.toLowerCase());
                         ;
                         if(flag)
                             remplirGrideSejour(t);
