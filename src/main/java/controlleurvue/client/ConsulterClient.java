@@ -313,7 +313,7 @@ public class ConsulterClient implements Initializable, Vue {
             Stage stage = new Stage();
             stage.setTitle("email");
             stage.setScene(scene);
-            Email.stage=stage;
+           // Email.stage=stage;
             stage.show();
         } catch (IOException e) {
             Logger logger = Logger.getLogger(getClass().getName());

@@ -8,8 +8,10 @@ import daos.impl.ClientDaoImpl;
 import facade.facadeEmail;
 import facade.impl.FacadeEmailImpl;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import modele.Client;
 import principale.Controlleur;
 
@@ -22,6 +24,7 @@ public class Email implements Initializable ,Vue{
    public static  String idclient;
     public JFXTextField sujet;
     public JFXTextArea message;
+    public StackPane pane;
     private Controlleur controlleur;
     private facadeEmail facadeEmail;
 
@@ -46,5 +49,7 @@ public class Email implements Initializable ,Vue{
         String[]tab=new String[1];
         tab[0]=this.recepteur.getText();
         this.facadeEmail.sendFromGMail("malikabdallah75019","Selamwait04",tab,sujet.getText(),message.getText());
+       Scene scene= pane.getScene();
+
     }
 }
