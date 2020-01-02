@@ -18,7 +18,7 @@
             <Label layoutX="10.0" layoutY="98.0" text="sujet" />
             <JFXTextField fx:id="sujet" layoutX="52.0" layoutY="94.0" prefHeight="25.0" prefWidth="438.0" />
             <JFXTextArea fx:id="message" layoutX="52.0" layoutY="153.0" prefHeight="206.0" prefWidth="463.0" />
-            <Button layoutX="521.0" layoutY="359.0" mnemonicParsing="false" onMouseClicked="#envoyerEmail" text="envoyer" />
+            <Button layoutX="521.0" layoutY="359.0" mnemonicParsing="false" onMouseClicked="#envoieEmail" text="envoyer" />
          </children>
       </Pane>
    </children>
