@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.centre.ConsulterCentre">
+    <children>
+        <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
+            <children>
+                <JFXTreeTableView fx:id="treeView" layoutX="445.0" layoutY="21.0" maxWidth="-Infinity" opacity="0.7" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                <Pane layoutX="29.0" layoutY="22.0" opacity="0.7" prefHeight="700.0" prefWidth="421.0" style="-fx-background-color: #fff; -fx-background-radius: 6 px;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="930.0" AnchorPane.topAnchor="15.0">
+                    <children>
+                        <Pane layoutX="14.0" layoutY="48.0" prefHeight="113.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                            <children>
+                                <JFXTextField fx:id="search_text" focusColor="#09e2a7" labelFloat="true" layoutX="34.0" layoutY="29.0" prefHeight="25.0" prefWidth="313.0" promptText="chercher un centre par id " text="chercher un centre" />
+                                <JFXButton buttonType="RAISED" layoutX="34.0" layoutY="69.0" onMouseClicked="#cherchecentreparid" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="chercher" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+
+                            </children>
+                        </Pane>
+
+
+
+                        <Pane layoutX="21.0" layoutY="531.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                            <children>
+                                <JFXButton buttonType="RAISED" layoutX="83.0" layoutY="51.0" onMouseClicked="#goBack" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Back" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                                <JFXButton buttonType="RAISED" layoutX="218.0" layoutY="51.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Close" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                            </children>
+                        </Pane>
+                        <Label layoutX="21.0" layoutY="14.0" prefHeight="34.0" prefWidth="257.0" text="vous pouvez chercher les donner d un centre">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+
+
+
+
+                        <Pane layoutX="8.0" layoutY="172.0" prefHeight="340.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                            <children>
+                                <JFXButton buttonType="RAISED" layoutX="28.0" layoutY="296.0" onMouseClicked="#SupprimerCentre" prefHeight="30.0" prefWidth="91.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Supprimer" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                        <Label layoutX="34.0" layoutY="82.0" text="nom:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Pane layoutX="164.0" layoutY="-1.0" prefHeight="340.0" prefWidth="212.0">
+                           <children>
+                                      <JFXButton buttonType="RAISED" layoutX="80.0" layoutY="298.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Editer" textFill="WHITE">
+                                          <font>
+                                              <Font size="14.0" />
+                                          </font>
+                                      </JFXButton>
+                              <JFXTextField fx:id="textnom" layoutX="45.0" layoutY="77.0" />
+                              <JFXTextField fx:id="textcapacite" layoutX="45.0" layoutY="125.0" />
+                           </children>
+                        </Pane>
+                        <Label layoutX="28.0" layoutY="123.0" text="capacite">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lnom" layoutX="66.0" layoutY="82.0" />
+                        <Label fx:id="lcapacite" layoutX="97.0" layoutY="123.0">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="34.0" layoutY="49.0" text="id">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lid" layoutX="83.0" layoutY="49.0" />
+                            </children>
+                        </Pane>
+
+
+
+
+
+                    </children>
+                </Pane>
+            </children>
+
+
+
+
+
+
+
+        </AnchorPane>
+
+
+
+
+    </children>
+
+
+</StackPane>

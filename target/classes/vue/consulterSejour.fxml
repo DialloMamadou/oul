@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.sejour.ConsulterSejour">
+    <children>
+        <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
+            <children>
+                <JFXTreeTableView fx:id="treeView" layoutX="573.0" layoutY="55.0" maxWidth="-Infinity" opacity="0.7" prefHeight="700.0" prefWidth="496.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="-25.0" AnchorPane.rightAnchor="378.0" AnchorPane.topAnchor="55.0" />
+                <Pane layoutY="42.0" opacity="0.7" prefHeight="763.0" prefWidth="490.0" style="-fx-background-color: #fff; -fx-background-radius: 6 px;" AnchorPane.bottomAnchor="-63.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="885.0" AnchorPane.topAnchor="42.0">
+                    <children>
+
+
+
+                        <Pane layoutX="21.0" layoutY="531.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                            <children>
+                                <JFXButton buttonType="RAISED" layoutX="83.0" layoutY="51.0" onMouseClicked="#goBack" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Back" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                                <JFXButton buttonType="RAISED" layoutX="218.0" layoutY="51.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Close" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                            </children>
+                        </Pane>
+                        <Pane layoutX="9.0" layoutY="344.0" prefHeight="200.0" prefWidth="378.0">
+                            <children>
+                                <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="40.0" onMouseClicked="#genereliste" prefHeight="30.0" prefWidth="103.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="generer liste" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                                <JFXButton buttonType="RAISED" layoutX="131.0" layoutY="40.0" onMouseClicked="#genereliste" prefHeight="30.0" prefWidth="103.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="convocation" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                            </children>
+                        </Pane>
+                        <Pane layoutX="21.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <GridPane layoutX="-6.0" prefHeight="200.0" prefWidth="207.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="70.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="131.0" minWidth="10.0" prefWidth="130.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Label text="CENTRE" />
+                                        <Label text="SEJOUR" GridPane.rowIndex="1" />
+                                        <Label text="date" GridPane.rowIndex="2" />
+                                        <Label text="age min max" GridPane.rowIndex="3" />
+                                        <Label text="PRIX" GridPane.rowIndex="4" />
+                                        <Label text="capacite" GridPane.rowIndex="5" />
+                                        <Label fx:id="lcentre" GridPane.columnIndex="1" />
+                                        <Label id="lsejour" fx:id="lsejour" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="8.0" />
+                                 </font></Label>
+                                        <Label id="ldate" fx:id="ldate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <Label fx:id="lage" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                        <Label fx:id="lprix" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                        <Label fx:id="lcapacite" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    </children>
+                                </GridPane>
+                            </children>
+                        </Pane>
+                        <Label fx:id="idsejour" layoutX="93.0" layoutY="224.0" />
+                        <GridPane layoutX="237.0" layoutY="24.0" prefHeight="180.0" prefWidth="253.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="101.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.0" minWidth="10.0" prefWidth="116.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="id" />
+                                <Label id="prenomnom" text="prenom - nom" GridPane.rowIndex="1" />
+                                <Label prefHeight="17.0" prefWidth="90.0" text="date naissance" GridPane.rowIndex="2" />
+                                <Label text="numero" GridPane.rowIndex="3" />
+                                <Label text="email" GridPane.rowIndex="4" />
+                                <Label fx:id="idclient" GridPane.columnIndex="1" />
+                                <Label fx:id="prenomnom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Label fx:id="dateclient" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <Label fx:id="numeroclient" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <Label fx:id="emailclient" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font></Label>
+                            </children>
+                        </GridPane>
+                        <Label layoutX="14.0" layoutY="224.0" prefHeight="17.0" prefWidth="59.0" text="id sejour" />
+                        <Label layoutX="21.0" layoutY="267.0" text="reste a payer" />
+                        <Label fx:id="reste" layoutX="107.0" layoutY="267.0" />
+                  <JFXRadioButton fx:id="retard" layoutX="9.0" layoutY="309.0" text="retard" />
+                  <JFXRadioButton fx:id="regle" layoutX="89.0" layoutY="309.0" prefHeight="17.0" prefWidth="78.0" text="regle" />
+                  <JFXRadioButton fx:id="tous" layoutX="155.0" layoutY="309.0" prefHeight="17.0" prefWidth="68.0" text="tous" />
+
+
+
+
+
+                    </children>
+                </Pane>
+                <JFXTreeTableView fx:id="listeClientSejour" layoutX="1062.0" layoutY="53.0" opacity="0.7" prefHeight="689.0" prefWidth="313.0" />
+                <Pane layoutX="936.0" layoutY="-3.0" opacity="0.7" style="-fx-background-color: #FFF;" />
+                <Pane layoutX="504.0" layoutY="17.0" opacity="0.7" prefHeight="41.0" prefWidth="565.0">
+                    <children>
+                        <JFXTextField fx:id="cherchersejour" focusColor="#09e2a7" labelFloat="true" layoutX="-9.0" layoutY="14.0" prefHeight="25.0" prefWidth="378.0" promptText="chercher un sejour  " style="-fx-background-color: #FFF;" />
+                        <JFXButton buttonType="RAISED" layoutX="369.0" layoutY="12.0" onMouseClicked="#cherchecentreparid" prefHeight="30.0" prefWidth="123.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="chercher" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </JFXButton>
+                    </children>
+                </Pane>
+                <Pane layoutX="66.0" layoutY="12.0" opacity="0.7" style="-fx-background-color: #FFF;" />
+                <JFXTextField fx:id="chercheclient" layoutX="1062.0" layoutY="29.0" prefHeight="25.0" prefWidth="207.0" promptText="chercher client" style="-fx-background-color: #FFF;" />
+                <JFXButton buttonType="RAISED" layoutX="1278.0" layoutY="27.0" onMouseClicked="#cherchecentreparid" prefHeight="30.0" prefWidth="88.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="chercher" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </JFXButton>
+            </children>
+
+
+
+
+
+
+
+        </AnchorPane>
+
+
+
+
+    </children>
+
+
+</StackPane>

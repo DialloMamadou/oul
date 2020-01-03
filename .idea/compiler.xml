@@ -6,11 +6,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+<<<<<<< HEAD
         <module name="ouldyh" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ouldyh" target="1.5" />
+=======
+        <module name="oulFinishh" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="8">
+      <module name="oulFinishh" target="8" />
+>>>>>>> 89832963d6af16e07a4215cc8cb008fbd46a75e3
     </bytecodeTargetLevel>
   </component>
 </project>
