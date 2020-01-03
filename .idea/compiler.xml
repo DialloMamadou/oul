@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ouldyh" target="8" />
+      <module name="ouldyh" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
