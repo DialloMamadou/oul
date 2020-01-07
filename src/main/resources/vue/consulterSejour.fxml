@@ -49,6 +49,11 @@
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
+                        <JFXButton buttonType="RAISED" layoutX="255.0" layoutY="40.0" onMouseClicked="#envoieEmail" prefHeight="30.0" prefWidth="103.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="email" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
                             </children>
                         </Pane>
                         <Pane layoutX="21.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0">

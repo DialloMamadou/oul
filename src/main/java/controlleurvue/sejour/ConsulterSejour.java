@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import controlleurvue.Email;
 import controlleurvue.Vue;
 import controlleurvue.inscription.CreerInscriptionSejour;
 import daos.*;
@@ -19,7 +20,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -27,6 +30,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import modele.Centre;
 import modele.Client;
@@ -36,12 +41,15 @@ import notification.Notification;
 import principale.Controlleur;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConsulterSejour implements Initializable, Vue {
 
@@ -716,5 +724,35 @@ public class ConsulterSejour implements Initializable, Vue {
     }
 
 
+    public void envoieEmail(MouseEvent mouseEvent) {
+        try {
+            Email.idclient="";
+            Email.envoieGroupe=true;
+            Email.idsejour=this.idsejour.getText();
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
+            /*
+             * if "fx:controller" is not set in fxml
+             * fxmlLoader.setController(NewWindowController);
+             */
+            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+
+            FileChooser fileChooser = new FileChooser();
+
+
+
+            Stage stage = new Stage();
+
+            stage.setTitle("email");
+            stage.setScene(scene);
+            // Email.stage=stage;
+            stage.show();
+        } catch (IOException e) {
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.log(Level.SEVERE, "Failed to create new Window.", e);
+        }
+
+    }
 }
 

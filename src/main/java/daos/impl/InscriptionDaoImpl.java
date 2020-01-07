@@ -58,6 +58,9 @@ public class InscriptionDaoImpl extends Dao<Inscription> implements InscriptionD
                 " VALUES (?,?,?,?,?)";
         try {
 
+            System.out.println("sejour ou on inscrit "+inscription2.id_sejour.get());
+            System.out.println("client inscrit "+inscription2.code_client.get());
+
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1, inscription2.paiement.get());
             ps.setString(2,inscription2.dateinscription.get());

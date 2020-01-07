@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -29,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -40,6 +42,7 @@ import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -302,6 +305,7 @@ public class ConsulterClient implements Initializable, Vue {
     public void envoieEmail(MouseEvent mouseEvent) {
         //this.controlleur.envoyerEmail(this.idclient.getText());
         Email.idclient=this.idclient.getText();
+        Email.idsejour="";
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
@@ -310,7 +314,13 @@ public class ConsulterClient implements Initializable, Vue {
              * fxmlLoader.setController(NewWindowController);
              */
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+
+            FileChooser fileChooser = new FileChooser();
+
+
+
             Stage stage = new Stage();
+
             stage.setTitle("email");
             stage.setScene(scene);
            // Email.stage=stage;

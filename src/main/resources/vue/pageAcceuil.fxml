@@ -77,7 +77,7 @@
                      </font></Label>
                     </children>
                 </Pane>
-            <Pane fx:id="pane_51" layoutX="869.0" layoutY="423.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#deconnexionAppli" onMouseEntered="#souris_dessus_6" onMouseExited="#souris_sort_6" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+            <Pane fx:id="pane_51" layoutX="889.0" layoutY="405.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#deconnexionAppli" onMouseEntered="#souris_dessus_6" onMouseExited="#souris_sort_6" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                <children>
                   <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                      <image>

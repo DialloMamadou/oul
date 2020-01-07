@@ -555,7 +555,7 @@ for(Sejour sejour:liste){
         String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         String depart=(String)this.depart.getValue().toString();
         Inscription inscription=new Inscription(this.accompte.getText().toString(), aujourdhui,
-        client.id.get(),sejour.nom_centre.get(),depart) ;
+        client.id.get(),sejour.id.get(),depart) ;
         int res=inscriptionDao.insererInscription(inscription);
         if(res>0){
             if(client==null || client.id.get()==null){
