@@ -90,7 +90,8 @@ public class CreerClient  implements Initializable, Vue {
         String dateNaissance=this.annee.getValue().toString();
 
 
-        Client client=new Client("",nom,prenom,id_group,dateNaissance,portable,observation,email,adresse,poste);
+
+        Client client=new Client("",nom,prenom,id_group,portable,observation,email,adresse,poste,dateNaissance);
 
         int res=this.clientDao.insererClient(client);
 

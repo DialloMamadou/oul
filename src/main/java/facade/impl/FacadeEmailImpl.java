@@ -46,6 +46,7 @@ public class FacadeEmailImpl implements facadeEmail {
     }
 
     public   void sendFromGMail(String from, String pass, String[] to, String subject, String body) {
+        System.out.println("to to "+to[0]);
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
         props.put("mail.smtp.starttls.enable", "true");

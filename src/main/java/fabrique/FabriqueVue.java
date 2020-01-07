@@ -8,6 +8,7 @@ import controlleurvue.client.ClientScreen;
 import controlleurvue.client.ConsulterClient;
 import controlleurvue.client.CreerClient;
 import controlleurvue.client.HistoriqueClient;
+import controlleurvue.groupe.AssocierGroupeSejour;
 import controlleurvue.groupe.ConsulterGroupe;
 import controlleurvue.groupe.CreerGroupe;
 import controlleurvue.groupe.GroupeScreen;
@@ -213,6 +214,11 @@ public class FabriqueVue{
     public void creerVueEmail() {
         load(Email.class.getResource("/vue/email.fxml")," email");
 
+
+    }
+
+    public void creerVueSejourGroupe() {
+        load(AssocierGroupeSejour.class.getResource("/vue/associerGroupeSejour.fxml")," associer groupe sejour");
 
     }
 }

@@ -36,6 +36,7 @@ public class Client extends RecursiveTreeObject<Client> {
     public Client(String id,String nom_client, String prenom_client, String groupe,
                   String numero,String observation, String email, String adresse, String codePostale,
                   String datenaissance) {
+        System.out.println("emailll ="+email);
         this.id=new SimpleStringProperty(id);
         this.nom_client = new SimpleStringProperty(nom_client);
         this.prenom_client = new SimpleStringProperty(prenom_client);

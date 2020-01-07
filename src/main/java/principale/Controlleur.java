@@ -101,4 +101,8 @@ public class Controlleur {
 
         fabriqueVue.creerVueEmail();
     }
+
+    public void lancerPageAssocierSejourGroupe() {
+        fabriqueVue.creerVueSejourGroupe();
+    }
 }

@@ -10,6 +10,7 @@ public class GroupeScreen implements Vue {
 
 
     public Pane pane_3;
+    public Pane pane_11;
 
     public void souris_dessus_1(MouseEvent mouseEvent) {
         pane_1.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
@@ -21,6 +22,16 @@ public class GroupeScreen implements Vue {
 
     }
 
+
+    public void souris_dessus_11(MouseEvent mouseEvent) {
+        pane_11.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
+
+    }
+
+    public void souris_sort_11(MouseEvent mouseEvent) {
+        pane_11.setStyle("-fx-background-color: white; -fx-background-radius: 6px;");
+
+    }
 
     public void souris_dessus_3(MouseEvent mouseEvent) {
         pane_3.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
@@ -70,5 +81,10 @@ public class GroupeScreen implements Vue {
             System.out.println("controlleur null");
         }
         this.controlleur.creerVueGroupeCreation();
+    }
+
+
+    public void associegroupesejour(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageAssocierSejourGroupe();
     }
 }
