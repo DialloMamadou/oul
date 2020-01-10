@@ -28,7 +28,7 @@
                                 <Image url="@../img/001-manager.png" />
                             </image>
                         </ImageView>
-                        <Label layoutX="49.0" layoutY="145.0" text="consulter la liste des groupes" />
+                        <Label layoutX="23.0" layoutY="147.0" text="consulter la liste des groupes" />
                     </children>
                 </Pane>
 
@@ -50,6 +50,16 @@
                      </image>
                   </ImageView>
                   <Label layoutX="46.0" layoutY="137.0" prefHeight="43.0" prefWidth="154.0" text="gestion groupe sejour" />
+               </children>
+            </Pane>
+            <Pane fx:id="pane_111" layoutX="321.0" layoutY="401.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consultergroupesejour" onMouseEntered="#souris_dessus_111" onMouseExited="#souris_sort_111" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/004-list-1.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="23.0" layoutY="135.0" prefHeight="43.0" prefWidth="154.0" text="consulter reservations mairie" />
                </children>
             </Pane>
 

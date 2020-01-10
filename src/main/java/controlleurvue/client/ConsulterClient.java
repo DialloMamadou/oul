@@ -305,7 +305,6 @@ public class ConsulterClient implements Initializable, Vue {
     public void envoieEmail(MouseEvent mouseEvent) {
         //this.controlleur.envoyerEmail(this.idclient.getText());
         Email.idclient=this.idclient.getText();
-        Email.idsejour="";
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));

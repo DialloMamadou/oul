@@ -18,6 +18,7 @@ import principale.Controlleur;
 
 public class AccueilScreen implements Vue {
     public Pane pane_51;
+    public Pane pane_31;
     private Controlleur controlleur;
     public Pane pane_5;
     public Pane pane_4;
@@ -235,5 +236,21 @@ public class AccueilScreen implements Vue {
         pane_51.setStyle("-fx-background-color: white; -fx-background-radius: 6px;");
 
 
+    }
+
+
+
+
+    public void souris_dessus_31(MouseEvent mouseEvent) {
+        pane_31.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
+
+    }
+
+    public void souris_sort_31(MouseEvent mouseEvent) {
+        pane_31.setStyle("-fx-background-color: white; -fx-background-radius: 6px;");
+
+    }
+
+    public void optionavance(MouseEvent mouseEvent) {
     }
 }

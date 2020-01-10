@@ -60,7 +60,7 @@ public class FacadeEmailImpl implements facadeEmail {
         MimeMessage message = new MimeMessage(session);
 
         try {
-           /* message.setFrom(new InternetAddress(from));
+            message.setFrom(new InternetAddress(from));
             InternetAddress[] toAddress = new InternetAddress[to.length];
 
             // To get the array of addresses
@@ -68,16 +68,8 @@ public class FacadeEmailImpl implements facadeEmail {
                 toAddress[i] = new InternetAddress(to[i]);
             }
 
-            for( int i = 0; i < toAddress.length; i++) {
-                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
-            }
 
-            message.setSubject(subject);
-            message.setText(body);
-            Transport transport = session.getTransport("smtp");
-            transport.connect(host, from, pass);
-            transport.sendMessage(message, message.getAllRecipients());
-            transport.close();*/
+
 
 
 
@@ -89,19 +81,20 @@ public class FacadeEmailImpl implements facadeEmail {
             msg.setFrom(from);
 
 
-            InternetAddress[] toAddress = new InternetAddress[to.length];
 
-            for( int i = 0; i < to.length; i++ ) {
-                toAddress[i] = new InternetAddress(to[i]);
-            }
+
+
+            String s="";
 
             for( int i = 0; i < to.length; i++) {
-                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
+                if(i!=to.length-1)
+                 s+=to[i]+",";
             }
+            s+=to[to.length-1];
 
 
-          //  msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to[0]));
 
+            msg.setRecipients(Message.RecipientType.CC,s);
 
 
             msg.setSubject(subject);
@@ -112,16 +105,23 @@ public class FacadeEmailImpl implements facadeEmail {
             messagePart.setText(body);
 
             // Set the email attachment file
-            FileDataSource fileDataSource = new FileDataSource(file);
-
             MimeBodyPart attachmentPart = new MimeBodyPart();
+
+            FileDataSource fileDataSource;
+            if(file!=null) {
+                fileDataSource = new FileDataSource(file);
+
+
             attachmentPart.setDataHandler(new DataHandler(fileDataSource));
             attachmentPart.setFileName(fileDataSource.getName());
+            }
 
             // Create Multipart E-Mail.
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messagePart);
-            multipart.addBodyPart(attachmentPart);
+
+           if(file!=null)
+               multipart.addBodyPart(attachmentPart);
 
             msg.setContent(multipart);
 

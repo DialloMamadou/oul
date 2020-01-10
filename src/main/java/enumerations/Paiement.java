@@ -3,5 +3,8 @@ package enumerations;
 public enum Paiement {
     CarteBleu,
     Cheque,
-    BonCaf
+    BonCaf,
+    AideSocial,
+    ANCV,
+    ParticipationCe
 }

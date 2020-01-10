@@ -32,8 +32,8 @@ public class Email implements Initializable ,Vue{
     public Label emeteur;
     public Label recepteur;
    public static  String idclient;
-   public static boolean envoieGroupe;
-   public static String idsejour;
+   public static String idSejour;
+
     public JFXTextField sujet;
     public JFXTextArea message;
     public StackPane pane;
@@ -54,41 +54,30 @@ public class Email implements Initializable ,Vue{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ClientDao clientDao=new ClientDaoImpl(DBconnexion.getConnection());
-        sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
-        inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
-        clientDao=new ClientDaoImpl(DBconnexion.getConnection());
-        Client client=clientDao.getClientParId(idclient);
-        if(envoieGroupe){
-            List<Inscription>list=inscriptionDao.getInscriptionsParIdSejour(Email.idsejour);
-            String[]tab=new String[list.size()];
-            int cpt=0;
-            for(Inscription inscription:list){
-                Client client2=clientDao.getClientParId(inscription.code_client.get());
-                tab[cpt]=client2.email.get();
-                cpt++;
+        sejourDao = new SejourDaoImpl(DBconnexion.getConnection());
+        inscriptionDao = new InscriptionDaoImpl(DBconnexion.getConnection());
+        clientDao = new ClientDaoImpl(DBconnexion.getConnection());
 
-            }
-            String s="";
-            for(int i=0;i<tab.length-1;i++){
-                if(i==2){
-                    break;
-                }
-                s=s+tab[i]+",";
+        if(!idclient.equals("-1")) {
 
-            }
-            s=s+"...";
+            Client client = clientDao.getClientParId(idclient);
 
-            this.recepteur.setText(s);
-
-        }else{
+            System.out.println("id client "+idclient);
             this.recepteur.setText(client.email.get());
 
+
+        }else{
+            List<Inscription> inscription=inscriptionDao.getInscriptionsParIdSejour(idSejour);
+            Client client=clientDao.getClientParId(inscription.get(0).code_client.get());
+            this.recepteur.setText(client.email.get()+",...");
+
+
         }
+
+
+
         this.emeteur.setText("malikabdallah75019@gmail.com");
-        facadeEmail=new FacadeEmailImpl();
-
-
+        facadeEmail = new FacadeEmailImpl();
         FileChooser fileChooser = new FileChooser();
 
         this.joindre.setOnAction(e -> {
@@ -102,23 +91,30 @@ public class Email implements Initializable ,Vue{
     }
 
     public void envoieEmail(MouseEvent mouseEvent) {
-        if(Email.idsejour!="") {
+        if(!idclient.equals("-1")) {
             String[] tab = new String[1];
             tab[0] = this.recepteur.getText();
             System.out.println("recepteur email " + tab[0]);
             this.facadeEmail.sendFromGMail("malikabdallah75019", "Selamwait04", tab, sujet.getText(), message.getText(), file);
-            Scene scene = pane.getScene();
+
+
         }else{
-            List<Inscription>list=inscriptionDao.getInscriptionsParIdSejour(Email.idsejour);
-            String[]tab=new String[list.size()];
+            List<Inscription> inscription=inscriptionDao.getInscriptionsParIdSejour(idSejour);
+            String tab[]=new String[inscription.size()];
             int cpt=0;
-            for(Inscription inscription:list){
-                Client client=clientDao.getClientParId(inscription.code_client.get());
+            for(Inscription inscription1:inscription){
+                Client client=clientDao.getClientParId(inscription1.code_client.get());
                 tab[cpt]=client.email.get();
                 cpt++;
-
             }
+
+
+            System.out.println("tab "+tab);
             this.facadeEmail.sendFromGMail("malikabdallah75019", "Selamwait04", tab, sujet.getText(), message.getText(), file);
+
+
+
+
 
         }
 

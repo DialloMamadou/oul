@@ -7,12 +7,11 @@ import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
-import controlleurvue.sejour.ConsulterSejour;
 import daos.AssociationGroupeSejourDao;
 import daos.CentreDao;
 import daos.GroupeDao;
 import daos.SejourDao;
-import daos.impl.AssociationGroupeSejourImpl;
+import daos.impl.AssociationGroupeSejourDaoImpl;
 import daos.impl.CentreDaoImpl;
 import daos.impl.GroupeDaoImpl;
 import daos.impl.SejourDaoImpl;
@@ -54,6 +53,7 @@ public class AssocierGroupeSejour implements Vue, Initializable {
     public JFXTreeTableView<Sejour> sejourarbre;
     public Label lage;
     public Label idgroupe;
+    public JFXTextField nbplace;
     private Controlleur controlleur;
     
     
@@ -76,8 +76,8 @@ public class AssocierGroupeSejour implements Vue, Initializable {
     }
 
     public void validerAssociation(MouseEvent mouseEvent) {
-        if(this.prixfixe.getText()!="" && this.lduree.getText()!="" && this.lnomGroupe.getText()!=""){
-            Associationgroupesejour associationgroupesejour=new Associationgroupesejour(this.prixfixe.getText(),this.idgroupe.getText(),this.id.getText());
+        if(this.prixfixe.getText()!="" && this.lduree.getText()!="" && this.lnomGroupe.getText()!="" && this.nbplace.getText()!=""){
+            Associationgroupesejour associationgroupesejour=new Associationgroupesejour(this.prixfixe.getText(),this.idgroupe.getText(),this.id.getText(),this.nbplace.getText());
 
             int res=associationGroupeSejourDao.inserrerAssociation(associationgroupesejour);
             if(res==0){
@@ -98,7 +98,7 @@ public class AssocierGroupeSejour implements Vue, Initializable {
         groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
-        associationGroupeSejourDao=new AssociationGroupeSejourImpl(DBconnexion.getConnection());
+        associationGroupeSejourDao=new AssociationGroupeSejourDaoImpl(DBconnexion.getConnection());
         genererLesSejours();
         genererLesGroupes();
     }
@@ -289,7 +289,8 @@ public class AssocierGroupeSejour implements Vue, Initializable {
         if(newValue!=null) {
             this.id.setText(newValue.getValue().id.get());
             id.setStyle("-fx-font-weight: bold");
-            Centre centre=centreDao.getCentreParId(this.id.getText());
+            Sejour sejour =sejourDao.getSejourParId(this.id.getText());
+            Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
             this.centre.setText(centre.nom_centre.get());
 
             this.date.setText(newValue.getValue().date_debut.get()+" "+newValue.getValue().date_fin.get());

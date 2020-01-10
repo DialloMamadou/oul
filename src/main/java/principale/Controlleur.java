@@ -105,4 +105,13 @@ public class Controlleur {
     public void lancerPageAssocierSejourGroupe() {
         fabriqueVue.creerVueSejourGroupe();
     }
+
+    public void lancerPageConsulterGroupeSejour() {
+        this.fabriqueVue.creerVueGroupeSejourConsulter();
+    }
+
+    public void ajouterEnfantMairie(String groupe, String sejour, String nombre) {
+
+        this.fabriqueVue.creerVueLieMairieSejourEnfant();
+    }
 }

@@ -90,7 +90,7 @@
                      </font></Label>
                </children>
             </Pane>
-            <Pane fx:id="pane_31" layoutX="592.0" layoutY="405.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#gestionSejour" onMouseEntered="#souris_dessus_3" onMouseExited="#souris_sort_3" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+            <Pane fx:id="pane_31" layoutX="592.0" layoutY="405.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#optionavance" onMouseEntered="#souris_dessus_31" onMouseExited="#souris_sort_31" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                <children>
                   <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="61.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
                      <image>
