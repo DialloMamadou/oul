@@ -55,7 +55,7 @@
                         <Label layoutX="16.0" layoutY="325.0" text="date naissance" />
                         <DatePicker fx:id="annee" layoutX="110.0" layoutY="321.0" />
                         <TextField fx:id="adresse" layoutX="104.0" layoutY="265.0" />
-                  <Label fx:id="lgroupe" layoutX="381.0" layoutY="325.0" prefHeight="17.0" prefWidth="118.0" />
+                  <Label fx:id="groupecomplet" layoutX="381.0" layoutY="325.0" prefHeight="17.0" prefWidth="118.0" />
                     </children>
                 </Pane>
 
@@ -91,7 +91,7 @@
                   <Label fx:id="lgrouped" layoutX="76.0" layoutY="77.0" />
                   <Label fx:id="sejour" layoutX="68.0" layoutY="116.0" prefHeight="17.0" prefWidth="92.0" />
                   <Label fx:id="date" layoutX="55.0" layoutY="150.0" prefHeight="17.0" prefWidth="126.0" />
-                  <Label layoutX="94.0" layoutY="179.0" prefHeight="17.0" prefWidth="82.0" />
+                  <Label fx:id="prix_unitaire" layoutX="94.0" layoutY="179.0" prefHeight="17.0" prefWidth="82.0" />
                   <Label fx:id="centre" layoutX="62.0" layoutY="219.0" prefHeight="17.0" prefWidth="82.0" />
                </children>
             </Pane>

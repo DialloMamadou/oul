@@ -1,6 +1,7 @@
 package principale;
 
 import controlleurvue.client.HistoriqueClient;
+import controlleurvue.groupe.AjoutSejourMairieClient;
 import fabrique.FabriqueVue;
 import javafx.stage.Stage;
 
@@ -111,6 +112,10 @@ public class Controlleur {
     }
 
     public void ajouterEnfantMairie(String groupe, String sejour, String nombre) {
+
+        AjoutSejourMairieClient.assocId=nombre;
+        AjoutSejourMairieClient.sejourId=sejour;
+        AjoutSejourMairieClient.groupe=groupe;
 
         this.fabriqueVue.creerVueLieMairieSejourEnfant();
     }

@@ -1,10 +1,7 @@
 package controlleurvue.groupe;
 
 import basededonnee.DBconnexion;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
 import daos.AssociationGroupeSejourDao;
@@ -13,23 +10,36 @@ import daos.SejourDao;
 import daos.impl.AssociationGroupeSejourDaoImpl;
 import daos.impl.GroupeDaoImpl;
 import daos.impl.SejourDaoImpl;
+import enumerations.Paiement;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
+import javafx.util.Pair;
 import modele.*;
 import notification.Notification;
 import principale.Controlleur;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -47,6 +57,8 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
     public Label resteapayer;
     public Label idgroupe;
     public Label idsejour;
+    public Label idassoc;
+    public StackPane stackepane;
 
     private  Controlleur controlleur;
     @Override
@@ -168,7 +180,9 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
                 this.typesejour.setText(sejour.type.get());
                 this.idsejour.setText(associationgroupesejour.sejour.get());
                 System.out.println("groupe id "+newValue.getValue().groupe.get());
+                this.idassoc.setText(newValue.getValue().id.get());
 
+                this.prix_unitaire.setText(newValue.getValue().prix_unitaire.get());
                 Groupe groupe=groupeDao.getGroupeParId(associationgroupesejour.groupe.get());
                 this.idgroupe.setText(groupe.id.get());
                 this.nomgroupe.setText(newValue.getValue().groupe.get());
@@ -238,6 +252,70 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
 
     public void ajoutenfant(MouseEvent mouseEvent) {
 
-        this.controlleur.ajouterEnfantMairie(this.idgroupe.getText(),this.idsejour.getText(),this.nombre_place.getText());
+        this.controlleur.ajouterEnfantMairie(this.nomgroupe.getText(),this.idsejour.getText(),this.idassoc.getText());
+    }
+
+    public void paiement(MouseEvent mouseEvent) {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("paiement");
+
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 10, 10, 10));
+
+        Label label=new Label("somme paye");
+        Label label2=new Label("methode");
+
+        TextField from = new TextField();
+        from.setPromptText("From");
+        TextField to = new TextField();
+        to.setPromptText("To");
+
+        ComboBox comboBox=new ComboBox();
+        for(Paiement paiement:Paiement.values()){
+            comboBox.getItems().add(paiement);
+        }
+/*        gridPane.add(from, 0, 0);
+        gridPane.add(new Label("To:"), 1, 0);
+        gridPane.add(to, 2, 0);
+        gridPane*/
+gridPane.add(label,0,0);
+gridPane.add(from,1,0);
+gridPane.add(comboBox,1,3);
+        gridPane.add(label2,0,3);
+
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Request focus on the username field by default.
+        Platform.runLater(() -> from.requestFocus());
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(from.getText(), comboBox.getValue().toString());
+            }
+            return null;
+        });
+
+
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+            System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
+        });
+
+
+
+
+    }
+
+    private void annulerReservation(MouseEvent mouseEvent, JFXDialog dialog) {
     }
 }

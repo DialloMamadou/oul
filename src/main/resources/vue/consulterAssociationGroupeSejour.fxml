@@ -45,7 +45,7 @@
 
                         <Pane layoutX="21.0" layoutY="112.0" prefHeight="431.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXButton fx:id="valider" buttonType="RAISED" layoutX="160.0" layoutY="379.0" onMouseClicked="#validerinscription" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="paiement" textFill="WHITE">
+                                <JFXButton fx:id="valider" buttonType="RAISED" layoutX="160.0" layoutY="379.0" onMouseClicked="#paiement" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="paiement" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
@@ -101,6 +101,8 @@
                         </JFXButton>
                         <Label layoutX="10.0" layoutY="171.0" prefHeight="17.0" prefWidth="64.0" text="id sejour" />
                         <Label fx:id="idsejour" layoutX="65.0" layoutY="171.0" prefHeight="17.0" prefWidth="42.0" />
+                        <Label layoutX="10.0" layoutY="199.0" prefHeight="17.0" prefWidth="51.0" text="id assoc" />
+                        <Label fx:id="idassoc" layoutX="64.0" layoutY="199.0" />
                             </children>
                         </Pane>
 

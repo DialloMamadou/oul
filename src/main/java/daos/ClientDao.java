@@ -10,7 +10,7 @@ public interface ClientDao {
 
     int insererClient(Client client);
 
-
+    int[] insererClientMairie(Client client);
     int supprimerClient(String id);
 
 

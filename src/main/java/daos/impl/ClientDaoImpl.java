@@ -26,6 +26,57 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
     }
 
     @Override
+    public int[] insererClientMairie(Client client) {
+        String sql="INSERT INTO client (nom_client,prenom_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance) VALUES (?,?,?,?,?,?,?,?,?)";
+
+        int []tab=new int[2];
+        ResultSet ress=null;
+        int res=0;
+        try {
+
+
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
+            System.out.println("prenom_client :"+client.prenom_client.get());
+            System.out.println("cote postale :"+client.codePostale.get());
+
+            ps.setString(1, client.prenom_client.get());
+            ps.setString(2, client.nom_client.get());
+            ps.setString(3, client.groupe.get());
+            ps.setString(4,client.numero.get());
+            ps.setString(5,client.observation.get());
+            ps.setString(6,client.email.get());
+            ps.setString(7,client.adresse.get());
+            ps.setString(8,client.codePostale.get());
+            ps.setString(9,client.datenaissance.get());
+
+
+
+
+
+            res=ps.executeUpdate();
+            ress=ps.getGeneratedKeys();
+            try {
+                if(ress.next()){
+                    tab[1]=ress.getInt(1);
+
+                    System.out.println("trouuuve");
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CreerSejour.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        tab[0]=res;
+
+        return tab;
+
+    }
+
+    @Override
     public int insererClient(Client client) {
         String sql="INSERT INTO client (nom_client,prenom_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance) VALUES (?,?,?,?,?,?,?,?,?)";
 
