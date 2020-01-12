@@ -4,7 +4,9 @@ import basededonnee.DBconnexion;
 import controlleurvue.Vue;
 import daos.*;
 import daos.impl.*;
+import enumerations.Depart;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -33,6 +35,7 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
     public TextField nom;
     public TextField prenom;
     public Label prix_unitaire;
+    public ComboBox depart;
 
 
     private Controlleur controlleur;
@@ -69,6 +72,10 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
         groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         this.groupeSejourClientDao=new GroupeSejourClientDaoImpl(DBconnexion.getConnection());
+        for(Depart depart:Depart.values()){
+            this.depart.getItems().add(depart);
+
+        }
         remplirData();
     }
 
@@ -110,7 +117,7 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
 
         if(res[0]>0){
             System.out.println("rows inserer "+res[1]);
-            groupeSejourClientDao.insererGroupeSejourClient(new GroupeSejourClient(id_group,sejourId,String.valueOf(res[1])));
+            groupeSejourClientDao.insererGroupeSejourClient(new GroupeSejourClient(id_group,sejourId,String.valueOf(res[1]),this.depart.getValue().toString()));
 
            // groupeSejourClientDao.insererGroupeSejourClient(new GroupeSejourClient(id_group,sejourId,))
             Notification.affichageSucces("succes","client creer avec succes");

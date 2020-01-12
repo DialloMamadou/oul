@@ -1,15 +1,19 @@
 package daos.impl;
 
+import basededonnee.DBconnexion;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.sejour.CreerSejour;
 import daos.AssociationGroupeSejourDao;
 import daos.GroupeSejourClientDao;
 import modele.Associationgroupesejour;
 import modele.GroupeSejourClient;
+import modele.Sejour;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +26,7 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
     @Override
     public int insererGroupeSejourClient(GroupeSejourClient groupeSejourClient) {
         int []tab=new int[2];
-        String sql="INSERT INTO groupe_sejour_client (id_groupe,id_sejour,id_client) VALUES (?,?,?)";
+        String sql="INSERT INTO groupe_sejour_client (id_groupe,id_sejour,id_client,depart) VALUES (?,?,?,?)";
         ResultSet ress=null;
         int res=0;
         try {
@@ -33,6 +37,7 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
             ps.setString(1, groupeSejourClient.idGroupe);
             ps.setString(2, groupeSejourClient.idSejour);
             ps.setString(3, groupeSejourClient.idClient);
+            ps.setString(4,groupeSejourClient.depart);
 
 
 
@@ -47,5 +52,34 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
 
 
         return res;
+    }
+
+    @Override
+    public List<GroupeSejourClient> getGroupeSejourClient(String id_groupe, String id_sejour) {
+
+        List<GroupeSejourClient>list=new ArrayList<>();
+        String sql="SELECT * FROM groupe_sejour_client where id_groupe ='"+id_groupe+"' AND id_sejour='"+id_sejour+"'";
+
+        System.out.println("requete sql "+sql);
+
+
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                GroupeSejourClient groupeSejourClient=new GroupeSejourClient(rs.getString(1),rs.getString(2),rs.getString(3),
+                        rs.getString(4));
+                list.add(groupeSejourClient);
+
+                System.out.println("right here right now");
+
+            }
+        }catch (Exception e){
+
+        }
+        return list;
     }
 }

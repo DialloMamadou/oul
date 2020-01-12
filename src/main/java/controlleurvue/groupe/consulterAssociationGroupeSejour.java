@@ -6,9 +6,11 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
 import daos.AssociationGroupeSejourDao;
 import daos.GroupeDao;
+import daos.PaiementMairieDao;
 import daos.SejourDao;
 import daos.impl.AssociationGroupeSejourDaoImpl;
 import daos.impl.GroupeDaoImpl;
+import daos.impl.PaiementMairieDaoImpl;
 import daos.impl.SejourDaoImpl;
 import enumerations.Paiement;
 import javafx.application.Platform;
@@ -37,10 +39,7 @@ import principale.Controlleur;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class consulterAssociationGroupeSejour implements Initializable, Vue {
@@ -59,6 +58,8 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
     public Label idsejour;
     public Label idassoc;
     public StackPane stackepane;
+    public Label prixtotal;
+    public Label resteapayer1;
 
     private  Controlleur controlleur;
     @Override
@@ -174,6 +175,8 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
                 //this.l
                 Associationgroupesejour associationgroupesejour=associationGroupeSejourDao.getById(newValue.getValue().id.get());
                 Sejour sejour=sejourDao.getSejourParId(associationgroupesejour.sejour.get());
+
+
                 this.age.setText(sejour.ageMin.get()+" "+sejour.ageMax.get());
                 this.duree.setText(sejour.duree.get());
                 this.date.setText(sejour.date_debut.get()+" "+sejour.date_fin.get());
@@ -188,6 +191,15 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
                 this.nomgroupe.setText(newValue.getValue().groupe.get());
                 this.prix_unitaire.setText(newValue.getValue().prix_unitaire.get());
                 this.nombre_place.setText(newValue.getValue().nbPlace.get());
+                int prix_total=Integer.parseInt(associationgroupesejour.prix_unitaire.get())*Integer.parseInt(associationgroupesejour.nbPlace.get());
+                this.prixtotal.setText(String.valueOf(prix_total));
+                List<PaiementMarie>list=paiementMairieDao.listePaimenent(Integer.parseInt(idsejour.getText()),Integer.parseInt(idgroupe.getText()));
+                int prixPaye=0;
+                for(PaiementMarie paiementMarie:list){
+                    System.out.println("paiemeent maiiirie "+paiementMarie.paiement.get());
+                    prixPaye+=Integer.parseInt(paiementMarie.paiement.get());
+                }
+                this.resteapayer1.setText(String.valueOf(prix_total-prixPaye));
 
             }
         }
@@ -233,9 +245,11 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
         associationGroupeSejourDao=new AssociationGroupeSejourDaoImpl(DBconnexion.getConnection());
         groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
+        paiementMairieDao=new PaiementMairieDaoImpl(DBconnexion.getConnection());
         loadallassociation();
     }
 
+    private PaiementMairieDao paiementMairieDao;
     private GroupeDao groupeDao;
     private SejourDao sejourDao;
     private AssociationGroupeSejourDao associationGroupeSejourDao;
@@ -309,6 +323,14 @@ gridPane.add(comboBox,1,3);
 
         result.ifPresent(pair -> {
             System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
+            System.out.println(" groupe "+idgroupe);
+            System.out.println(" sejour "+idsejour);
+            PaiementMarie paiementMarie=new PaiementMarie(String.valueOf(idgroupe.getText()),pair.getKey(),String.valueOf(idsejour.getText()),pair.getValue());
+
+            int res=paiementMairieDao.inserrerPaiement(paiementMarie);
+            if(res!=0){
+                Notification.affichageSucces("succes","le paiement a bien ete pris en compte");
+            }
         });
 
 
@@ -317,5 +339,19 @@ gridPane.add(comboBox,1,3);
     }
 
     private void annulerReservation(MouseEvent mouseEvent, JFXDialog dialog) {
+    }
+
+    public void historiquePaiement(MouseEvent mouseEvent) {
+        this.controlleur.lancerHistoriquePaiementGroupeSejour(idsejour,idgroupe);
+    }
+
+    public void listeinscrit(MouseEvent mouseEvent) {
+        ListeInscrit.assoc_id=this.idassoc.getText();
+        ListeInscrit.id_sejour=this.idsejour.getText();
+        ListeInscrit.id_groupe=this.idgroupe.getText();
+        System.out.println("reste a payer "+resteapayer1.getText());
+        ListeInscrit.reste=this.resteapayer1.getText();
+        this.controlleur.lancerListeInscritSejourGroupe();
+
     }
 }

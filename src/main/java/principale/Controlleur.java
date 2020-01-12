@@ -2,9 +2,11 @@ package principale;
 
 import controlleurvue.client.HistoriqueClient;
 import controlleurvue.groupe.AjoutSejourMairieClient;
+import controlleurvue.groupe.Historique;
 import fabrique.FabriqueVue;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
-
+import modele.Sejour;
 
 
 public class Controlleur {
@@ -118,5 +120,19 @@ public class Controlleur {
         AjoutSejourMairieClient.groupe=groupe;
 
         this.fabriqueVue.creerVueLieMairieSejourEnfant();
+    }
+
+    public void lancerHistoriquePaiementGroupeSejour(Label idsejour, Label idgroupe) {
+        Historique.id_groupe=idgroupe.getText();
+        Historique.id_sejour=idsejour.getText();
+        System.out.println("historique groupe "+Historique.id_groupe);
+        System.out.println("historique sejour "+Historique.id_sejour);
+
+        this.fabriqueVue.lancerVueHistoriquePaiementMairie();
+
+    }
+
+    public void lancerListeInscritSejourGroupe() {
+        this.fabriqueVue.lancerListeSejourClient();
     }
 }

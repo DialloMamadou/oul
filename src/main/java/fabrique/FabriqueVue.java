@@ -228,4 +228,14 @@ public class FabriqueVue{
         load(AjoutSejourMairieClient.class.getResource("/vue/ajoutSejourMairie.fxml")," associer groupe sejour");
 
     }
+
+    public void lancerVueHistoriquePaiementMairie() {
+        load(Historique.class.getResource("/vue/historiquePaiementMairieSejour.fxml")," associer groupe sejour");
+
+    }
+
+    public void lancerListeSejourClient() {
+        load(ListeInscrit.class.getResource("/vue/listeInscritSejour.fxml")," associer groupe sejour");
+
+    }
 }
