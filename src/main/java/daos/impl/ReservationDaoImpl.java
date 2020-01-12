@@ -52,6 +52,7 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
     public int insererReservation(Reservation reservation) {
         int res=0;
 
+        System.out.println("reservation "+reservation);
         String sql="INSERT INTO reservation (date_reservation,code_client,id_sejour,depart)" +
                 " VALUES (?,?,?,?)";
         try {

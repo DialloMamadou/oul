@@ -8,6 +8,7 @@ import daos.GroupeSejourClientDao;
 import modele.Associationgroupesejour;
 import modele.GroupeSejourClient;
 import modele.Sejour;
+import notification.Notification;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -82,4 +83,43 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
         }
         return list;
     }
+
+
+
+    @Override
+    public GroupeSejourClient getGroupeSejourClient(String id_groupe, String id_sejour,String id_client) {
+
+        GroupeSejourClient list=null;
+      //  String sql="SELECT * FROM groupe_sejour_client where id_groupe ='"+id_groupe+"' AND id_sejour='"+id_sejour+
+       //         "' AND id_client='"+id_client;
+        String sql="SELECT * FROM groupe_sejour_client where id_groupe = ? AND id_sejour= ? AND id_client=?";
+
+        System.out.println("requete sql "+sql);
+
+
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ps.setString(1,id_groupe);
+            ps.setString(2,id_sejour);
+            ps.setString(3,id_client);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list=new GroupeSejourClient(rs.getString(1),rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5));
+
+                System.out.println("right here right now");
+
+            }
+        }catch (Exception e){
+
+        }
+        if(list==null){
+            Notification.affichageEchec("objet null","null");
+        }
+        return list;
+    }
+
 }

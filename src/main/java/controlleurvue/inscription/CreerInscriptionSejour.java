@@ -502,7 +502,7 @@ for(Sejour sejour:liste){
         String depart=(String)this.depart.getValue().toString();
 
         Reservation reservation=new Reservation( aujourdhui,
-                client.id.get(),sejour.nom_centre.get(),depart) ;
+                client.id.get(),sejour.id.get(),depart) ;
 
 
         int res=reservationDao.insererReservation(reservation);
@@ -558,15 +558,7 @@ for(Sejour sejour:liste){
         client.id.get(),sejour.id.get(),depart) ;
         int res=inscriptionDao.insererInscription(inscription);
         if(res>0){
-            if(client==null || client.id.get()==null){
-                System.out.println("client null");
-            }
-            if(sejour==null || sejour.id.get()==null){
-                System.out.println("sejour null");
-            }
-            if(this.accompte.getText()==null){
-                System.out.println("accompte null");
-            }
+
             Evenement evenement=new Evenement(client.id.get(),sejour.id.get(),"paiement inscription",this.accompte.getText(),aujourdhui);
             evenementDao.insererEvenement(evenement);
             Notification.affichageSucces("succes","inscription faite avec succes");

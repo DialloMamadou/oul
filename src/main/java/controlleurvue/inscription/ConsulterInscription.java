@@ -55,6 +55,7 @@ public class ConsulterInscription implements Initializable, Vue {
     public Label idinscription;
     public Label idclient;
     public Label idsejour;
+    public Label groupe;
     /**
      * Initializes the controller class.
      */
@@ -234,6 +235,17 @@ public class ConsulterInscription implements Initializable, Vue {
             this.lreste.setTextFill(Color.web("#00ff00"));
 
         }
+
+
+        this.groupe.setText(client.groupe.get());
+
+        GroupeSejourClient groupeSejourClient=groupeSejourClientDao.getGroupeSejourClient(client.groupe.get(),
+                sejour.id.get(),client.id.get());
+        if(groupeSejourClient==null){
+            this.groupe.setText("faux");
+        }else{
+            this.groupe.setText("true");
+        }
     }
 
     private void optimiserRechercheSejour() {
@@ -280,8 +292,10 @@ public class ConsulterInscription implements Initializable, Vue {
     private AnnulationDao annulationDao;
     private EvenementDao evenementDao;
 
+    private GroupeSejourClientDao groupeSejourClientDao;
 
     public void initialize(URL location, ResourceBundle resources) {
+        groupeSejourClientDao=new GroupeSejourClientDaoImpl(DBconnexion.getConnection());
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());

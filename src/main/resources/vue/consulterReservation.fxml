@@ -142,6 +142,10 @@
                         </JFXButton>
                         <Label layoutX="154.0" layoutY="262.0" text="id sejour" />
                         <Label layoutX="148.0" layoutY="238.0" text="id client" />
+                        <Label layoutX="14.0" layoutY="55.0" text="reservation groupe" />
+                        <Label fx:id="reservationgroupe" layoutX="128.0" layoutY="55.0" prefHeight="17.0" prefWidth="55.0" />
+                        <Label layoutX="230.0" layoutY="199.0" text="groupe" />
+                        <Label fx:id="groupe" layoutX="287.0" layoutY="199.0" prefHeight="17.0" prefWidth="63.0" />
                             </children>
                         </Pane>
 

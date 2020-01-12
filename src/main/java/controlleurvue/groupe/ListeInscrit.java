@@ -267,8 +267,26 @@ this.resteapayer.setText(ListeInscrit.reste);
                 Client client=clientDao.getClientParId(groupeSejourClient.idClient);
                 Reservation reservation=reservationDao.getReservationParIdClientEtIdSejour(client.id.get(),id_sejour);
                 if(reservation!=null){
+                    String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
                     Notification.affichageSucces("reservaation trouve ","reservation trouve");
+                    Inscription inscription=new Inscription("0",aujourdhui,client.id.get(),id_sejour,groupeSejourClient.depart);
+
+                    Inscription inscription1=inscriptionDao.getInscriptionsParIdSejourEtIdClient(id_sejour,client.id.get());
+                    if(inscription1!=null){
+                        Notification.affichageSucces("inscription trouve ","inscription trouve");
+
+                    }else{
+                        int ress=inscriptionDao.insererInscription(inscription);
+                        if(ress!=0){
+                            Notification.affichageSucces("inscription effectue ","inscription effectue");
+
+                        }else {
+                            Notification.affichageEchec("aucune inscription ", "aucune inscription");
+                        }
+
+                    }
+                    reservationDao.supprimerParId(reservation.id.get());
 
 
                 }else{

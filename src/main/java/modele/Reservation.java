@@ -50,4 +50,14 @@ public class Reservation  extends RecursiveTreeObject<Reservation> {
     public void setTriche2(String triche2) {
         this.triche2 = triche2;
     }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "dateinscription=" + dateinscription.get() +
+                ", code_client=" + code_client.get() +
+                ", id_sejour=" + id_sejour.get() +
+                ", depart=" + depart.get() +
+                '}';
+    }
 }
