@@ -16,7 +16,7 @@ public class Notification {
         Notifications notification=Notifications.create()
                 .title(titre)
                 .text(text)
-                .hideAfter(Duration.seconds(3))
+                //.hideAfter(Duration.seconds(10))
                 .position(Pos.BOTTOM_LEFT)
                 .graphic(new ImageView(image));
         notification.darkStyle();
@@ -30,7 +30,7 @@ public class Notification {
         Notifications notification=Notifications.create()
                 .title(titre)
                 .text(text)
-                .hideAfter(Duration.seconds(3))
+                //.hideAfter(Duration.seconds(10))
                 .position(Pos.BOTTOM_LEFT)
                 .graphic(new ImageView(image));
         notification.darkStyle();

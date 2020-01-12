@@ -71,7 +71,7 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
 
             while (rs.next()) {
                 GroupeSejourClient groupeSejourClient=new GroupeSejourClient(rs.getString(1),rs.getString(2),rs.getString(3),
-                        rs.getString(4));
+                        rs.getString(4),rs.getString(5));
                 list.add(groupeSejourClient);
 
                 System.out.println("right here right now");

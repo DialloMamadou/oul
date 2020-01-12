@@ -51,6 +51,7 @@ public class ListeInscrit implements Initializable, Vue {
     private ClientDao clientDao;
     private GroupeSejourClientDao groupeSejourClientDao;
     private ReservationDao reservationDao;
+    private  InscriptionDao inscriptionDao;
 
 
     @Override
@@ -62,6 +63,7 @@ public class ListeInscrit implements Initializable, Vue {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
         reservationDao=new ReservationDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
@@ -258,12 +260,48 @@ this.resteapayer.setText(ListeInscrit.reste);
         if(res>0){
             Notification.affichageEchec("echec","le paiement n est pas complet pour se groupe");
         }else{
+            List<GroupeSejourClient>liste=groupeSejourClientDao.getGroupeSejourClient(id_groupe,id_sejour);
+            for(GroupeSejourClient groupeSejourClient:liste){
+
+
+                Client client=clientDao.getClientParId(groupeSejourClient.idClient);
+                Reservation reservation=reservationDao.getReservationParIdClientEtIdSejour(client.id.get(),id_sejour);
+                if(reservation!=null){
+
+                    Notification.affichageSucces("reservaation trouve ","reservation trouve");
+
+
+                }else{
+                  //  Notification.affichageEchec("aucune reservation ","aucune reservation");
+                    String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+                    Inscription inscription=new Inscription("0",aujourdhui,client.id.get(),id_sejour,groupeSejourClient.depart);
+                    Inscription inscription1=inscriptionDao.getInscriptionsParIdSejourEtIdClient(id_sejour,client.id.get());
+                    if(inscription1!=null){
+                        Notification.affichageSucces("inscription trouve ","inscription trouve");
+
+                    }else{
+                        int ress=inscriptionDao.insererInscription(inscription);
+                        if(ress!=0){
+                            Notification.affichageSucces("inscription effectue ","inscription effectue");
+
+                        }else {
+                            Notification.affichageEchec("aucune inscription ", "aucune inscription");
+                        }
+
+                    }
+                }
+
+
+
+            }
+
 
         }
     }
 
     public void validerreservation(MouseEvent mouseEvent) {
-        Notification.affichageEchec("deja present database","en avant les reservations");
+       // Notification.affichageEchec("deja present database","en avant les reservations");
 
         List<GroupeSejourClient>liste=groupeSejourClientDao.getGroupeSejourClient(id_groupe,id_sejour);
 
@@ -271,16 +309,21 @@ this.resteapayer.setText(ListeInscrit.reste);
         String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
         for (GroupeSejourClient groupeSejourClient : liste) {
-            Notification.affichageEchec("test 2","test 2");
+            //Notification.affichageEchec("test 2","test 2");
 
             Client client=clientDao.getClientParId(groupeSejourClient.idClient);
             Reservation reservation=new Reservation(aujourdhui,client.id.get(),id_sejour,"inconnu");
-           Reservation reservation2= reservationDao.getReservationParIdClientEtIdSejour(client.id.get(),id_sejour);
+           // System.out.println("id client "+client.id.get()+" sejour "+id_sejour);
+
+            Reservation reservation2= reservationDao.getReservationParIdClientEtIdSejour(client.id.get(),id_sejour);
             if(reservation2==null){
+
+            //    Notification.affichageEchec("pas present database","pas present");
+
 
                 reservationDao.insererReservation(reservation);
             }else{
-                Notification.affichageEchec("deja present database","deja present");
+               // Notification.affichageEchec("deja present database","deja present");
             }
             centres.add(client);
         }

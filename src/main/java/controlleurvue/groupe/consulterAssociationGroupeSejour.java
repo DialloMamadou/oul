@@ -4,14 +4,8 @@ import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
-import daos.AssociationGroupeSejourDao;
-import daos.GroupeDao;
-import daos.PaiementMairieDao;
-import daos.SejourDao;
-import daos.impl.AssociationGroupeSejourDaoImpl;
-import daos.impl.GroupeDaoImpl;
-import daos.impl.PaiementMairieDaoImpl;
-import daos.impl.SejourDaoImpl;
+import daos.*;
+import daos.impl.*;
 import enumerations.Paiement;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -38,6 +32,7 @@ import notification.Notification;
 import principale.Controlleur;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
@@ -241,7 +236,7 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
         associationGroupeSejourDao=new AssociationGroupeSejourDaoImpl(DBconnexion.getConnection());
         groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
@@ -253,6 +248,7 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
     private GroupeDao groupeDao;
     private SejourDao sejourDao;
     private AssociationGroupeSejourDao associationGroupeSejourDao;
+    private EvenementMairieDao evenementMairieDao;
 
     public void retour(MouseEvent mouseEvent) {
         this.controlleur.lancerPageGroupe();
@@ -323,11 +319,16 @@ gridPane.add(comboBox,1,3);
 
         result.ifPresent(pair -> {
             System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
+
             System.out.println(" groupe "+idgroupe);
             System.out.println(" sejour "+idsejour);
             PaiementMarie paiementMarie=new PaiementMarie(String.valueOf(idgroupe.getText()),pair.getKey(),String.valueOf(idsejour.getText()),pair.getValue());
+            String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
             int res=paiementMairieDao.inserrerPaiement(paiementMarie);
+            Evenement_Mairie evenement_mairie=new Evenement_Mairie(idgroupe.getText(),idsejour.getText(),"paiement_mairie",pair.getKey(),
+                    aujourdhui,pair.getValue());
+            evenementMairieDao.insererEvenement(evenement_mairie);
             if(res!=0){
                 Notification.affichageSucces("succes","le paiement a bien ete pris en compte");
             }

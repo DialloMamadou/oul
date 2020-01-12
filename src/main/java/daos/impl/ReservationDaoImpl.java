@@ -139,7 +139,7 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
 
     @Override
     public Reservation getReservationParIdClientEtIdSejour(String id_client,String id_sejour) {
-        String sql="SELECT * FROM reservation WHERE codeClient ='"+id_client+"' AND id_sejour='"+id_sejour+"'";
+        String sql="SELECT * FROM reservation WHERE code_client ='"+id_client+"' AND id_sejour='"+id_sejour+"'";
 Reservation reservation=null;
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);

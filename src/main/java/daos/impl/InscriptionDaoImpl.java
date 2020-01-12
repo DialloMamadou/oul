@@ -9,6 +9,7 @@ import modele.Centre;
 import modele.Client;
 import modele.Inscription;
 import modele.Sejour;
+import notification.Notification;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -163,14 +164,16 @@ return x;
     }
 
     @Override
-    public Inscription getInscriptionsParIdSejourEtIdClient(String text, String s) {
-        String sql="SELECT * FROM inscription WHERE id_sejour ='"+text+"' AND code_client="+s;
+    public Inscription getInscriptionsParIdSejourEtIdClient(String id_sejour, String code_client) {
+        String sql="SELECT * FROM inscription WHERE id_sejour ='"+id_sejour+"' AND code_client="+code_client;
         Inscription inscription =null;
 
+        Notification.affichageSucces("voici la requete ",sql);
 
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
+            Notification.affichageSucces(" trouve ",sql);
 
             while(rs.next()){
 

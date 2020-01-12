@@ -25,4 +25,13 @@ public class GroupeSejourClient {
         this.idClient = idClient;
         this.depart=depart;
     }
+
+
+    public GroupeSejourClient( String id,String idGroupe, String idSejour, String idClient,String depart) {
+        this.id=id;
+        this.idGroupe = idGroupe;
+        this.idSejour = idSejour;
+        this.idClient = idClient;
+        this.depart=depart;
+    }
 }
