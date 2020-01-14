@@ -725,11 +725,11 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
     public void envoieEmail(MouseEvent mouseEvent) {
+        Email.idclient="-1";
+        Email.idSejour=this.idsejour.getText();
+        Notification.affichageSucces("ici","ici");
+        System.out.println("id sejour "+this.idsejour.getText());
         try {
-            Email.idclient="";
-            Email.envoieGroupe=true;
-            Email.idsejour=this.idsejour.getText();
-
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
             /*
@@ -747,12 +747,12 @@ public class ConsulterSejour implements Initializable, Vue {
             stage.setTitle("email");
             stage.setScene(scene);
             // Email.stage=stage;
+            System.out.println("sejour id "+Email.idSejour);
             stage.show();
         } catch (IOException e) {
             Logger logger = Logger.getLogger(getClass().getName());
             logger.log(Level.SEVERE, "Failed to create new Window.", e);
         }
-
     }
 }
 

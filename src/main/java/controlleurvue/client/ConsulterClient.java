@@ -329,4 +329,7 @@ public class ConsulterClient implements Initializable, Vue {
             logger.log(Level.SEVERE, "Failed to create new Window.", e);
         }
     }
+
+    public void editerclient(MouseEvent mouseEvent) {
+    }
 }
