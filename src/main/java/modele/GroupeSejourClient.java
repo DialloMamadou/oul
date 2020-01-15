@@ -14,6 +14,7 @@ public class GroupeSejourClient {
         this.id = id;
         this.idGroupe = idGroupe;
         this.idSejour = idSejour;
+
         this.idClient = idClient;
     }
 

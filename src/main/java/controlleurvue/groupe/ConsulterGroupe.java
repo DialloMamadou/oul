@@ -94,6 +94,7 @@ public class ConsulterGroupe implements Initializable, Vue {
         for(Groupe groupe:liste){
             groupes.add(groupe);
         }
+
         final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(groupes, RecursiveTreeObject::getChildren);
         treeView.getColumns().setAll(groupe_id,groupe_nom);
         treeView.setRoot(root);

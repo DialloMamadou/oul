@@ -534,6 +534,7 @@ for(Sejour sejour:liste){
 
             }
         });
+
         cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             public void handle(javafx.event.ActionEvent event) {
                 dialog.close();

@@ -44,6 +44,7 @@ public class HistoriqueClient implements Initializable, Vue {
     public JFXRadioButton btninscription;
     private Controlleur controlleur;
     public  static  int id;
+
     public Label lnom;
     public Label lprenom;
     public Label ldatenaissance;

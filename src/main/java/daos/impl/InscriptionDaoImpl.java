@@ -170,6 +170,7 @@ return x;
 
         Notification.affichageSucces("voici la requete ",sql);
 
+
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();

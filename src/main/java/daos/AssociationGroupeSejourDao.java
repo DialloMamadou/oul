@@ -8,6 +8,7 @@ import java.util.List;
 public interface AssociationGroupeSejourDao {
 
 
+
     int inserrerAssociation(Associationgroupesejour associationgroupesejour);
 
     List<Associationgroupesejour> getListes();

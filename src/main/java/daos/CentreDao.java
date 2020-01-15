@@ -9,6 +9,7 @@ import java.util.List;
 public interface CentreDao {
 
 
+
     int inserrerCentre(String nom_centre,String capacite);
 
 

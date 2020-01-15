@@ -36,6 +36,7 @@ import java.util.function.Predicate;
 
 public class AssocierGroupeSejour implements Vue, Initializable {
 
+
     public JFXTreeTableView sejour;
     public JFXTextField chercherSejour;
     public JFXTextField chercherGroupe;

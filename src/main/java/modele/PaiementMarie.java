@@ -12,6 +12,7 @@ public class PaiementMarie  extends RecursiveTreeObject<PaiementMarie> {
     public StringProperty sejour;
     public StringProperty methode;
 
+
     public PaiementMarie(String groupe,String prix,  String sejour,String methode) {
         this.groupe = new SimpleStringProperty(groupe);
         this.sejour = new SimpleStringProperty(sejour);

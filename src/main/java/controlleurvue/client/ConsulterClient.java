@@ -318,6 +318,7 @@ public class ConsulterClient implements Initializable, Vue {
 
 
 
+
             Stage stage = new Stage();
 
             stage.setTitle("email");

@@ -22,6 +22,7 @@ public class Associationgroupesejour extends RecursiveTreeObject<Associationgrou
 
 
 
+
     public Associationgroupesejour(String id,String prix, String groupe, String sejour,String nbPlace) {
         this.id=new SimpleStringProperty(id);
         this.prix_unitaire = new SimpleStringProperty(prix);

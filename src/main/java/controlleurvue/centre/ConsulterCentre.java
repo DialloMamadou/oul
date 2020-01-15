@@ -103,6 +103,7 @@ public class ConsulterCentre  implements Initializable, Vue {
 
         return capaciteCentre;
 
+
     }
 
 

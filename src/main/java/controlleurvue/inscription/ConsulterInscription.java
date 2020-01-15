@@ -254,6 +254,7 @@ public class ConsulterInscription implements Initializable, Vue {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
+
                 treeView.setPredicate(new Predicate<TreeItem<Inscription>>() {
 
                     @Override

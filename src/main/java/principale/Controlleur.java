@@ -26,6 +26,7 @@ public class Controlleur {
         this.fabriqueVue.creerEcranVue();
     }
 
+
     public void creerCentre() {
         this.fabriqueVue.creerCentreVue();
     }

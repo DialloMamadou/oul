@@ -22,6 +22,7 @@ public class Client extends RecursiveTreeObject<Client> {
 
 
 
+
 //nom,prenom,groupe,datenaissance,numero,observation,email,adresse,codepostale
 
     //prenom_client

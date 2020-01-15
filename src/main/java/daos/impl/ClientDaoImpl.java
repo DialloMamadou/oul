@@ -186,6 +186,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
         return client;
 }
 
+
     @Override
     public Client getClientParNomPrenomAnneeNaissance(String text, String text1, String text2) {
         Client Client=null;

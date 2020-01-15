@@ -18,6 +18,7 @@ public class Evenement {
     }
 
 
+
     public Evenement(String codeclient, String codesejour, String event, String somme, String date) {
 
         this.codeclient = codeclient;

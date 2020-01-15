@@ -16,6 +16,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
     public  StringProperty date_debut;
     public StringProperty  date_fin;
     public StringProperty type;
+
     public StringProperty nom_centre;
     public StringProperty prix;
     public StringProperty ageMin;

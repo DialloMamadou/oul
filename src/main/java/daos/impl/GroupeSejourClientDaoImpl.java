@@ -97,6 +97,7 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
         System.out.println("requete sql "+sql);
 
 
+
         Connection connection= DBconnexion.getConnection();
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);

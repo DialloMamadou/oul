@@ -26,6 +26,7 @@ public class CreerGroupe implements Vue {
     public JFXTextField nom;
     private Controlleur controlleur;
 
+
     public void back(MouseEvent mouseEvent) {
         this.controlleur.lancerPageGroupe();
     }

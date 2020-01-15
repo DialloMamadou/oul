@@ -281,6 +281,7 @@ this.resteapayer.setText(ListeInscrit.reste);
                         if(ress!=0){
                             Notification.affichageSucces("inscription effectue ","inscription effectue");
 
+
                         }else {
                             Notification.affichageEchec("aucune inscription ", "aucune inscription");
                         }

@@ -23,6 +23,7 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
         super(conn);
     }
 
+
     public int inserrerCentre(String nom_centre,String capacite) {
         int res=0;
         String sql="INSERT INTO centre (nom_centre,capacite) VALUES (?,?)";

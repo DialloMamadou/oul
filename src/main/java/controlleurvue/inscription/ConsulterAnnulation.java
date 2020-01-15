@@ -43,6 +43,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
     public Label lcentre;
     public Label lcapacite;
     public Label lprix;
+
     public Label lnom;
     public Label lprenom;
     public Label ldate;

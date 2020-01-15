@@ -12,3 +12,4 @@ public interface PaiementMairieDao {
     List<PaiementMarie> listePaimenentBis(int idSejour, int idGroupe);
 
 }
+

@@ -27,6 +27,7 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
         System.out.println("evenemnt "+sql);
 
         try {
+
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1, evenement.codeclient);
             ps.setString(2,evenement.codesejour);

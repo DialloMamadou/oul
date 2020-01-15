@@ -25,6 +25,7 @@ public class Notification {
 
 
 
+
     public static void affichageEchec(String titre,String text){
         Image image=new Image("img/delete.png");
         Notifications notification=Notifications.create()

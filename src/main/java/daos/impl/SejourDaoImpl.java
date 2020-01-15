@@ -25,6 +25,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
         super(conn);
     }
 
+
     @Override
     public int insererSejour(Sejour sejour) {
         int res=0;

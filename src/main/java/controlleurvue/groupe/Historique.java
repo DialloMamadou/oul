@@ -192,6 +192,7 @@ public class Historique implements Initializable, Vue {
         if(id==groupe){
             System.out.println("id = null");
         }
+
         if(id==sejour){
             System.out.println("id = null");
         }

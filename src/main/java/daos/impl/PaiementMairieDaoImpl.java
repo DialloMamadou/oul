@@ -24,6 +24,7 @@ public class PaiementMairieDaoImpl extends Dao<Dao> implements PaiementMairieDao
         super(conn);
     }
 
+
     @Override
     public int inserrerPaiement(PaiementMarie paiementMarie) {
         int res=0;

@@ -99,6 +99,7 @@ public class CreerClient  implements Initializable, Vue {
         String dateNaissance=this.annee.getValue().toString();
 
 
+
         String groupeL=this.groupelabel.getText();
 
         Client client=new Client("",nom,prenom,id_Groupe,portable,observation,email,adresse,poste,dateNaissance);

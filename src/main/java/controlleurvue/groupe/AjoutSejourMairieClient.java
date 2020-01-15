@@ -93,6 +93,7 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
 
     }
 
+
     public void book(MouseEvent mouseEvent) {
 
         Groupe groupe=groupeDao.trouverGroupeParNomGroupe(AjoutSejourMairieClient.groupe);

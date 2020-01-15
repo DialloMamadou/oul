@@ -9,5 +9,6 @@ public interface AnnulationDao {
 
     List<Annulation> getAnnulationsParId(int id);
 
+
     List<Annulation> getAnnulartions();
 }

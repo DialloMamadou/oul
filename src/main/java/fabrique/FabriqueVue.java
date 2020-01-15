@@ -33,6 +33,7 @@ public class FabriqueVue{
             this.controlleur = controller;
         }
 
+
        public void createConnexionView(){
           load(ConnexionView.class.getResource("/vue/connexion.fxml"), "Login");
      }

@@ -24,6 +24,7 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
     }
 
     @Override
+
     public int inserrerAssociation(Associationgroupesejour associerGroupeSejour) {
         int res=0;
         String sql="INSERT INTO associationgroupesejour (prix_unitaire,groupe,sejour,nbplace) VALUES (?,?,?,?)";

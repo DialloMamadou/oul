@@ -199,6 +199,7 @@ public class ConsulterReservation implements Initializable, Vue {
 
             }
 
+
             this.groupe.setText(client.groupe.get());
 
             GroupeSejourClient groupeSejourClient=groupeSejourClientDao.getGroupeSejourClient(client.groupe.get(),

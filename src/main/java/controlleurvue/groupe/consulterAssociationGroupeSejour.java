@@ -320,6 +320,7 @@ gridPane.add(comboBox,1,3);
         result.ifPresent(pair -> {
             System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
 
+
             System.out.println(" groupe "+idgroupe);
             System.out.println(" sejour "+idsejour);
             PaiementMarie paiementMarie=new PaiementMarie(String.valueOf(idgroupe.getText()),pair.getKey(),String.valueOf(idsejour.getText()),pair.getValue());

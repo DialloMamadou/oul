@@ -20,6 +20,7 @@ public class Evenement_Mairie {
         this.somme = somme;
         this.dateEvent = date;
         this.methode=methode;
+
     }
 
 
