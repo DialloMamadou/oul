@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
+
 <StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.client.ConsulterClient">
     <children>
         <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
@@ -18,7 +19,7 @@
                     <children>
                         <Pane layoutX="14.0" layoutY="7.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXTextField fx:id="chercherclient"  focusColor="#09e2a7" labelFloat="true" layoutX="34.0" layoutY="29.0" prefHeight="25.0" prefWidth="313.0" promptText="chercher client" />
+                                <JFXTextField fx:id="chercherclient" focusColor="#09e2a7" labelFloat="true" layoutX="34.0" layoutY="29.0" prefHeight="25.0" prefWidth="313.0" promptText="chercher client" />
                                 <JFXButton buttonType="RAISED" layoutX="79.0" layoutY="77.0" onMouseClicked="#cherchecentreparid" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="chercher" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
@@ -50,7 +51,7 @@
 
                         <Pane layoutX="14.0" layoutY="141.0" prefHeight="407.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXButton buttonType="RAISED" layoutX="22.0" layoutY="324.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Editer" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="22.0" layoutY="324.0" onMouseClicked="#editerclient" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Editer" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
@@ -85,6 +86,11 @@
                         <Label fx:id="lgroupe" layoutX="272.0" layoutY="166.0" />
                         <Label layoutX="203.0" layoutY="215.0" text="id client" />
                         <Label fx:id="idclient" layoutX="293.0" layoutY="215.0" />
+                        <JFXButton buttonType="RAISED" layoutX="19.0" layoutY="275.0" onMouseClicked="#envoieEmail" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="email" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
                             </children>
                         </Pane>
 

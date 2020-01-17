@@ -53,6 +53,9 @@ public class ConsulterReservation implements Initializable, Vue {
     public Label lidclient;
     public Label lidsejour;
     public Label lmotif;
+    public Label reservationgroupe;
+    public Label groupe;
+    private GroupeSejourClientDao groupeSejourClientDao;
     private Controlleur controlleur;
     @FXML
     private JFXTreeTableView<Reservation> treeView;
@@ -172,6 +175,9 @@ public class ConsulterReservation implements Initializable, Vue {
             Sejour sejour = sejourDao.getSejourParId(newValue.getValue().getTriche());
             Centre centre = centreDao.getCentreParId(sejour.nom_centre.get());
             this.lprix.setText(sejour.prix.get());
+
+
+
             this.ldates.setText(sejour.date_debut.get() + " " + sejour.date_fin.get());
             this.ltype.setText(sejour.type.get());
             this.lcentre.setText(centre.nom_centre.get());
@@ -192,6 +198,17 @@ public class ConsulterReservation implements Initializable, Vue {
                 this.lreste.setTextFill(Color.web("#00ff00"));
 
             }
+
+
+            this.groupe.setText(client.groupe.get());
+
+            GroupeSejourClient groupeSejourClient=groupeSejourClientDao.getGroupeSejourClient(client.groupe.get(),
+                    sejour.id.get(),client.id.get());
+            if(groupeSejourClient==null){
+                this.reservationgroupe.setText("faux");
+            }else{
+                this.reservationgroupe.setText("true");
+            }
         }
     }
 
@@ -207,10 +224,10 @@ public class ConsulterReservation implements Initializable, Vue {
                     public boolean test(TreeItem<Reservation> t) {
 
                         boolean flag =
-                                t.getValue().depart.getValue().contains(newValue)
-                                        || t.getValue().code_client.getValue().contains(newValue)
-                                        || t.getValue().dateinscription.getValue().contains(newValue)
-                                        || t.getValue().id.getValue().equals(newValue);
+                                t.getValue().depart.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().code_client.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().dateinscription.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().id.getValue().toLowerCase().equals(newValue.toLowerCase());
 
 
                         return flag;
@@ -234,6 +251,7 @@ public class ConsulterReservation implements Initializable, Vue {
 
 
     public void initialize(URL location, ResourceBundle resources) {
+        groupeSejourClientDao=new GroupeSejourClientDaoImpl(DBconnexion.getConnection());
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());

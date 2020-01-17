@@ -12,6 +12,7 @@ public class Annulation extends RecursiveTreeObject<Annulation> {
     public StringProperty  idsejour;
     public StringProperty idclient;
 
+
     private  String triche="";
     private String triche2="";
 

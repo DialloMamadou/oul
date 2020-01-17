@@ -21,4 +21,5 @@ public class Centre extends RecursiveTreeObject<Centre> {
         this.capacite_centre=new SimpleStringProperty(capacite);
 
     }
+
 }

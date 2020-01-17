@@ -18,5 +18,6 @@ public class Groupe  extends RecursiveTreeObject<Groupe> {
         this.id = new SimpleStringProperty(id);
         this.nom_groupe = new SimpleStringProperty(name);
 
+
     }
 }

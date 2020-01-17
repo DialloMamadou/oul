@@ -17,6 +17,17 @@ public class Evenement {
         this.dateEvent = date;
     }
 
+
+
+    public Evenement(String codeclient, String codesejour, String event, String somme, String date) {
+
+        this.codeclient = codeclient;
+        this.codesejour = codesejour;
+        this.event = event;
+        this.somme = somme;
+        this.dateEvent = date;
+    }
+
     public Evenement() {
 
     }

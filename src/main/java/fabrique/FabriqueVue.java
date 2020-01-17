@@ -8,14 +8,13 @@ import controlleurvue.client.ClientScreen;
 import controlleurvue.client.ConsulterClient;
 import controlleurvue.client.CreerClient;
 import controlleurvue.client.HistoriqueClient;
-import controlleurvue.groupe.ConsulterGroupe;
-import controlleurvue.groupe.CreerGroupe;
-import controlleurvue.groupe.GroupeScreen;
+import controlleurvue.groupe.*;
 import controlleurvue.inscription.*;
 import controlleurvue.sejour.ConsulterSejour;
 import controlleurvue.sejour.CreerSejour;
 import controlleurvue.sejour.SejourScreen;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -33,6 +32,7 @@ public class FabriqueVue{
             this.stage = stage;
             this.controlleur = controller;
         }
+
 
        public void createConnexionView(){
           load(ConnexionView.class.getResource("/vue/connexion.fxml"), "Login");
@@ -207,5 +207,42 @@ public class FabriqueVue{
 
     public void creerVueConsulterAnnulation() {
         load(ConsulterAnnulation.class.getResource("/vue/consulterAnnulation.fxml"),"consulter annulation");
+    }
+
+    public void creerVueEmail() {
+        load(Email.class.getResource("/vue/email.fxml")," email");
+
+
+    }
+
+    public void creerVueSejourGroupe() {
+        load(AssocierGroupeSejour.class.getResource("/vue/associerGroupeSejour.fxml")," associer groupe sejour");
+
+    }
+
+    public void creerVueGroupeSejourConsulter() {
+        load(consulterAssociationGroupeSejour.class.getResource("/vue/consulterAssociationGroupeSejour.fxml")," associer groupe sejour");
+
+    }
+
+    public void creerVueLieMairieSejourEnfant() {
+        load(AjoutSejourMairieClient.class.getResource("/vue/ajoutSejourMairie.fxml")," associer groupe sejour");
+
+    }
+
+    public void lancerVueHistoriquePaiementMairie() {
+        load(Historique.class.getResource("/vue/historiquePaiementMairieSejour.fxml")," associer groupe sejour");
+
+    }
+
+    public void lancerListeSejourClient() {
+        load(ListeInscrit.class.getResource("/vue/listeInscritSejour.fxml")," associer groupe sejour");
+
+    }
+
+    public void splashWindow() {
+
+        load(Loginscreen.class.getResource("/vue/splash.fxml"), "Chargement ...");
+
     }
 }

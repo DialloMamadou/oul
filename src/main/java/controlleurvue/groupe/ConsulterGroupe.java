@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.image.Image;
@@ -34,6 +35,8 @@ import java.util.ResourceBundle;
 public class ConsulterGroupe implements Initializable, Vue {
     public JFXTextField search_text2;
     public JFXTextField search_text3;
+    public JFXTextField nbplace;
+    public Label lnommairie;
     /**
      * Initializes the controller class.
      */
@@ -91,6 +94,7 @@ public class ConsulterGroupe implements Initializable, Vue {
         for(Groupe groupe:liste){
             groupes.add(groupe);
         }
+
         final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(groupes, RecursiveTreeObject::getChildren);
         treeView.getColumns().setAll(groupe_id,groupe_nom);
         treeView.setRoot(root);

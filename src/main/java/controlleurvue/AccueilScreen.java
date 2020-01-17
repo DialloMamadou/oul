@@ -17,6 +17,8 @@ import javafx.stage.StageStyle;
 import principale.Controlleur;
 
 public class AccueilScreen implements Vue {
+    public Pane pane_51;
+    public Pane pane_31;
     private Controlleur controlleur;
     public Pane pane_5;
     public Pane pane_4;
@@ -39,6 +41,7 @@ public class AccueilScreen implements Vue {
     }
 
     public void souris_dessus_2(MouseEvent mouseEvent) {
+
         pane_2.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
 
     }
@@ -218,5 +221,36 @@ public class AccueilScreen implements Vue {
 
     public void gestionReservation(MouseEvent mouseEvent) {
         this.controlleur.lancerPageInscription();
+    }
+
+    public void deconnexionAppli(MouseEvent mouseEvent) {
+        this.controlleur.lancerLogin();
+    }
+
+    public void souris_dessus_6(MouseEvent mouseEvent) {
+        pane_51.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
+
+    }
+
+    public void souris_sort_6(MouseEvent mouseEvent) {
+        pane_51.setStyle("-fx-background-color: white; -fx-background-radius: 6px;");
+
+
+    }
+
+
+
+
+    public void souris_dessus_31(MouseEvent mouseEvent) {
+        pane_31.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
+
+    }
+
+    public void souris_sort_31(MouseEvent mouseEvent) {
+        pane_31.setStyle("-fx-background-color: white; -fx-background-radius: 6px;");
+
+    }
+
+    public void optionavance(MouseEvent mouseEvent) {
     }
 }

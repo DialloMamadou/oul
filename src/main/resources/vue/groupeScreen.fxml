@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,14 +8,13 @@
 <?import javafx.scene.layout.StackPane?>
 
 
-
 <StackPane fx:id="stack" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.groupe.GroupeScreen">
     <children>
         <AnchorPane prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
             <children>
-                <Pane fx:id="pane_1" layoutX="57.0" layoutY="162.0" onMouseClicked="#creerGroupe" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseEntered="#souris_dessus_1" onMouseExited="#souris_sort_1" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+                <Pane fx:id="pane_1" layoutX="57.0" layoutY="162.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#creerGroupe" onMouseEntered="#souris_dessus_1" onMouseExited="#souris_sort_1" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
                     <children>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0"  pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/002-businessman.png" />
                             </image>
@@ -29,20 +22,20 @@
                         <Label layoutX="49.0" layoutY="145.0" text="creer un groupe" />
                     </children>
                 </Pane>
-                <Pane onMouseClicked="#consultergroupe" fx:id="pane_2" layoutX="321.0" layoutY="165.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0"  onMouseEntered="#souris_dessus_2" onMouseExited="#souris_sort_2" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                <Pane fx:id="pane_2" layoutX="321.0" layoutY="165.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consultergroupe" onMouseEntered="#souris_dessus_2" onMouseExited="#souris_sort_2" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/001-manager.png" />
                             </image>
                         </ImageView>
-                        <Label layoutX="49.0" layoutY="145.0" text="consulter la liste des groupes" />
+                        <Label layoutX="23.0" layoutY="147.0" text="consulter la liste des groupes" />
                     </children>
                 </Pane>
 
-                <Pane fx:id="pane_3" layoutX="590.0" layoutY="162.0" onMouseClicked="#goback" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseEntered="#souris_dessus_3" onMouseExited="#souris_sort_3" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+                <Pane fx:id="pane_3" layoutX="590.0" layoutY="162.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#goback" onMouseEntered="#souris_dessus_3" onMouseExited="#souris_sort_3" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
                     <children>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0"  pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/010-home.png" />
                             </image>
@@ -50,6 +43,26 @@
                         <Label layoutX="49.0" layoutY="145.0" text="retour acceuil" />
                     </children>
                 </Pane>
+            <Pane fx:id="pane_11" layoutX="57.0" layoutY="401.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#associegroupesejour" onMouseEntered="#souris_dessus_11" onMouseExited="#souris_sort_11" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/001-interface-1.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="46.0" layoutY="137.0" prefHeight="43.0" prefWidth="154.0" text="gestion groupe sejour" />
+               </children>
+            </Pane>
+            <Pane fx:id="pane_111" layoutX="321.0" layoutY="401.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consultergroupesejour" onMouseEntered="#souris_dessus_111" onMouseExited="#souris_sort_111" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/004-list-1.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="23.0" layoutY="135.0" prefHeight="43.0" prefWidth="154.0" text="consulter reservations mairie" />
+               </children>
+            </Pane>
 
             </children>
         </AnchorPane>

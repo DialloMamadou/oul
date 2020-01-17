@@ -4,6 +4,7 @@ import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.mysql.jdbc.PreparedStatement;
+import controlleurvue.Email;
 import controlleurvue.Vue;
 import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.centre.CreerCentre;
@@ -16,8 +17,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -26,6 +30,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import modele.Client;
@@ -36,6 +42,8 @@ import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -200,11 +208,11 @@ public class ConsulterClient implements Initializable, Vue {
 
                     @Override
                     public boolean test(TreeItem<Client> t) {
-                        boolean flag=t.getValue().prenom_client.getValue().contains(newValue)
-                                || t.getValue().nom_client.getValue().contains(newValue)
-                                || t.getValue().groupe.getValue().contains(newValue)
-                                || t.getValue().datenaissance.getValue().contains(newValue)
-                                || t.getValue().id.getValue().contains(newValue);
+                        boolean flag=t.getValue().prenom_client.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().nom_client.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().groupe.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().datenaissance.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().id.getValue().toLowerCase().contains(newValue.toLowerCase());
 
 
                         return flag ;
@@ -292,5 +300,37 @@ public class ConsulterClient implements Initializable, Vue {
 
 
         controlleur.lancerPageSejourHistoriqueClient(this.idclient.getText());
+    }
+
+    public void envoieEmail(MouseEvent mouseEvent) {
+        //this.controlleur.envoyerEmail(this.idclient.getText());
+        Email.idclient=this.idclient.getText();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
+            /*
+             * if "fx:controller" is not set in fxml
+             * fxmlLoader.setController(NewWindowController);
+             */
+            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+
+            FileChooser fileChooser = new FileChooser();
+
+
+
+
+            Stage stage = new Stage();
+
+            stage.setTitle("email");
+            stage.setScene(scene);
+           // Email.stage=stage;
+            stage.show();
+        } catch (IOException e) {
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.log(Level.SEVERE, "Failed to create new Window.", e);
+        }
+    }
+
+    public void editerclient(MouseEvent mouseEvent) {
     }
 }
