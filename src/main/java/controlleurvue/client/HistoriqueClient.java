@@ -21,10 +21,17 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import modele.*;
+import notification.Notification;
 import principale.Controlleur;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.*;
+import javax.mail.internet.*;
 import java.net.URL;
 import java.util.List;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class HistoriqueClient implements Initializable, Vue {
@@ -37,6 +44,7 @@ public class HistoriqueClient implements Initializable, Vue {
     public JFXRadioButton btninscription;
     private Controlleur controlleur;
     public  static  int id;
+
     public Label lnom;
     public Label lprenom;
     public Label ldatenaissance;
@@ -325,6 +333,11 @@ public class HistoriqueClient implements Initializable, Vue {
         this.reservations.setShowRoot(false);
 
 
+
+
+        this.inscriptions.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
+                ->
+        System.out.println(("clicker")));
     }
 
     private void remplirInscription() {
@@ -468,4 +481,117 @@ public class HistoriqueClient implements Initializable, Vue {
 
     public void visualiserannulation(MouseEvent mouseEvent) {
     }
+
+    public void genererDocument(MouseEvent mouseEvent) {
+        if(!this.inscriptions.getSelectionModel().isEmpty()){
+            System.out.println("clicker generation");
+            test();
+        }else{
+            Notification.affichageEchec("echec","il faut selectionner une inscription");
+        }
+    }
+
+
+
+
+
+    private static String USER_NAME = "malikabdallah75019";  // GMail user name (just the part before "@gmail.com")
+    private static String PASSWORD = "Selamwait04"; // GMail password
+    private static String RECIPIENT = "malik.mahamoud-abdallah@etu.univ-orleans.fr";
+
+    public  void test() {
+        String from = USER_NAME;
+        String pass = PASSWORD;
+        String[] to = { RECIPIENT }; // list of recipient email addresses
+        String subject = "Java send mail example";
+        String body = "Welcome to JavaMail!";
+
+        sendFromGMail(from, pass, to, subject, body);
+    }
+
+    private  void sendFromGMail(String from, String pass, String[] to, String subject, String body) {
+        Properties props = System.getProperties();
+        String host = "smtp.gmail.com";
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.user", from);
+        props.put("mail.smtp.password", pass);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+
+            // Create a default MimeMessage object.
+
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(from));
+
+            // Set To: header field of the header.
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(HistoriqueClient.RECIPIENT));
+
+            // Set Subject: header field
+            message.setSubject("Testing Subject");
+
+            // Create the message part
+            BodyPart messageBodyPart = new MimeBodyPart();
+
+            // Now set the actual message
+            messageBodyPart.setText("This is message body");
+
+            // Create a multipar message
+            Multipart multipart = new MimeMultipart();
+
+            // Set text message part
+            multipart.addBodyPart(messageBodyPart);
+
+            // Part two is attachment
+            messageBodyPart = new MimeBodyPart();
+            String filename = "/home/manisha/file.txt";
+            DataSource source = new FileDataSource(filename);
+            messageBodyPart.setDataHandler(new DataHandler(source));
+            messageBodyPart.setFileName(filename);
+            multipart.addBodyPart(messageBodyPart);
+
+            // Send the complete message parts
+            message.setContent(multipart);
+
+            // Send message
+            Transport.send(message);
+
+            System.out.println("Sent message successfully....");
+        /*    message.setFrom(new InternetAddress(from));
+            InternetAddress[] toAddress = new InternetAddress[to.length];
+
+            // To get the array of addresses
+            for( int i = 0; i < to.length; i++ ) {
+                toAddress[i] = new InternetAddress(to[i]);
+            }
+
+            for( int i = 0; i < toAddress.length; i++) {
+                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
+            }
+
+            message.setSubject(subject);
+            message.setText(body);
+
+
+
+            Transport transport = session.getTransport("smtp");
+            transport.connect(host, from, pass);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();*/
+        }
+        catch (AddressException ae) {
+            ae.printStackTrace();
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();
+        }
+    }
+
+
 }

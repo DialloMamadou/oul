@@ -14,6 +14,11 @@ public interface ReservationDao {
 
     Reservation getReservationParId(String id);
 
+
     List<Reservation> getReservationsParIdClient(int id);
+
+    Reservation getReservationParIdClientEtIdSejour(String id_client,String id_sejour);
+
+    int nbReservationForId(String id);
 }
 

@@ -48,10 +48,12 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
         return liste;
     }
 
+
     @Override
     public int insererReservation(Reservation reservation) {
         int res=0;
 
+        System.out.println("reservation "+reservation);
         String sql="INSERT INTO reservation (date_reservation,code_client,id_sejour,depart)" +
                 " VALUES (?,?,?,?)";
         try {
@@ -134,6 +136,52 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
         }
 
         return liste;
+
+    }
+
+    @Override
+    public Reservation getReservationParIdClientEtIdSejour(String id_client,String id_sejour) {
+        String sql="SELECT * FROM reservation WHERE code_client ='"+id_client+"' AND id_sejour='"+id_sejour+"'";
+Reservation reservation=null;
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                reservation=new Reservation(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return reservation;
+    }
+
+    @Override
+    public int nbReservationForId(String id) {
+        System.out.println("id sejour reserv"+id);
+
+        int nbReserv=0;
+        String sql="SELECT COUNT(*) FROM reservation WHERE id_sejour ='"+id+"'";
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()) {
+                System.out.println("Count nb sejour dans reservation pour id:" + id + " = " + rs.getInt(1));
+                nbReserv = rs.getInt(1);
+            }
+            return nbReserv;
+
+        }catch (Exception e){
+
+        }
+        return nbReserv;
 
     }
 }

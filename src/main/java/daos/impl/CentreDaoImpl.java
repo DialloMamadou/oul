@@ -3,6 +3,8 @@ package daos.impl;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.centre.CreerCentre;
 import daos.CentreDao;
+import exceptions.centre.CapaciteException;
+import exceptions.centre.NomDejaPresentException;
 import modele.Centre;
 import modele.Groupe;
 
@@ -20,6 +22,7 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
     public CentreDaoImpl(Connection conn) {
         super(conn);
     }
+
 
     public int inserrerCentre(String nom_centre,String capacite) {
         int res=0;
@@ -125,6 +128,34 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
         }
 
         return liste;
+
+    }
+
+    @Override
+    public int mettreAjourCentre(String id, Centre centre)  {
+
+        String sql="UPDATE  centre SET nom_centre '"+ centre.nom_centre.get()+"AND capacite'"+centre.capacite_centre.get()+"'WHERE id_centre ='"+id+"'";
+        int x=0;
+
+        try{
+
+            String query = "update centre set nom_centre = ? ,  capacite=? where id_centre = ?";
+
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(query);
+            ps.setString(3,id);
+            ps.setString(2,centre.capacite_centre.get());
+            ps.setString(1,centre.nom_centre.get());
+            x=ps.executeUpdate();
+
+
+
+        }catch (Exception e){
+            return 0;
+
+        }
+
+        return x;
+
 
     }
 

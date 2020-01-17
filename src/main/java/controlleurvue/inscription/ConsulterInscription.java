@@ -1,10 +1,6 @@
 package controlleurvue.inscription;
 
 import basededonnee.DBconnexion;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
@@ -34,10 +30,11 @@ import modele.*;
 import notification.Notification;
 import principale.Controlleur;
 
-import java.io.FileOutputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 public class ConsulterInscription implements Initializable, Vue {
@@ -58,6 +55,7 @@ public class ConsulterInscription implements Initializable, Vue {
     public Label idinscription;
     public Label idclient;
     public Label idsejour;
+    public Label groupe;
     /**
      * Initializes the controller class.
      */
@@ -237,6 +235,17 @@ public class ConsulterInscription implements Initializable, Vue {
             this.lreste.setTextFill(Color.web("#00ff00"));
 
         }
+
+
+        this.groupe.setText(client.groupe.get());
+
+        GroupeSejourClient groupeSejourClient=groupeSejourClientDao.getGroupeSejourClient(client.groupe.get(),
+                sejour.id.get(),client.id.get());
+        if(groupeSejourClient==null){
+            this.groupe.setText("faux");
+        }else{
+            this.groupe.setText("true");
+        }
     }
 
     private void optimiserRechercheSejour() {
@@ -245,17 +254,18 @@ public class ConsulterInscription implements Initializable, Vue {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
+
                 treeView.setPredicate(new Predicate<TreeItem<Inscription>>() {
 
                     @Override
                     public boolean test(TreeItem<Inscription> t) {
 
                         boolean flag =
-                                t.getValue().depart.getValue().contains(newValue)
-                                        || t.getValue().code_client.getValue().contains(newValue)
-                                        || t.getValue().dateinscription.getValue().contains(newValue)
-                                        || t.getValue().id.getValue().equals(newValue)
-                                        ||t.getValue().paiement.getValue().equals(newValue);
+                                t.getValue().depart.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().code_client.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().dateinscription.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        || t.getValue().id.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                        ||t.getValue().paiement.getValue().toLowerCase().contains(newValue.toLowerCase());
                         ;
                         if(flag)
                             remplirGrideSejour(t);
@@ -283,8 +293,10 @@ public class ConsulterInscription implements Initializable, Vue {
     private AnnulationDao annulationDao;
     private EvenementDao evenementDao;
 
+    private GroupeSejourClientDao groupeSejourClientDao;
 
     public void initialize(URL location, ResourceBundle resources) {
+        groupeSejourClientDao=new GroupeSejourClientDaoImpl(DBconnexion.getConnection());
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
