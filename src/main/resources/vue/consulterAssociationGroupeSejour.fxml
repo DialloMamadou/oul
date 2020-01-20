@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.groupe.consulterAssociationGroupeSejour">
     <children>
         <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
@@ -107,6 +106,11 @@
                         <Label layoutX="14.0" layoutY="355.0" text="reste a payer" />
                         <Label fx:id="resteapayer1" layoutX="91.0" layoutY="355.0" prefHeight="17.0" prefWidth="86.0" />
                         <JFXButton fx:id="valider3" buttonType="RAISED" layoutX="14.0" layoutY="427.0" onMouseClicked="#listeinscrit" prefHeight="30.0" prefWidth="109.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="liste inscrit" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="valider31" buttonType="RAISED" layoutX="146.0" layoutY="427.0"  onMouseClicked="#supprimer" prefHeight="30.0" prefWidth="109.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="supprimer" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>

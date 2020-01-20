@@ -14,4 +14,6 @@ public interface AssociationGroupeSejourDao {
     List<Associationgroupesejour> getListes();
 
     Associationgroupesejour getById(String s);
+
+    int supprimerById(String text);
 }

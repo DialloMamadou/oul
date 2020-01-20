@@ -103,4 +103,24 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
 
         return associationgroupesejour;
     }
+
+    @Override
+    public int supprimerById(String text) {
+
+        int res=0;
+        String sql="DELETE FROM associationgroupesejour WHERE id=?";
+
+        try {
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ps.setString(1, text);
+
+
+            res=ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return res;
+
+    }
 }

@@ -46,6 +46,7 @@ public class CreerSejour implements Initializable, Vue {
     public TextField agemax;
     public TextField agemin;
     public TextField prix;
+    public TextField refsejour;
 
     private SejourDao sejourDao;
     private CentreDao centreDao;
@@ -86,9 +87,9 @@ public class CreerSejour implements Initializable, Vue {
         String min=this.agemin.getText().toString();
         String prix=this.prix.getText().toString();
         String capacite=this.capacite.getText().toString();
+String refSejour=this.refsejour.getText().toString();
 
-
-        Sejour sejour=new Sejour(duree,datedebut,datefin,type,id,prix,min,max,capacite);
+        Sejour sejour=new Sejour(duree,datedebut,datefin,type,id,prix,min,max,capacite,refSejour);
         int res=sejourDao.insererSejour(sejour);
         if(res>0){
             Notification.affichageSucces("succes","Sejour creer avec succes");

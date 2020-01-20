@@ -30,7 +30,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
     public int insererSejour(Sejour sejour) {
         int res=0;
 
-        String sql="INSERT INTO sejour (duree,date_debut,date_fin,type_sejour,centre_id,prix,age_min,age_max,capacite) VALUES (?,?,?,?,?" +
+        String sql="INSERT INTO sejour (duree,date_debut,date_fin,type_sejour,centre_id,prix,age_min,age_max,capacite,ref_sejour) VALUES (?,?,?,?,?,?" +
                 ",?,?,?,?)";
         try {
 
@@ -44,6 +44,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             ps.setString(8,sejour.ageMax.get() );
             ps.setString(9,sejour.capacite.get() );
             ps.setString(5,sejour.nom_centre.get() );
+            ps.setString(10,sejour.refSejour.get());
 
 
 
@@ -78,7 +79,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                         rs.getString(7),
                         rs.getString(8),
                       rs.getString(9),
-                        rs.getString(10)  ));
+                        rs.getString(10)  ,rs.getString(11)));
 
             }
 
@@ -109,7 +110,8 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                         rs.getString(7),
                         rs.getString(8),
                         rs.getString(9),
-                        rs.getString(10));
+                        rs.getString(10),
+                        rs.getString(11));
                 System.out.println("trouvee");
 
             }
@@ -167,7 +169,8 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                         rs.getString(7),
                         rs.getString(8),
                         rs.getString(9),
-                        rs.getString(10));
+                        rs.getString(10),
+                        rs.getString(11));
                 liste.add(sejour);
                 System.out.println("trouvee");
 
@@ -205,7 +208,8 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                 Sejour sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
-                ,rs.getString(10));
+                ,rs.getString(10),
+                        rs.getString(11));
                 list.add(sejour);
 
                 System.out.println("right here right now");
@@ -234,10 +238,11 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Sejour sejour=new Sejour(rs.getString(2),rs.getString(3),
+                Sejour sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
-                        ,rs.getString(10));
+                        ,rs.getString(10),
+                        rs.getString(11));
                 list.add(sejour);
 
                 System.out.println("right here right now");
@@ -267,7 +272,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                 Sejour sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
-                        ,rs.getString(10));
+                        ,rs.getString(10),rs.getString(11));
                 list.add(sejour);
 
                 System.out.println("right here right now");
@@ -294,7 +299,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                  sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
-                        ,rs.getString(10));
+                        ,rs.getString(10),rs.getString(11));
 
             }
         }catch (Exception e){

@@ -14,7 +14,7 @@ public interface InscriptionDao {
 
     int supperimerParId(String toString);
 
-
+    public Inscription getInscritptionParIdInscription(String s) ;
     int mettreAjourPaiement(String idInscription,String result);
 
     List<Inscription> getInscriptionsParIdSejour(String s);

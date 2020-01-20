@@ -6,6 +6,8 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
 import daos.*;
 import daos.impl.*;
+import enumerations.Paiement;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,20 +16,21 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import javafx.util.Pair;
 import modele.*;
 import notification.Notification;
 import principale.Controlleur;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -308,31 +311,80 @@ public class ConsulterReservation implements Initializable, Vue {
     }
 
     public void paiement(MouseEvent mouseEvent) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("barre de paiement");
-        dialog.setHeaderText("mettre a jour paiement ");
-        dialog.setContentText("somme paye:");
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("paiement");
 
-// Traditional way to get the response value.
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
-            Evenement evenement = new Evenement("1", this.lidclient.getText(), this.lidsejour.getText(), "paiement-reservation", result.get(), new Date().toString());
-            evenementDao.insererEvenement(evenement);
-            Reservation reservation = reservationDao.getReservationParId(this.idinscription.getText());
-            Inscription inscription = new Inscription(result.get(), reservation.dateinscription.get(), this.lidclient.getText(),
-                    this.lidsejour.getText(), reservation.depart.get());
-            reservationDao.supprimerParId(this.idinscription.getText());
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 10, 10, 10));
 
-            inscriptionDao.insererInscription(inscription);
-            System.out.println("tout est bien ");
-            Notification.affichageSucces("paiement succes", "le paiement a bien ete pris en comtpe");
-            //genererTouteslesreservations();
-            genererBis();
+        Label label=new Label("somme paye");
+        Label label2=new Label("methode");
 
+        TextField from = new TextField();
+        from.setPromptText("From");
+        TextField to = new TextField();
+        to.setPromptText("To");
 
+        ComboBox comboBox=new ComboBox();
+        for(Paiement paiement:Paiement.values()){
+            comboBox.getItems().add(paiement);
         }
+
+        gridPane.add(label,0,0);
+        gridPane.add(from,1,0);
+        gridPane.add(comboBox,1,3);
+        gridPane.add(label2,0,3);
+
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Request focus on the username field by default.
+        Platform.runLater(() -> from.requestFocus());
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(from.getText(), comboBox.getValue().toString());
+            }
+            return null;
+        });
+
+
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+
+            Evenement evenement=new Evenement("1",this.lidclient.getText(),this.lidsejour.getText(),"paiement",pair.getKey(),
+                    new Date().toString().toString(),pair.getValue().toString());
+            int res=evenementDao.insererEvenement(evenement);
+            if(res==0){
+
+                Notification.affichageEchec("echec ","la paiement n a pas ete pris en comtpe");
+
+            }else{
+                Notification.affichageSucces("succes ","la paiement a ete pris en comtpe");
+                String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+                Reservation reservation=reservationDao.getReservationParId(this.idinscription.getText());
+                Inscription inscription=new Inscription(pair.getKey(),aujourdhui,this.lidclient.getText(),
+                        this.lidsejour.getText(),reservation.depart.get());
+                int ress=inscriptionDao.insererInscription(inscription);
+                if(res!=0){
+                    Notification.affichageSucces("succes","inscription prise en compte");
+                }
+                reservationDao.supprimerParId(idinscription.getText());
+                this.genererTouteslesreservations();
+
+            }});
     }
+
 
 
         public void genererBis(){
@@ -413,7 +465,7 @@ public class ConsulterReservation implements Initializable, Vue {
 
 
 
-                Evenement evenement = new Evenement("1", this.lidclient.getText(), this.lidsejour.getText(), "anulation-reservation", String.valueOf(0), new Date().toString());
+                Evenement evenement = new Evenement("1", this.lidclient.getText(), this.lidsejour.getText(), "anulation-reservation", String.valueOf(0), new Date().toString(),"annulation");
                 int x=evenementDao.insererEvenement(evenement);
                 if(x==0){
                     System.out.println("evenenement non enregistre");

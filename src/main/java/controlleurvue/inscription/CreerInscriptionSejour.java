@@ -498,7 +498,7 @@ for(Sejour sejour:liste){
         Client client=clientDao.getClientParId(iduser.getText());
         System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
         System.out.println("sejour :"+sejour.type.get()+" "+sejour.capacite.get());
-        String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        String aujourdhui = new SimpleDateFormat("dd-MM-yyyy ").format(new Date());
         String depart=(String)this.depart.getValue().toString();
 
         Reservation reservation=new Reservation( aujourdhui,
@@ -560,8 +560,8 @@ for(Sejour sejour:liste){
         int res=inscriptionDao.insererInscription(inscription);
         if(res>0){
 
-            Evenement evenement=new Evenement(client.id.get(),sejour.id.get(),"paiement inscription",this.accompte.getText(),aujourdhui);
-            evenementDao.insererEvenement(evenement);
+           // Evenement evenement=new Evenement(client.id.get(),sejour.id.get(),"paiement inscription",this.accompte.getText(),aujourdhui);
+            //evenementDao.insererEvenement(evenement);
             Notification.affichageSucces("succes","inscription faite avec succes");
             confirmationInscriptionPDF(client,sejour);
 

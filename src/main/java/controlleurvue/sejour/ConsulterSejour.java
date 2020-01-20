@@ -74,6 +74,7 @@ public class ConsulterSejour implements Initializable, Vue {
     public JFXRadioButton tous;
     public JFXRadioButton regle;
     public JFXRadioButton retard;
+    public Label refsejour;
 
     /**
      * Initializes the controller class.
@@ -348,6 +349,7 @@ public class ConsulterSejour implements Initializable, Vue {
             this.lsejour.setText(newValue.getValue().type.get());
             this.ldate.setText(newValue.getValue().date_debut.get() + " au " + newValue.getValue().date_fin.get());
             this.idsejour.setText(newValue.getValue().id.get());
+            this.refsejour.setText(newValue.getValue().refSejour.get());
             RemplirClientSejour(newValue.getValue());
 
         }
@@ -727,7 +729,6 @@ public class ConsulterSejour implements Initializable, Vue {
     public void envoieEmail(MouseEvent mouseEvent) {
         Email.idclient="-1";
         Email.idSejour=this.idsejour.getText();
-        Notification.affichageSucces("ici","ici");
         System.out.println("id sejour "+this.idsejour.getText());
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
