@@ -11,6 +11,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
 
 
 
+
     public StringProperty id;
     public StringProperty duree;
     public  StringProperty date_debut;

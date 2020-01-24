@@ -70,6 +70,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
     private JFXTextField search_text;
 
 
+
     @FXML
     private StackPane stackepane;
 

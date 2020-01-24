@@ -9,6 +9,7 @@ public interface GroupeSejourClientDao {
 
     List<GroupeSejourClient> getGroupeSejourClient(String id_groupe, String id_sejour);
 
+
     public GroupeSejourClient getGroupeSejourClient(String id_groupe, String id_sejour,String id_client) ;
 
 

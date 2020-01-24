@@ -30,6 +30,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
     public int[] insererClientMairie(Client client) {
         String sql="INSERT INTO client (nom_client,prenom_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance) VALUES (?,?,?,?,?,?,?,?,?)";
 
+
         int []tab=new int[2];
         Notification.affichageSucces("numero ",client.numero.get());
         ResultSet ress=null;

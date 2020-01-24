@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
+
     public GroupeDaoImpl(Connection conn) {
         super(conn);
     }

@@ -726,6 +726,7 @@ public class ConsulterSejour implements Initializable, Vue {
     }
 
 
+
     public void envoieEmail(MouseEvent mouseEvent) {
         Email.idclient="-1";
         Email.idSejour=this.idsejour.getText();

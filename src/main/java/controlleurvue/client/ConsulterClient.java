@@ -57,6 +57,7 @@ import java.util.logging.Logger;
 public class ConsulterClient implements Initializable, Vue {
 
 
+
     public JFXTextField search_text2;
     public JFXTextField search_text3;
     public Label lnom;

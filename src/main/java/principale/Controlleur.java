@@ -11,6 +11,7 @@ import modele.Sejour;
 
 public class Controlleur {
 
+
     private FabriqueVue fabriqueVue;
 
     public Controlleur(Stage stage){

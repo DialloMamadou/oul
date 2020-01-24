@@ -28,6 +28,7 @@ public class FabriqueVue{
         private Stage stage;
         private Controlleur controlleur;
 
+
         public FabriqueVue(Stage stage, Controlleur controller){
             this.stage = stage;
             this.controlleur = controller;

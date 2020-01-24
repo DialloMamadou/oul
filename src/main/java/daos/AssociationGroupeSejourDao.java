@@ -11,6 +11,7 @@ public interface AssociationGroupeSejourDao {
 
     int inserrerAssociation(Associationgroupesejour associationgroupesejour);
 
+
     List<Associationgroupesejour> getListes();
 
     Associationgroupesejour getById(String s);

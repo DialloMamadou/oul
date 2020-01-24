@@ -104,6 +104,7 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
         return associationgroupesejour;
     }
 
+
     @Override
     public int supprimerById(String text) {
 

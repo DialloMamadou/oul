@@ -10,6 +10,7 @@ public interface InscriptionDao {
 
     List<Inscription> getInscriptions();
 
+
     int insererInscription(Inscription inscription2);
 
     int supperimerParId(String toString);

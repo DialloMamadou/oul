@@ -49,6 +49,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
 
 
 
+
             res=ps.executeUpdate();
 
         } catch (SQLException ex) {

@@ -446,6 +446,7 @@ public class ConsulterReservation implements Initializable, Vue {
 
     private void annulerReservation(MouseEvent mouseEvent,JFXDialog dialogLayout) {
 
+
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("annulation reservation");
         dialog.setHeaderText("indiquer la raison ");

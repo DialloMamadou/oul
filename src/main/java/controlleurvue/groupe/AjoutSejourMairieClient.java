@@ -24,7 +24,8 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
     public Label date;
     public Label centre;
     public Label groupecomplet;
-    
+
+
     
     public TextField portable;
     public TextField observation;

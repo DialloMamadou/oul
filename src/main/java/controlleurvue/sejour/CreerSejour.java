@@ -89,6 +89,7 @@ public class CreerSejour implements Initializable, Vue {
         String capacite=this.capacite.getText().toString();
 String refSejour=this.refsejour.getText().toString();
 
+
         Sejour sejour=new Sejour(duree,datedebut,datefin,type,id,prix,min,max,capacite,refSejour);
         int res=sejourDao.insererSejour(sejour);
         if(res>0){

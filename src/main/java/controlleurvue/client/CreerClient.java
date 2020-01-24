@@ -46,6 +46,8 @@ import java.util.logging.Logger;
 public class CreerClient  implements Initializable, Vue {
 
 
+
+
     public StackPane stack;
     public TextField nom;
 

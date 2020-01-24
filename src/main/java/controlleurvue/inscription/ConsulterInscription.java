@@ -354,6 +354,7 @@ public class ConsulterInscription implements Initializable, Vue {
     public void EditerCentre(MouseEvent mouseEvent) {
     }
 
+
     public void paiement(MouseEvent mouseEvent) {
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("paiement");

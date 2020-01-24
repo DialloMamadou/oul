@@ -27,6 +27,7 @@ public class CreerGroupe implements Vue {
     private Controlleur controlleur;
 
 
+
     public void back(MouseEvent mouseEvent) {
         this.controlleur.lancerPageGroupe();
     }

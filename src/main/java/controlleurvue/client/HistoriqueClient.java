@@ -36,6 +36,7 @@ import java.util.ResourceBundle;
 
 public class HistoriqueClient implements Initializable, Vue {
 
+
     public JFXTreeTableView<Annulation> annulations;
     public JFXTreeTableView <Reservation>reservations;
     public JFXTreeTableView <Inscription>inscriptions;

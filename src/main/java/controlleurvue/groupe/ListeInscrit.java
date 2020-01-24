@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 
 public class ListeInscrit implements Initializable, Vue {
 
+
     public static  String id_sejour;
     public static  String id_groupe;
     public static String assoc_id;

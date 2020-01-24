@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 public class CreerCentre implements Vue {
 
 
+
     public StackPane stackepane;
     public JFXTextField nom;
     public JFXTextField capacite;

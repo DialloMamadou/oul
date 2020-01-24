@@ -478,6 +478,7 @@ for(Sejour sejour:liste){
         ok.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(javafx.event.ActionEvent event) {
                 enregistrerReservation();
+
                 dialog.close();
 
             }

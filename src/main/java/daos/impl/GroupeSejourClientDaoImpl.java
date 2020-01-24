@@ -107,6 +107,7 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
             ps.setString(3,id_client);
             ResultSet rs = ps.executeQuery();
 
+
             while (rs.next()) {
                 list=new GroupeSejourClient(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5));
