@@ -161,7 +161,7 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
 
         }*/
 
-        Boolean b = true;
+        //Boolean b = true;
         /*
 
             if(!(dD.after(new Date()))){
