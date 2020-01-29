@@ -159,9 +159,11 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
 
        /* if (ChronoUnit.YEARS.between(LocalDate.parse(dN),LocalDate.parse(dD) >= this.aMin){
 
-        }
+        }*/
 
         Boolean b = true;
+        /*
+
             if(!(dD.after(new Date()))){
                 Notification.affichageEchec("echec","la date du debut est incorrecte");
                 b=false;
