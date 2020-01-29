@@ -199,6 +199,51 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
     }
 
+
+    private void chargementCentre() {
+
+        JFXTreeTableColumn<CentreDto,String> type=this.genererCentre();
+        ObservableList<CentreDto> centres = FXCollections.observableArrayList();
+        List<Centre>liste=centreDao.listeCentres();
+        for(Centre centre:liste){
+            centres.add(new CentreDto(centre.nom_centre.get()));
+        }
+        final TreeItem<CentreDto> root = new RecursiveTreeItem<CentreDto>(centres, RecursiveTreeObject::getChildren);
+        vueCentre.getColumns().setAll(type);
+        vueCentre.setRoot(root);
+        vueCentre.setShowRoot(false);
+        optimiserRechercheCentre();
+
+        vueCentre.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
+                ->
+                showCentre(newValue)
+        );
+
+
+
+        /*this.lduree//.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirtemp((String)newItem);
+        });*/
+        this.type.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirtemp((String)newItem);
+            });
+
+        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirDate((String)newItem);
+        });
+
+        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirDepart();
+        });
+
+        this.depart.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirPrix();
+        });
+
+
+    }
+
+
     private void optimiserrechercheclient() {
         this.chercheClient.textProperty().addListener(new ChangeListener<String>() {
 
@@ -215,7 +260,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
                                         || t.getValue().prenom_client.getValue().contains(newValue)
                                         || t.getValue().groupe.getValue().contains(newValue)
                                         || t.getValue().datenaissance.getValue().equals(newValue)
-                                ||t.getValue().id_client.getValue().equals(newValue);
+                                        ||t.getValue().id_client.getValue().equals(newValue);
                         ;
                         if(flag)
                             System.out.println("trouve");
@@ -252,46 +297,6 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
 
 
-
-    private void chargementCentre() {
-
-        JFXTreeTableColumn<CentreDto,String> type=this.genererCentre();
-        ObservableList<CentreDto> centres = FXCollections.observableArrayList();
-        List<Centre>liste=centreDao.listeCentres();
-        for(Centre centre:liste){
-            centres.add(new CentreDto(centre.nom_centre.get()));
-        }
-        final TreeItem<CentreDto> root = new RecursiveTreeItem<CentreDto>(centres, RecursiveTreeObject::getChildren);
-        vueCentre.getColumns().setAll(type);
-        vueCentre.setRoot(root);
-        vueCentre.setShowRoot(false);
-        optimiserRechercheCentre();
-
-        vueCentre.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
-                ->
-                showCentre(newValue)
-        );
-
-
-
-        this.type.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirtemp((String)newItem);
-            });
-
-        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirDate((String)newItem);
-        });
-
-        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirDepart();
-        });
-
-        this.depart.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirPrix();
-        });
-
-
-    }
 
     private void optimiserRechercheCentre() {
         this.chercheCentre.textProperty().addListener(new ChangeListener<String>() {

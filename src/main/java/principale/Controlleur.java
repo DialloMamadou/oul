@@ -15,7 +15,7 @@ public class Controlleur {
 
     public Controlleur(Stage stage){
         this. fabriqueVue= new FabriqueVue(stage, this);
-        this.fabriqueVue.splashWindow();
+        this.fabriqueVue.creerPageAcceuil();//splashWindow();
     }
 
     public void lancerPageAccueil() {

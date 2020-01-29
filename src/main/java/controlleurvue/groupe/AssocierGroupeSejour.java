@@ -20,7 +20,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 import modele.*;
 import notification.Notification;
 import principale.Controlleur;
@@ -120,11 +119,13 @@ public class AssocierGroupeSejour implements Vue, Initializable {
 
                         dialog.close();
 
+
                     }
                 });
                 cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
                     public void handle(javafx.event.ActionEvent event) {
                         dialog.close();
+
                     }
                 });
                 dialogLayout.setActions(ok, cancel);
@@ -143,12 +144,14 @@ public class AssocierGroupeSejour implements Vue, Initializable {
 
         Associationgroupesejour associationgroupesejour = new Associationgroupesejour(this.prixfixe.getText(), this.idgroupe.getText(), this.id.getText(), this.nbplace.getText());
 
-        int res = associationGroupeSejourDao.inserrerAssociation(associationgroupesejour);
+        int res =0;
+        res = associationGroupeSejourDao.inserrerAssociation(associationgroupesejour);
         if (res == 0) {
             Notification.affichageSucces("echec", "L ajout de l association n a pu se faire ");
 
         } else {
             Notification.affichageSucces("succes insertion", "l  association entre groupe sejour a ete fait");
+            this.controlleur.lancerPageAssocierSejourGroupe();
         }
     }
 

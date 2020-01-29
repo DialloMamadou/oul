@@ -67,13 +67,14 @@ public class CreerGroupe implements Vue {
     public void book(MouseEvent mouseEvent) {
 
         int res=0;
-        if(!nom.getText().isEmpty() && !tiers.getText().isEmpty()) {
+        if(nom.getText().length() >=3 && tiers.getText().length() >=3) {
             Groupe findGrpByName = groupeDao.trouverGroupeParNomGroupe(nom.getText());
             Groupe findGrpByTiers = groupeDao.trouverGroupeParCodeTiers(tiers.getText());
             if (findGrpByName == null && findGrpByTiers == null) {
                 res = groupeDao.inserrerGroupe(nom.getText(), tiers.getText());
                 if(res>0){
                     messageSuccess();
+                    back(mouseEvent);
                 }else{
                     messageErreur("Il y a eu une erreur lors de la creation");
                 }
@@ -84,7 +85,7 @@ public class CreerGroupe implements Vue {
 
         }else {
 
-            messageErreur("Veuillez remplir le(s) champ(s) vide(s)");
+            messageErreur("Veuillez remplir le(s) champ(s) avec de valeurs valides");
         }
 
     }

@@ -3,6 +3,7 @@ package daos.impl;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.centre.CreerCentre;
 import daos.GroupeDao;
+import java.sql.Array;
 import modele.Centre;
 import modele.Groupe;
 
@@ -67,7 +68,8 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
     @Override
     public List<Groupe> listeGroupes() {
         String sql = "SELECT * FROM groupe";
-        List<Groupe> liste = new ArrayList<>();
+        List<Groupe> liste;
+        liste = new ArrayList<>() ;
 
         try {
             PreparedStatement ps = (PreparedStatement) connect.prepareStatement(sql);

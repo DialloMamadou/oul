@@ -12,12 +12,12 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
 import modele.Centre;
 import modele.Sejour;
 import notification.Notification;
@@ -28,6 +28,12 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -41,7 +47,7 @@ public class CreerSejour implements Initializable, Vue {
     public DatePicker dateD;
     public DatePicker dateF;
     public ComboBox centre;
-    public TextField duree;
+    public String duree;
     public TextField capacite;
     public TextField agemax;
     public TextField agemin;
@@ -75,30 +81,80 @@ public class CreerSejour implements Initializable, Vue {
 
     public void book(MouseEvent mouseEvent) {
 
+        try{
+            String centr =this.centre.getValue().toString();
+            String datedebut= this.dateD.getValue().toString();
+            String datefin= this.dateF.getValue().toString();
 
-        Centre centre=centreDao.trouverParNomCentre(this.centre.getValue().toString());
-        String id=centre.id.get();
-        String duree= this.duree.getText().toString();
-        String datedebut= this.dateD.getValue().toString();
-       String datefin= this.dateF.getValue().toString();
-        String type=this.type.getText().toString();
-        String max=this.agemax.getText().toString();
-        String min=this.agemin.getText().toString();
-        String prix=this.prix.getText().toString();
-        String capacite=this.capacite.getText().toString();
+            String type=this.type.getText();
+            String max=this.agemax.getText();
+            String min=this.agemin.getText();
+            String prix=this.prix.getText();
+            String capacite=this.capacite.getText();
 
+            Integer.parseInt(max);
+            Integer.parseInt(min);
+            Integer.parseInt(prix);
+            Integer.parseInt(capacite);
 
-        Sejour sejour=new Sejour(duree,datedebut,datefin,type,id,prix,min,max,capacite);
-        int res=sejourDao.insererSejour(sejour);
-        if(res>0){
-            Notification.affichageSucces("succes","Sejour creer avec succes");
+            Centre centre=centreDao.trouverParNomCentre(centr);
 
-        }else{
-            Notification.affichageEchec("echec","echec dans la creation du sejour");
+            //String duree= String.valueOf(Period.between(dateD.getValue(),dateF.getValue()).getDays());
+
+            long diff = java.sql.Date.valueOf(dateF.getValue()).getTime() - java.sql.Date.valueOf(dateD.getValue()).getTime();
+            String duree = String.valueOf(diff+1 / (1000*60*60*24));
+            System.out.println("duree = "+duree);
+
+            if (controleDate(datedebut, datefin) && Integer.parseInt(min) >= 4 && Integer.parseInt(min) <= 17 && type.length() >=5 ) {
+                Sejour sejour = new Sejour(duree, datedebut, datefin, type, centre.id.get(), prix, min, max, capacite);
+                int res = sejourDao.insererSejour(sejour);
+                if (res > 0) {
+                    Notification.affichageSucces("succes", "Sejour creer avec succes");
+
+                } else {
+                    Notification.affichageEchec("echec", "echec dans la création du sejour");
+                }
+            } else {
+                Notification.affichageEchec("echec", "donnée(s) incorrecte(s)");
+            }
+        }catch (NullPointerException | NumberFormatException e ){
+            Notification.affichageEchec("Problème de donnees","veuillez saisir de(s) champ(s) non vides et valide(s) ");
 
         }
+
+
+        
     }
 
+    public boolean controleDate(String dateDebut, String dateFin){
+
+        Boolean b = true;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            Date dD=null;
+            dD = sdf.parse(dateDebut);
+            Date dF=null;
+            dF = sdf.parse(dateFin);
+            
+            if(!(dD.after(new Date()))){
+                Notification.affichageEchec("echec","la date du debut est incorrecte");
+                b=false;
+                return b;
+            }else if(!(dF.after(dD))){
+                Notification.affichageEchec("echec","la date de fin doit etre apres celle du debut");
+                b=false;
+                return b;
+            }else{
+                return b;
+            }
+        }catch(ParseException e){
+            Notification.affichageEchec("echec","echec le format de la date incorrect");
+        }
+        return b;
+
+    }
+    
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
