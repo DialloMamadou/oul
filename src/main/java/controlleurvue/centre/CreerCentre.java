@@ -31,6 +31,8 @@ public class CreerCentre implements Vue {
     public JFXTextField nom;
     public JFXTextField capacite;
     private Controlleur controlleur;
+
+    
     public void back(MouseEvent mouseEvent) {
         this.controlleur.lancerPageCentre();
     }

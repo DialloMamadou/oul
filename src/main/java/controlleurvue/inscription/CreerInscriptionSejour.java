@@ -11,6 +11,7 @@ import daos.impl.*;
 import dto.CentreDto;
 import dto.ClientDto;
 import enumerations.Depart;
+import enumerations.Paiement;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +24,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import modele.*;
@@ -54,7 +56,6 @@ public class CreerInscriptionSejour implements Initializable, Vue {
     public Label nom;
     public Label lprenom;
     public Label prenom;
-    public Label lage;
     public Label age;
     public Label lgroupe;
     public Label groupe;
@@ -520,8 +521,20 @@ for(Sejour sejour:liste){
     private void lancerDemandeInscription() {
 
         JFXDialogLayout dialogLayout=new JFXDialogLayout();
-        dialogLayout.setHeading(new Text("ferme"));
-        dialogLayout.setBody(new Text("vous voulez finaliser cette inscription  ?"));
+        dialogLayout.setHeading(new Text("finaliser inscription"));
+      // dialogLayout.getBody().add(new Text("vous voulez finaliser cette inscription  ?"));
+        ComboBox comboBox=new ComboBox();
+        for(Paiement paiement:Paiement.values()){
+            comboBox.getItems().add(paiement);
+        }
+
+
+        VBox vbox=new VBox();
+        vbox.getChildren().add(new Text("vous voulez finaliser cette inscription  ?"));
+        vbox.getChildren().add(comboBox);
+
+        dialogLayout.getBody().add(vbox);
+
 
         JFXButton ok=new JFXButton("ok");
         JFXButton cancel=new JFXButton("annule");
@@ -530,7 +543,8 @@ for(Sejour sejour:liste){
 
         ok.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(javafx.event.ActionEvent event) {
-                enrergistrerInscription();
+                System.out.println("value ="+comboBox.getValue());
+                enrergistrerInscription(comboBox.getValue());
                 dialog.close();
 
             }
@@ -546,7 +560,7 @@ for(Sejour sejour:liste){
     }
 
 
-    public void enrergistrerInscription(){
+    public void enrergistrerInscription(Object value){
         String date=(String)this.date.getValue();
         String[] args = date.split(" au ");
         Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
@@ -561,8 +575,8 @@ for(Sejour sejour:liste){
         int res=inscriptionDao.insererInscription(inscription);
         if(res>0){
 
-           // Evenement evenement=new Evenement(client.id.get(),sejour.id.get(),"paiement inscription",this.accompte.getText(),aujourdhui);
-            //evenementDao.insererEvenement(evenement);
+            Evenement evenement=new Evenement("1",client.groupe.get(),sejour.id.get(),"paiement inscription",this.accompte.getText(),new Date().toString(),value.toString());
+            evenementDao.insererEvenement(evenement);
             Notification.affichageSucces("succes","inscription faite avec succes");
             confirmationInscriptionPDF(client,sejour);
 

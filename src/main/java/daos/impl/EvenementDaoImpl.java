@@ -20,9 +20,7 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
 
     @Override
     public int insererEvenement(Evenement evenement) {
-        if(evenement==null){
-            System.out.println("nul nul nul");
-        }
+
         int res=0;
         String sql="INSERT INTO evenement (codeclient,codesejour,evenementa,somme,dateevenement,methode)VALUES (?,?,?,?,?,?)";
         System.out.println("evenemnt "+sql);
