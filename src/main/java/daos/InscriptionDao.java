@@ -10,12 +10,11 @@ public interface InscriptionDao {
 
     List<Inscription> getInscriptions();
 
-
     int insererInscription(Inscription inscription2);
 
     int supperimerParId(String toString);
 
-    public Inscription getInscritptionParIdInscription(String s) ;
+
     int mettreAjourPaiement(String idInscription,String result);
 
     List<Inscription> getInscriptionsParIdSejour(String s);
@@ -23,4 +22,8 @@ public interface InscriptionDao {
     Inscription getInscriptionsParIdSejourEtIdClient(String text, String s);
 
     List<Inscription> getInscriptiosnParIdClient(int id);
+
+    int nbInscriptionForId(String id);
+
+    Inscription getInscritptionParIdInscription(String text);
 }

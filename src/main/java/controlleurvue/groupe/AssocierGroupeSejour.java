@@ -1,35 +1,31 @@
 package controlleurvue.groupe;
 
 import basededonnee.DBconnexion;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
-import daos.AssociationGroupeSejourDao;
-import daos.CentreDao;
-import daos.GroupeDao;
-import daos.SejourDao;
-import daos.impl.AssociationGroupeSejourDaoImpl;
-import daos.impl.CentreDaoImpl;
-import daos.impl.GroupeDaoImpl;
-import daos.impl.SejourDaoImpl;
+import daos.*;
+import daos.impl.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import modele.*;
 import notification.Notification;
 import principale.Controlleur;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
@@ -37,7 +33,7 @@ import java.util.function.Predicate;
 public class AssocierGroupeSejour implements Vue, Initializable {
 
 
-
+    public StackPane stackepane;
     public JFXTreeTableView sejour;
     public JFXTextField chercherSejour;
     public JFXTextField chercherGroupe;
@@ -46,6 +42,8 @@ public class AssocierGroupeSejour implements Vue, Initializable {
     public Label type;
     public Label lgroupe;
     public Label centre;
+    public int capaciteCentre;
+
     public Label prix;
     public Label id;
     public Label date;
@@ -63,7 +61,9 @@ public class AssocierGroupeSejour implements Vue, Initializable {
     private GroupeDao groupeDao;
     private SejourDao sejourDao;
     private AssociationGroupeSejourDao associationGroupeSejourDao;
-    
+
+    private InscriptionDao inscriptionDao;
+    private ReservationDao reservationDao;
     
     @Override
     public void setController(Controlleur controller) {
@@ -78,20 +78,81 @@ public class AssocierGroupeSejour implements Vue, Initializable {
     }
 
     public void validerAssociation(MouseEvent mouseEvent) {
-        if(this.prixfixe.getText()!="" && this.lduree.getText()!="" && this.lnomGroupe.getText()!="" && this.nbplace.getText()!=""){
-            Associationgroupesejour associationgroupesejour=new Associationgroupesejour(this.prixfixe.getText(),this.idgroupe.getText(),this.id.getText(),this.nbplace.getText());
 
-            int res=associationGroupeSejourDao.inserrerAssociation(associationgroupesejour);
-            if(res==0){
-                Notification.affichageSucces("echec","L ajout de l association n a pu se faire ");
+        System.out.println("##################Clic bouton Valider######################\n");
+
+        if (!this.prixfixe.getText().isEmpty() && !this.lduree.getText().isEmpty() && !this.lnomGroupe.getText().isEmpty() && !this.nbplace.getText().isEmpty()) {
+
+            int nbTotalResev_Insc =0;
+
+            List<String> listeIdSejour = associationGroupeSejourDao.testCapaciteCentre(this.id.getText());
+
+            for (String id:listeIdSejour){
+                System.out.println("id sejour MCD :"+id);
+                int nb0 = associationGroupeSejourDao.nbReservationGroupSejourForId(id);
+                int nb1 = reservationDao.nbReservationForId(id);
+                int nb2 = inscriptionDao.nbInscriptionForId(id);
+                nbTotalResev_Insc+=nb1+nb2+nb0;
+            }
+
+            if (Integer.parseInt(this.nbplace.getText())+nbTotalResev_Insc > this.capaciteCentre) {
+                int dif =this.capaciteCentre - nbTotalResev_Insc;
+                System.out.println("nbPlace="+Integer.parseInt(this.nbplace.getText())+"; nbResev_Insc="+ nbTotalResev_Insc +"; CapCentre="+this.capaciteCentre);
+                JFXDialogLayout dialogLayout = new JFXDialogLayout();
+                dialogLayout.setHeading(new Text("Attention !"));
+                if (dif < 0) {
+                    dialogLayout.setBody(new Text("Vous souhaitez inscrire " + this.nbplace.getText() + " client(s) alors que vous avez dejà depassé la capacite total du centre ( " + this.capaciteCentre +
+                            " places) de " +(-1)*dif+ " places \npour tous les sejours ne finissants pas avant la date du debut de ce sejour y compris ce sejour.\nVoulez vous quand meme valider ?"));
+                }else {
+                    dialogLayout.setBody(new Text("Vous souhaitez inscrire "+this.nbplace.getText()+" clients alors qu'il ne vous reste plus que "
+                            +dif+" places sur la capacite du centre de "+this.capaciteCentre +" \n"+
+                            "pour tous les sejours ne finissants pas avant la date du debut de ce sejour y compris ce sejour.\nVoulez vous quand meme valider ?"));
+                }
+                JFXButton ok = new JFXButton("oui");
+                JFXButton cancel = new JFXButton("non");
+
+                final JFXDialog dialog = new JFXDialog(stackepane, dialogLayout, JFXDialog.DialogTransition.CENTER);
+
+                ok.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(javafx.event.ActionEvent event) {
+                        creerAssociationGroupeSejour();
+
+                        dialog.close();
+
+
+                    }
+                });
+                cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+                    public void handle(javafx.event.ActionEvent event) {
+                        dialog.close();
+
+                    }
+                });
+                dialogLayout.setActions(ok, cancel);
+                dialog.show();
+            }else {
+                creerAssociationGroupeSejour();
+            }
 
             }else{
-                Notification.affichageSucces("succes insertion","l  association entre groupe sejour a ete fait");
+            Notification.affichageEchec("Donnees manquantes","veuillez saisir le(s) champ(s) vide(s) ");
             }
-        }else{
-            Notification.affichageEchec("donnees manquantes","veuillez saisir un prix , un sejour et un groupe");
-        }
+        System.out.println("##################fin bouton Valider######################\n");
 
+    }
+    public void creerAssociationGroupeSejour() {
+
+        Associationgroupesejour associationgroupesejour = new Associationgroupesejour(this.prixfixe.getText(), this.idgroupe.getText(), this.id.getText(), this.nbplace.getText());
+
+        int res =0;
+        res = associationGroupeSejourDao.inserrerAssociation(associationgroupesejour);
+        if (res == 0) {
+            Notification.affichageSucces("echec", "L ajout de l association n a pu se faire ");
+
+        } else {
+            Notification.affichageSucces("succes insertion", "l  association entre groupe sejour a ete fait");
+            this.controlleur.lancerPageAssocierSejourGroupe();
+        }
     }
 
 
@@ -101,6 +162,8 @@ public class AssocierGroupeSejour implements Vue, Initializable {
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         associationGroupeSejourDao=new AssociationGroupeSejourDaoImpl(DBconnexion.getConnection());
+        reservationDao=new ReservationDaoImpl(DBconnexion.getConnection());
+        inscriptionDao= new InscriptionDaoImpl(DBconnexion.getConnection());
         genererLesSejours();
         genererLesGroupes();
     }
@@ -294,6 +357,8 @@ public class AssocierGroupeSejour implements Vue, Initializable {
             Sejour sejour =sejourDao.getSejourParId(this.id.getText());
             Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
             this.centre.setText(centre.nom_centre.get());
+            this.capaciteCentre= Integer.parseInt(centre.capacite_centre.get());
+            System.out.println("capacite_centre="+this.capaciteCentre);
 
             this.date.setText(newValue.getValue().date_debut.get()+" "+newValue.getValue().date_fin.get());
             date.setStyle("-fx-font-weight: bold");

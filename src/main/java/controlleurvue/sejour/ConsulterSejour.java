@@ -74,7 +74,6 @@ public class ConsulterSejour implements Initializable, Vue {
     public JFXRadioButton tous;
     public JFXRadioButton regle;
     public JFXRadioButton retard;
-    public Label refsejour;
 
     /**
      * Initializes the controller class.
@@ -349,7 +348,6 @@ public class ConsulterSejour implements Initializable, Vue {
             this.lsejour.setText(newValue.getValue().type.get());
             this.ldate.setText(newValue.getValue().date_debut.get() + " au " + newValue.getValue().date_fin.get());
             this.idsejour.setText(newValue.getValue().id.get());
-            this.refsejour.setText(newValue.getValue().refSejour.get());
             RemplirClientSejour(newValue.getValue());
 
         }
@@ -631,27 +629,33 @@ public class ConsulterSejour implements Initializable, Vue {
         Document doc = new Document();
 
         try {
-            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/DocCentre.pdf"));
+            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/"+sejour.nom_centre.get()+".pdf"));
             doc.open();
 
             //Add Image
             Image img = Image.getInstance("src/main/resources/img/oul.jpg");
             //Fixed Positioning
-            img.setAbsolutePosition(30f, 700f);
+            img.setAbsolutePosition(25f, 750f);
             //Scale to new height and new width of image
-            img.scaleAbsolute(100, 100);
+            img.scaleAbsolute(80, 80);
             //Add to document
             doc.add(img);
             //doc.add(Chunk.SPACETABBING);
-            doc.add(new Paragraph("\n\n\n\n\n"));
-            Font font = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD);
+            doc.add(new Paragraph("\n\n"));
+            Font font = FontFactory.getFont(FontFactory.HELVETICA, 9, Font.BOLD);
             font.setColor(BaseColor.BLUE);
+            Font font1 =FontFactory.getFont(FontFactory.HELVETICA, 10);
+            font1.setColor(BaseColor.BLUE);
+
+            Font font0 =FontFactory.getFont(FontFactory.HELVETICA, 8);
+
+            Font font2 =FontFactory.getFont(FontFactory.HELVETICA, 10);
+
 
             doc.add(new Phrase("ŒUVRE UNIVERSITAIRE DU LOIRET\n",font));
-            doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61"+
-                    "\n"+"siege.asso@ouloiret.fr\n www.ouloiret.fr \nSIRET : 77550821100072 \nAPE : 552 E"));
-
-            //doc.add(new Paragraph("\n\n\n\n\n\n"));
+            doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61\n",font0));
+            doc.add(new Phrase("siege.asso@ouloiret.fr\nwww.ouloiret.fr \n",font1));
+            doc.add(new Phrase("SIRET : 77550821100072 \nAPE : 552 E",font0));
 
             Paragraph pCentre = new Paragraph("CENTRE"+"    " +centre.nom_centre.get()+" avec capacite "+centre.capacite_centre.get());
             Paragraph pdateSejour = new Paragraph("DATES DU SEJOUR"+"     "+ldate.getText());
@@ -669,7 +673,7 @@ public class ConsulterSejour implements Initializable, Vue {
             doc.add(new Paragraph(" "));
 
 
-            PdfPTable table = new PdfPTable(4);
+            PdfPTable table = new PdfPTable(8);
             table.setWidthPercentage(100);
 
             PdfPCell cell;
@@ -689,11 +693,30 @@ public class ConsulterSejour implements Initializable, Vue {
             cell.setBackgroundColor(BaseColor.GRAY);
             table.addCell(cell);
 
+            cell = new PdfPCell(new Phrase("date de nais", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
             cell = new PdfPCell(new Phrase("groupe", FontFactory.getFont("Comic Sans MS", 12)));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBackgroundColor(BaseColor.GRAY);
             table.addCell(cell);
 
+            cell = new PdfPCell(new Phrase("adresse", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("code postale", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("observation", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -711,7 +734,23 @@ public class ConsulterSejour implements Initializable, Vue {
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
 
+                cell = new PdfPCell(new Phrase(client.datenaissance.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
                 cell = new PdfPCell(new Phrase(client.groupe.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(client.adresse.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(client.codePostale.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(client.observation.get(), FontFactory.getFont("Arial", 12)));
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
             }
@@ -726,10 +765,10 @@ public class ConsulterSejour implements Initializable, Vue {
     }
 
 
-
     public void envoieEmail(MouseEvent mouseEvent) {
         Email.idclient="-1";
         Email.idSejour=this.idsejour.getText();
+        Notification.affichageSucces("ici","ici");
         System.out.println("id sejour "+this.idsejour.getText());
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();

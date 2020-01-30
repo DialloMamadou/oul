@@ -246,4 +246,27 @@ return x;
         return liste;    }
 
 
+    public int  nbInscriptionForId(String id) {
+        System.out.println("id sejour inscr"+id);
+
+        int nbInsc=0;
+        String sql="SELECT COUNT(*) FROM inscription WHERE id_sejour ='"+id+"'";
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()) {
+                System.out.println("Count nb sejour dans inscription pour id:" + id + " = " + rs.getInt(1));
+                nbInsc = rs.getInt(1);
+            }
+            return nbInsc;
+
+        }catch (Exception e){
+
+        }
+        return nbInsc;
+
+    }
+
+
 }

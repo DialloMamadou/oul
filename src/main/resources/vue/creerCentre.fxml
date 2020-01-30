@@ -11,7 +11,6 @@
 <?import javafx.scene.text.Font?>
 
 
-
 <StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.centre.CreerCentre">
     <children>
         <AnchorPane prefHeight="730.0" prefWidth="1366.0">
@@ -33,7 +32,7 @@
                         <Image url="@../img/010-home.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="27.0" layoutY="267.0" text="capacite">
+                  <Label layoutX="27.0" layoutY="267.0" text="Capacite">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

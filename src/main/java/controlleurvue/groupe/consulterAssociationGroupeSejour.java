@@ -265,81 +265,110 @@ evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
         this.controlleur.ajouterEnfantMairie(this.nomgroupe.getText(),this.idsejour.getText(),this.idassoc.getText());
     }
 
+
     public void paiement(MouseEvent mouseEvent) {
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("paiement");
+        if (this.idsejour.getText().isEmpty()){
+            Notification.affichageEchec("Message", "Veuillez selectionner un sejour(un groupe) SVP  ");
+        }else {
+            Dialog<Pair<String, String>> dialog = new Dialog<>();
+            dialog.setTitle("paiement");
 
-        // Set the button types.
-        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+            // Set the button types.
+            ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(20, 10, 10, 10));
+            GridPane gridPane = new GridPane();
+            gridPane.setHgap(10);
+            gridPane.setVgap(10);
+            gridPane.setPadding(new Insets(20, 10, 10, 10));
 
-        Label label=new Label("somme paye");
-        Label label2=new Label("methode");
+            Label label = new Label("somme paye");
+            Label label2 = new Label("methode");
 
-        TextField from = new TextField();
-        from.setPromptText("From");
-        TextField to = new TextField();
-        to.setPromptText("To");
+            TextField from = new TextField();
+            from.setPromptText("From");
+            TextField to = new TextField();
+            to.setPromptText("To");
 
-        ComboBox comboBox=new ComboBox();
-        for(Paiement paiement:Paiement.values()){
-            comboBox.getItems().add(paiement);
+            ComboBox comboBox = new ComboBox();
+            for (Paiement paiement : Paiement.values()) {
+                comboBox.getItems().add(paiement);
+
+            }
+    /*        gridPane.add(from, 0, 0);
+            gridPane.add(new Label("To:"), 1, 0);
+            gridPane.add(to, 2, 0);
+            gridPane*/
+            gridPane.add(label, 0, 0);
+            gridPane.add(from, 1, 0);
+            gridPane.add(comboBox, 1, 3);
+            gridPane.add(label2, 0, 3);
+
+
+            dialog.getDialogPane().setContent(gridPane);
+
+            // Request focus on the username field by default.
+            Platform.runLater(() -> from.requestFocus());
+
+            // Convert the result to a username-password-pair when the login button is clicked.
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == loginButtonType) {
+                    try {
+                        Pair<String, String> p = new Pair<>(from.getText(), comboBox.getValue().toString());
+                        if (from.getText().isEmpty() || comboBox.getValue().toString().isEmpty()){
+                            Notification.affichageEchec("Message d'erreur", "Veuillez saisir le(s) champs vide(s)");
+                            //dialog.close();
+                            paiement(mouseEvent);
+                        }else {
+                            try {
+                                int mt = Integer.parseInt(from.getText());
+                                if (mt <=0){
+                                    Notification.affichageEchec("Message d'erreur", "Le montant doit etre supperieur à 0");
+                                    paiement(mouseEvent);
+                                }else
+                                    return p;
+                            }catch (NumberFormatException e){
+                                Notification.affichageEchec("Message d'erreur", "Veuillez saisir un montant svp");
+                                paiement(mouseEvent);
+                            }
+
+                        }
+                    }catch (NullPointerException e){
+                        Notification.affichageEchec("Champ(s) vide(s)", "Veuillez saisir les champs vides :)");
+                        //dialog.close();
+                        paiement(mouseEvent);
+                    }
+                }
+                return null;
+            });
+
+
+            Optional<Pair<String, String>> result = dialog.showAndWait();
+
+
+            result.ifPresent(pair -> {
+                System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
+
+
+                System.out.println(" groupe " + idgroupe);
+                System.out.println(" sejour " + idsejour);
+
+                PaiementMarie paiementMarie = new PaiementMarie(String.valueOf(idgroupe.getText()), pair.getKey(), String.valueOf(idsejour.getText()), pair.getValue());
+                String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+                int res = paiementMairieDao.inserrerPaiement(paiementMarie);
+                Evenement_Mairie evenement_mairie = new Evenement_Mairie(idgroupe.getText(), idsejour.getText(), "paiement_mairie", pair.getKey(),
+                        aujourdhui, pair.getValue());
+                evenementMairieDao.insererEvenement(evenement_mairie);
+                if (res != 0) {
+                    Notification.affichageSucces("succes", "le paiement a bien ete pris en compte");
+                }
+            });
+
         }
-/*        gridPane.add(from, 0, 0);
-        gridPane.add(new Label("To:"), 1, 0);
-        gridPane.add(to, 2, 0);
-        gridPane*/
-gridPane.add(label,0,0);
-gridPane.add(from,1,0);
-gridPane.add(comboBox,1,3);
-        gridPane.add(label2,0,3);
-
-
-        dialog.getDialogPane().setContent(gridPane);
-
-        // Request focus on the username field by default.
-        Platform.runLater(() -> from.requestFocus());
-
-        // Convert the result to a username-password-pair when the login button is clicked.
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
-                return new Pair<>(from.getText(), comboBox.getValue().toString());
-            }
-            return null;
-        });
-
-
-
-        Optional<Pair<String, String>> result = dialog.showAndWait();
-
-        result.ifPresent(pair -> {
-            System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
-
-
-            System.out.println(" groupe "+idgroupe);
-            System.out.println(" sejour "+idsejour);
-            PaiementMarie paiementMarie=new PaiementMarie(String.valueOf(idgroupe.getText()),pair.getKey(),String.valueOf(idsejour.getText()),pair.getValue());
-            String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-
-            int res=paiementMairieDao.inserrerPaiement(paiementMarie);
-            Evenement_Mairie evenement_mairie=new Evenement_Mairie(idgroupe.getText(),idsejour.getText(),"paiement_mairie",pair.getKey(),
-                    aujourdhui,pair.getValue());
-            evenementMairieDao.insererEvenement(evenement_mairie);
-            if(res!=0){
-                Notification.affichageSucces("succes","le paiement a bien ete pris en compte");
-            }
-        });
-
-
 
 
     }
-
 
     private void annulerReservation(MouseEvent mouseEvent, JFXDialog dialog) {
     }
@@ -348,15 +377,7 @@ gridPane.add(comboBox,1,3);
         this.controlleur.lancerHistoriquePaiementGroupeSejour(idsejour,idgroupe);
     }
 
-    public void listeinscrit(MouseEvent mouseEvent) {
-        ListeInscrit.assoc_id=this.idassoc.getText();
-        ListeInscrit.id_sejour=this.idsejour.getText();
-        ListeInscrit.id_groupe=this.idgroupe.getText();
-        System.out.println("reste a payer "+resteapayer1.getText());
-        ListeInscrit.reste=this.resteapayer1.getText();
-        this.controlleur.lancerListeInscritSejourGroupe();
 
-    }
 
     public void supprimer(MouseEvent mouseEvent) {
 
@@ -382,6 +403,7 @@ gridPane.add(comboBox,1,3);
     }
 
     private void annulerFinal(JFXDialog dialog) {
+
         int res=associationGroupeSejourDao.supprimerById(this.idassoc.getText());
         if (res > 0) {
             Notification.affichageSucces("succes", "association supprimer avec succes");
@@ -395,5 +417,20 @@ gridPane.add(comboBox,1,3);
 
 
         }
+
+    }
+
+    public void listeinscrit(MouseEvent mouseEvent) {
+        if (this.idsejour.getText().isEmpty()){
+            Notification.affichageEchec("Message", "Veuillez selectionner un sejour(un groupe) SVP  ");
+        }else {
+            ListeInscrit.assoc_id = this.idassoc.getText();
+            ListeInscrit.id_sejour = this.idsejour.getText();
+            ListeInscrit.id_groupe = this.idgroupe.getText();
+            System.out.println("reste a payer " + resteapayer1.getText());
+            ListeInscrit.reste = this.resteapayer1.getText();
+            this.controlleur.lancerListeInscritSejourGroupe();
+        }
+
     }
 }

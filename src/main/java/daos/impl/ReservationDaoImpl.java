@@ -24,7 +24,6 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
         super(connection);
     }
 
-
     @Override
     public List<Reservation> getReservations() {
         String sql="SELECT * FROM reservation";
@@ -161,5 +160,28 @@ Reservation reservation=null;
         }
 
         return reservation;
+    }
+
+    @Override
+    public int nbReservationForId(String id) {
+        System.out.println("id sejour reserv"+id);
+
+        int nbReserv=0;
+        String sql="SELECT COUNT(*) FROM reservation WHERE id_sejour ='"+id+"'";
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()) {
+                System.out.println("Count nb sejour dans reservation pour id:" + id + " = " + rs.getInt(1));
+                nbReserv = rs.getInt(1);
+            }
+            return nbReserv;
+
+        }catch (Exception e){
+
+        }
+        return nbReserv;
+
     }
 }
