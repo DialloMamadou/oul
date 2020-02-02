@@ -123,4 +123,33 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
         return list;
     }
 
+    @Override
+    public GroupeSejourClient getSejrGrpClient(String id_groupe, String id_sejour,String id_client) {
+        GroupeSejourClient gsc=null;
+        String sql="SELECT * FROM groupe_sejour_client where id_groupe ='"+id_groupe+"' AND id_sejour='"+id_sejour+
+                 "' AND id_client='"+id_client;
+
+
+
+        Connection connection= DBconnexion.getConnection();
+        try {
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+
+            ps.setString(1,id_groupe);
+            ps.setString(2,id_sejour);
+            ps.setString(3,id_client);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                gsc=new GroupeSejourClient(rs.getString(1),rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5));
+
+            }
+            return gsc;
+        }catch (Exception e){
+
+        }
+        return null;
+    }
+
 }

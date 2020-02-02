@@ -39,11 +39,12 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             ps.setString(2,sejour.date_debut.get());
             ps.setString(3, sejour.date_fin.get());
             ps.setString(4, sejour.type.get());
+            ps.setString(5,sejour.nom_centre.get() );
             ps.setString(6,sejour.prix.get() );
             ps.setString(7,sejour.ageMin.get() );
             ps.setString(8,sejour.ageMax.get() );
             ps.setString(9,sejour.capacite.get() );
-            ps.setString(5,sejour.nom_centre.get() );
+
 
 
 

@@ -2,6 +2,7 @@ package daos;
 
 import modele.Centre;
 import modele.Client;
+import sun.misc.Cleaner;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface ClientDao {
     Client getClientParNomPrenomAnneeNaissance(String text, String text1, String text2);
 
     Client getClientParNomEtPrenom(String arg, String arg1);
+
+    Client getClient(String nom , String prenom, String dN, String idGrp);
 }
