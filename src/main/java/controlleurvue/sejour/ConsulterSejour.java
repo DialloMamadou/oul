@@ -74,6 +74,7 @@ public class ConsulterSejour implements Initializable, Vue {
     public JFXRadioButton tous;
     public JFXRadioButton regle;
     public JFXRadioButton retard;
+    public Label refsejour;
 
     /**
      * Initializes the controller class.
@@ -401,6 +402,8 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
     public void RemplirClientSejour(Sejour value) {
+        Sejour sejour=sejourDao.getSejourParId(idsejour.getText());
+        this.refsejour.setText(sejour.refSejour.get());
         System.out.println("on remplit liste");
         List<Inscription>listeInscription=this.inscriptionDao.getInscriptionsParIdSejour(value.id.get());
         List<Client>listeClient=new ArrayList<>();
