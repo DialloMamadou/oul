@@ -198,13 +198,11 @@ return x;
         String sql="SELECT * FROM inscription WHERE id_sejour ='"+id_sejour+"' AND code_client="+code_client;
         Inscription inscription =null;
 
-        Notification.affichageSucces("voici la requete ",sql);
 
 
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
-            Notification.affichageSucces(" trouve ",sql);
 
             while(rs.next()){
 

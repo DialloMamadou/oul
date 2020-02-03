@@ -32,7 +32,6 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
 
         int []tab=new int[2];
-        Notification.affichageSucces("numero ",client.numero.get());
         ResultSet ress=null;
         int res=0;
         try {
