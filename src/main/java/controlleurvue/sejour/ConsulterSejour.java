@@ -456,6 +456,7 @@ public class ConsulterSejour implements Initializable, Vue {
         }
 
 
+
         final TreeItem<Client> root = new RecursiveTreeItem<Client>(clients, RecursiveTreeObject::getChildren);
 
         listeClientSejour.getColumns().setAll(idclient, nomclient,prenomclient);
