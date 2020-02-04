@@ -7,7 +7,6 @@ import javafx.beans.property.StringProperty;
 public class Client extends RecursiveTreeObject<Client> {
 
 
-
     public StringProperty id;
     public StringProperty nom_client;
     public  StringProperty prenom_client;

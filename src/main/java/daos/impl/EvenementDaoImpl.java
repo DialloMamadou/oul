@@ -17,12 +17,13 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
         super(conn);
     }
 
-
     @Override
     public int insererEvenement(Evenement evenement) {
-
+        if(evenement==null){
+            System.out.println("nul nul nul");
+        }
         int res=0;
-        String sql="INSERT INTO evenement (codeclient,codesejour,evenementa,somme,dateevenement,methode)VALUES (?,?,?,?,?,?)";
+        String sql="INSERT INTO evenement (codeclient,codesejour,evenementa,somme,dateevenement)VALUES (?,?,?,?,?)";
         System.out.println("evenemnt "+sql);
 
         try {
@@ -35,7 +36,6 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
             ps.setString(4,evenement.somme);
             System.out.println("somme "+evenement.somme);
             ps.setString(5,evenement.dateEvent);
-            ps.setString(6,evenement.methode);
 
 
             res=ps.executeUpdate();

@@ -131,7 +131,6 @@ public class CentreDaoImpl extends Dao<Centre> implements CentreDao {
 
     }
 
-
     @Override
     public int mettreAjourCentre(String id, Centre centre)  {
 

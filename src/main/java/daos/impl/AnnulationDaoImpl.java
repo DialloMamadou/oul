@@ -23,7 +23,6 @@ public class AnnulationDaoImpl extends Dao<Annulation> implements AnnulationDao 
 
 
 
-
     @Override
     public int insererAnnulation(Annulation annulation) {
         int res=0;

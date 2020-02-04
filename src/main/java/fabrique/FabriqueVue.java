@@ -28,7 +28,6 @@ public class FabriqueVue{
         private Stage stage;
         private Controlleur controlleur;
 
-
         public FabriqueVue(Stage stage, Controlleur controller){
             this.stage = stage;
             this.controlleur = controller;
@@ -238,6 +237,12 @@ public class FabriqueVue{
 
     public void lancerListeSejourClient() {
         load(ListeInscrit.class.getResource("/vue/listeInscritSejour.fxml")," associer groupe sejour");
+
+    }
+
+    public void splashWindow() {
+
+        load(Loginscreen.class.getResource("/vue/splash.fxml"), "Chargement ...");
 
     }
 }

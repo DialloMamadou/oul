@@ -11,7 +11,6 @@ public class Inscription extends RecursiveTreeObject<Inscription> {
     private String triche2="";
 
 
-
     public StringProperty id;
     public StringProperty paiement;
     public StringProperty  dateinscription;

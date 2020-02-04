@@ -7,22 +7,6 @@ public class Evenement {
     public String event;
     public String somme;
     public String dateEvent;
-    public String methode;
-
-
-
-    public Evenement(String id, String codeclient, String codesejour, String event, String somme, String date
-    ,String methode) {
-        this.id = id;
-        this.codeclient = codeclient;
-        this.codesejour = codesejour;
-        this.event = event;
-        this.somme = somme;
-        this.dateEvent = date;
-        this.methode=methode;
-    }
-
-/*
 
     public Evenement(String id, String codeclient, String codesejour, String event, String somme, String date) {
         this.id = id;
@@ -43,7 +27,6 @@ public class Evenement {
         this.somme = somme;
         this.dateEvent = date;
     }
-*/
 
     public Evenement() {
 

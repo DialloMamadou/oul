@@ -14,7 +14,6 @@ public class InscriptionScreen implements Vue {
     public Pane pane_111;
     public Pane pane_21;
 
-
     private Controlleur controlleur;
 
 

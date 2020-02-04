@@ -70,7 +70,6 @@ public class ConsulterAnnulation implements Initializable, Vue {
     private JFXTextField search_text;
 
 
-
     @FXML
     private StackPane stackepane;
 
@@ -93,7 +92,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
 
 
     public JFXTreeTableColumn<Annulation,String> geenererIdSejour(){
-        JFXTreeTableColumn<Annulation,String> inscription_paiement=new JFXTreeTableColumn<>("type sejour");
+        JFXTreeTableColumn<Annulation,String> inscription_paiement=new JFXTreeTableColumn<>("depart");
         inscription_paiement.setPrefWidth(100);
         inscription_paiement.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
             @Override
@@ -375,7 +374,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
 
                 Notification.affichageSucces("annulation","l annulation a bien ete effectue");
                 Evenement evenement=new Evenement("1",this.lidclient.getText(),this.lidsejour.getText(),
-                        "annulation","0",new Date().toString(),"annultation");
+                        "annulation","0",new Date().toString());
                 evenementDao.insererEvenement(evenement);
                 int bis=reservationDao.supprimerParId(this.idinscription.getText());
                 this.chargertouslesinscriptions();

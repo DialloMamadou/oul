@@ -7,7 +7,6 @@ import javafx.beans.property.StringProperty;
 public class Groupe  extends RecursiveTreeObject<Groupe> {
 
 
-
     public StringProperty id;
     public StringProperty nom_groupe;
 

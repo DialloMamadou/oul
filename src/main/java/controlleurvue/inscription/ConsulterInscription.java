@@ -8,8 +8,6 @@ import daos.*;
 import daos.impl.*;
 import dto.CentreDto;
 import dto.ClientDto;
-import enumerations.Paiement;
-import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,21 +17,20 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import javafx.util.Pair;
 import modele.*;
 import notification.Notification;
 import principale.Controlleur;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -354,86 +351,31 @@ public class ConsulterInscription implements Initializable, Vue {
     public void EditerCentre(MouseEvent mouseEvent) {
     }
 
-
     public void paiement(MouseEvent mouseEvent) {
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("paiement");
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("barre de paiement");
+        dialog.setHeaderText("mettre a jour paiement ");
+        dialog.setContentText("somme paye:");
 
-        // Set the button types.
-        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+// Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
 
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(20, 10, 10, 10));
+            int x = inscriptionDao.mettreAjourPaiement(this.idinscription.getText(), result.get());
+            if (x != 0) {
+                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "paiement-reservation", result.get(), new Date().toString());
+                evenementDao.insererEvenement(evenement);
+                String s = this.lreste.getText();
+                System.out.println("valeur paye " + s);
+                System.out.println("valeur vient paye " + result.get());
+                int valeur = Integer.parseInt(s) - Integer.parseInt(result.get());
+                System.out.println("valeur valeur = " + valeur);
+                this.lreste.setText(String.valueOf(valeur));
+                genererBis();
 
-        Label label=new Label("somme paye");
-        Label label2=new Label("methode");
 
-        TextField from = new TextField();
-        from.setPromptText("From");
-        TextField to = new TextField();
-        to.setPromptText("To");
-
-        ComboBox comboBox=new ComboBox();
-        for(Paiement paiement:Paiement.values()){
-            comboBox.getItems().add(paiement);
+            }
         }
-
-        gridPane.add(label,0,0);
-        gridPane.add(from,1,0);
-        gridPane.add(comboBox,1,3);
-        gridPane.add(label2,0,3);
-
-
-        dialog.getDialogPane().setContent(gridPane);
-
-        // Request focus on the username field by default.
-        Platform.runLater(() -> from.requestFocus());
-
-        // Convert the result to a username-password-pair when the login button is clicked.
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
-                return new Pair<>(from.getText(), comboBox.getValue().toString());
-            }
-            return null;
-        });
-
-
-
-        Optional<Pair<String, String>> result = dialog.showAndWait();
-
-        result.ifPresent(pair -> {
-
-            Evenement evenement=new Evenement("1",this.idclient.getText(),this.idsejour.getText(),"paiement",pair.getKey(),
-                    new Date().toString().toString(),pair.getValue().toString());
-            int res=evenementDao.insererEvenement(evenement);
-            if(res==0){
-
-                Notification.affichageEchec("echec ","la paiement n a pas ete pris en comtpe");
-
-            }else{
-                Notification.affichageSucces("succes ","la paiement a ete pris en comtpe");
-                int rest=Integer.parseInt(this.lreste.getText());
-                int somme=Integer.parseInt(pair.getKey());
-                System.out.println("reste "+rest);
-                System.out.println("somme "+somme);
-
-                Inscription inscription=inscriptionDao.getInscritptionParIdInscription(idinscription.getText());
-
-                System.out.println("paiement actuelle "+inscription.paiement.get());
-                int paiementActuelle=Integer.parseInt(inscription.paiement.get());
-
-                int sommetotal=somme+paiementActuelle;
-                System.out.println("id inscription = "+idinscription.getText());
-                int sommef=rest+somme;
-                inscriptionDao.mettreAjourPaiement(idinscription.getText(),pair.getKey());
-                this.chargertouslesinscriptions();
-               // inscriptionDao.mettreAjourPaiement(idinscription.getText(),String.valueOf(x));
-            }
-
-        });
     }
 
 
@@ -524,7 +466,7 @@ public class ConsulterInscription implements Initializable, Vue {
 
             }else{
 
-                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "annulation inscription",String.valueOf(0), new Date().toString(),"aucune");
+                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "annulation inscription",String.valueOf(0), new Date().toString());
                 evenementDao.insererEvenement(evenement);
                 Notification.affichageSucces("annulation","l annulation a bien ete effectue");
                 int bis=inscriptionDao.supperimerParId(this.idinscription.getText());

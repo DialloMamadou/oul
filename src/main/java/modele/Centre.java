@@ -7,7 +7,6 @@ import javafx.beans.property.StringProperty;
 public class Centre extends RecursiveTreeObject<Centre> {
 
 
-
     public StringProperty id;
     public StringProperty nom_centre;
     public StringProperty capacite_centre;
