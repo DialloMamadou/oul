@@ -35,6 +35,7 @@ public class Email implements Initializable ,Vue{
    public static String idSejour;
 
 
+
     public JFXTextField sujet;
     public JFXTextArea message;
     public StackPane pane;

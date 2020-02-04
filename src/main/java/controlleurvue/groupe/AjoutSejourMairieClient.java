@@ -103,8 +103,8 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
 
         this.dD = sejour.date_debut.get();
         this.dF = sejour.date_fin.get();
-        this.aMax = Integer.parseInt(sejour.ageMin.get());
-        this.aMin = Integer.parseInt(sejour.ageMax.get());
+        this.aMin = Integer.parseInt(sejour.ageMin.get());
+        this.aMax = Integer.parseInt(sejour.ageMax.get());
 
         this.date.setText(dD+" "+dF);
         this.sejour.setText(sejour.type.get());
@@ -131,81 +131,55 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
             String poste=this.poste.getText();
             System.out.println("poste =="+poste);
             String dateNaissance=this.annee.getValue().toString();
-            if (!nom.isEmpty() && !prenom.isEmpty() && !portable.isEmpty() && !adresse.isEmpty() && !poste.isEmpty() && !dateNaissance.isEmpty()) {
+            //lml;
+            controleDate(dateNaissance,this.dD, this.dF);
 
-                if (controleDate(dateNaissance, this.dD, this.dF)) {
-                    if (isEmailAdress(email)){
-                        if (isCodePostale(poste)){
-                            Client cl = testClientExiste(nom , prenom, dateNaissance, id_group);
-                            if ( cl!= null) {
-                                GroupeSejourClient gsc = testSejourGroupClientExiste(id_group, sejourId, cl.id.get());
-                                if ( gsc == null) {
-                                    Notification.affichageEchec("erreur", "le client est déjà inscrit à ce sejour avec ce groupe ");
-                                } else {
-                                    groupeSejourClientDao.insererGroupeSejourClient(new GroupeSejourClient(id_group, sejourId, cl.id.get(), this.depart.getValue().toString()));
+            Client client=new Client("",nom,prenom,id_group,portable,observation,email,adresse,poste,dateNaissance);
 
-                                    Notification.affichageSucces("succes", "client inscrit à ce sejour avec ce groupe avec succes");
-                                }
-                            }else {
-                                    Client client = new Client("", nom, prenom, id_group, portable, observation, email, adresse, poste, dateNaissance);
+            int[] res=this.clientDao.insererClientMairie(client);
 
-                                    int[] res = this.clientDao.insererClientMairie(client);
+            if(res[0]>0){
+                System.out.println("rows inserer "+res[1]);
+                groupeSejourClientDao.insererGroupeSejourClient(new GroupeSejourClient(id_group,sejourId,String.valueOf(res[1]),this.depart.getValue().toString()));
 
-                                    if (res[0] > 0) {
-                                        System.out.println("rows inserer " + res[1]);
-                                        groupeSejourClientDao.insererGroupeSejourClient(new GroupeSejourClient(id_group, sejourId, String.valueOf(res[1]), this.depart.getValue().toString()));
+               // groupeSejourClientDao.insererGroupeSejourClient(new GroupeSejourClient(id_group,sejourId,))
+                Notification.affichageSucces("succes","client creer avec succes n bjbhj");
 
-                                        // groupeSejourClientDao.insererGroupeSejourClient(new GroupeSejourClient(id_group,sejourId,))
-                                        Notification.affichageSucces("succes", "client creer avec succes");
-                                        //this.controlleur.ajouterEnfantMairie(groupe.nom_groupe.get(), this.sejour.getText(), AjoutSejourMairieClient.assocId);
+            }else{
+                Notification.affichageEchec("erreur","il y a eu une erreur au moment de la creation");
 
-
-                                    } else {
-                                        Notification.affichageEchec("erreur", "il y a eu une erreur au moment de la creation");
-
-                                    }
-                            }
-
-                        }else {
-                            Notification.affichageEchec("erreur","le code poste est incorrect ");
-                        }
-                    }
-                    else {
-                        Notification.affichageEchec("erreur","l'Email est incorrect ");
-                    }
-                }
-                else {
-                    Notification.affichageEchec("echec","l'âge de l'enfant ne lui permet pas de s'inscrire à ce sejour ");
-                }
-
-            } else {
-                Notification.affichageEchec("Problème de donnees", "veuillez saisir de(s) champ(s) non vide(s)");
             }
         }catch (NullPointerException | NumberFormatException e){
-                Notification.affichageEchec("Problème de donnees","veuillez saisir de(s) champ(s) non vide(s)et valide(s) ");
+            Notification.affichageEchec("Problème de donnees","veuillez saisir de(s) champ(s) non vides et valide(s) ");
+
         }
     }
 
-
-
     public boolean controleDate(String dN, String dateDebut, String dateFin){
 
-        long ageD = ChronoUnit.YEARS.between(LocalDate.parse(dN),LocalDate.parse(dateDebut));
-        long ageF = ChronoUnit.YEARS.between(LocalDate.parse(dN),LocalDate.parse(dateFin));
-        System.out.println("dN ="+dN+" dd ="+dateDebut+" df ="+dateFin+" aD ="+ageD+" aF ="+ageF);
+       /* if (ChronoUnit.YEARS.between(LocalDate.parse(dN),LocalDate.parse(dD) >= this.aMin){
 
-        if ( ageD < this.aMin){
-            System.out.println(" aD ="+ageD+" aMin ="+this.aMin+" aMax ="+this.aMax);
+        }*/
 
-            return false;
+        //Boolean b = true;
+        /*
 
-        }else if (ageF > this.aMax){
-            System.out.println(" aD ="+ageD+" aMax ="+this.aMax);
-
-            return false;
-        }else {
-            return true;
+            if(!(dD.after(new Date()))){
+                Notification.affichageEchec("echec","la date du debut est incorrecte");
+                b=false;
+                return b;
+            }else if(!(dF.after(dD))){
+                Notification.affichageEchec("echec","la date de fin doit etre apres celle du debut");
+                b=false;
+                return b;
+            }else{
+                return b;
+            }
+        }catch(ParseException e){
+            Notification.affichageEchec("echec","echec le format de la date incorrect");
         }
+        return b;*/
+       return false;
 
     }
 
@@ -216,19 +190,11 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
         return m.matches();
     }
 
-    public static boolean isCodePostale(String codePostale){
-        Pattern p = Pattern.compile("^(([0-8][0-9])|(9[0-5])|(2[ab]))[0-9]{3}$");
+    public static boolean isCodePostale(String email){
+        Pattern p = Pattern.compile("^(0[1-9]{0,1}|[1-9][0-9]{0,1})[0-9]{0,3}$");
         Matcher m;
-        m = p.matcher(codePostale.toUpperCase());
+        m = p.matcher(email.toUpperCase());
         return m.matches();
-    }
-
-    public Client testClientExiste(String nom , String prenom, String dN, String idGrp){
-        System.out.println("dans testClientExiste");
-        return clientDao.getClient( nom , prenom, dN, idGrp);
-    }
-    public GroupeSejourClient testSejourGroupClientExiste(String id_groupe, String id_sejour,String id_client){
-        return groupeSejourClientDao.getSejrGrpClient(id_groupe, id_sejour,id_client);
     }
 }
     

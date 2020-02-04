@@ -24,4 +24,6 @@ public interface InscriptionDao {
     List<Inscription> getInscriptiosnParIdClient(int id);
 
     int nbInscriptionForId(String id);
+
+    Inscription getInscritptionParIdInscription(String text);
 }
