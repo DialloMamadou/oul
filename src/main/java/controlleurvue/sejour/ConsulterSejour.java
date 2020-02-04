@@ -78,6 +78,9 @@ public class ConsulterSejour implements Initializable, Vue {
     public JFXRadioButton regle;
     public JFXRadioButton retard;
 
+    /**
+     * Initializes the controller class.
+     */
 
     private Controlleur controlleur;
 
