@@ -1,2 +1,5 @@
 .idea/*
-target/
+target/*
+.idea/vcs.xml
+src/main/resources/docs/*
+target/classes/*
