@@ -118,6 +118,7 @@ public class CreerClient  implements Initializable, Vue {
 
                                     if (res > 0) {
                                         Notification.affichageSucces("succes", "client creer avec succes");
+                                        this.controlleur.creerInscription();
                                     } else {
                                         Notification.affichageEchec("erreur", "il y a eu une erreur au moment de la creation");
                                     }

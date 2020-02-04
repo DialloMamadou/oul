@@ -234,6 +234,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
 
             ResultSet rs = ps.executeQuery();
 
+
             while (rs.next()) {
                 Sejour sejour=new Sejour(rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),

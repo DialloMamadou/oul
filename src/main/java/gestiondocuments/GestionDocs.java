@@ -1,5 +1,9 @@
 package gestiondocuments;
 
-public interface GestionDocs {
+import modele.Client;
+import modele.Sejour;
 
+
+public interface GestionDocs {
+    public void genereAttestationFacture(Client client, Sejour sejour);
 }
