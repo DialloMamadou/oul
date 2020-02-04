@@ -10,7 +10,6 @@ public class GroupeSejourClient {
 
 
 
-
     public GroupeSejourClient( String idGroupe, String idSejour, String idClient) {
         this.id = id;
         this.idGroupe = idGroupe;

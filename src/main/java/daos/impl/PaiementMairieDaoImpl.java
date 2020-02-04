@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 public class PaiementMairieDaoImpl extends Dao<Dao> implements PaiementMairieDao {
 
 
-
     public PaiementMairieDaoImpl(Connection conn) {
         super(conn);
     }

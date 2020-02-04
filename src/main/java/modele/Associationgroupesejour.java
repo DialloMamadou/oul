@@ -6,7 +6,6 @@ import javafx.beans.property.StringProperty;
 
 public class Associationgroupesejour extends RecursiveTreeObject<Associationgroupesejour> {
 
-
     public StringProperty id;
     public StringProperty prix_unitaire;
     public StringProperty groupe;

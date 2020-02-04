@@ -13,7 +13,6 @@ public class CentreScreen implements Vue {
     public Pane pane_3;
 
 
-
     private Controlleur controlleur;
 
     public void souris_dessus_1(MouseEvent mouseEvent) {

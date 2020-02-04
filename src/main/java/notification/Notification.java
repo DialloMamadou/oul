@@ -11,7 +11,6 @@ public class Notification {
 
 
 
-
     public static void affichageSucces(String titre,String text){
         Image image=new Image("img/mooo.png");
         Notifications notification=Notifications.create()

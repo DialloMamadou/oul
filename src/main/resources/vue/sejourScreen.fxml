@@ -9,7 +9,6 @@
 
 
 
-
 <StackPane fx:id="stack" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.sejour.SejourScreen">
     <children>
         <AnchorPane prefHeight="730.0" prefWidth="1366.0"  style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">

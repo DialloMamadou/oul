@@ -9,7 +9,6 @@ import principale.Controlleur;
 public class GroupeScreen implements Vue {
 
 
-
     public Pane pane_3;
     public Pane pane_11;
     public Pane pane_111;

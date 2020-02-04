@@ -11,12 +11,11 @@ import modele.Sejour;
 
 public class Controlleur {
 
-
     private FabriqueVue fabriqueVue;
 
     public Controlleur(Stage stage){
         this. fabriqueVue= new FabriqueVue(stage, this);
-        this.fabriqueVue.creerLoginVue();
+        this.fabriqueVue.creerPageAcceuil();//splashWindow();
     }
 
     public void lancerPageAccueil() {

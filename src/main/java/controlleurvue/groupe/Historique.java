@@ -32,7 +32,6 @@ import java.util.ResourceBundle;
 
 public class Historique implements Initializable, Vue {
 
-
     public static  String id_sejour;
     public static  String id_groupe;
 
