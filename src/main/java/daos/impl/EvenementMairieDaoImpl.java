@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 public class EvenementMairieDaoImpl extends Dao<Evenement_Mairie> implements EvenementMairieDao {
 
 
+
     public EvenementMairieDaoImpl(Connection conn) {
         super(conn);
     }

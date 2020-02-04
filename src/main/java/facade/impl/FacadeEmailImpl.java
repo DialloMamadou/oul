@@ -17,6 +17,7 @@ public class FacadeEmailImpl implements facadeEmail {
 
 
 
+
     private static String USER_NAME = "malikabdallah75019";  // GMail user name (just the part before "@gmail.com")
     private static String PASSWORD = "Selamwait04"; // GMail password
     private static String RECIPIENT = "malikabdallah75019@gmail.com";
@@ -30,6 +31,7 @@ public class FacadeEmailImpl implements facadeEmail {
         sendFromGMail(from, pass, too, subject, body,new File(""));
 
     }
+
 
     public FacadeEmailImpl() {
     }

@@ -1,7 +1,9 @@
 package daos.impl;
 
 import com.mysql.jdbc.PreparedStatement;
+
 import com.sun.org.apache.xerces.internal.xs.StringList;
+
 import controlleurvue.centre.CreerCentre;
 import controlleurvue.groupe.AssocierGroupeSejour;
 import daos.AssociationGroupeSejourDao;
@@ -14,7 +16,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import java.util.Date;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +33,8 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
 
     public int inserrerAssociation(Associationgroupesejour associerGroupeSejour) {
         int res=0;
-        String sql="INSERT INTO associationgroupesejour (prix_unitaire,groupe,id_sejour,nbplace) VALUES (?,?,?,?)";
+
+        String sql="INSERT INTO associationgroupesejour (prix_unitaire,groupe,sejour,nbplace) VALUES (?,?,?,?)";
         try {
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1,associerGroupeSejour.prix_unitaire.get());
@@ -106,8 +111,28 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
         return associationgroupesejour;
     }
 
+
+    @Override
+    public int supprimerById(String text) {
+
+        int res=0;
+        String sql="DELETE FROM associationgroupesejour WHERE id=?";
+
+        try {
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ps.setString(1, text);
+
+
+            res=ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return res;
+
+    }
     public List<String> testCapaciteCentre(String id){
-        String sql="SELECT id_sejour FROM sejour WHERE date_fin < (SELECT date_debut FROM `sejour` WHERE id_sejour='"+id+"')";
+        String sql="SELECT id_sejour FROM sejour WHERE date_fin < (SELECT date_debut FROM `sejour` WHERE sejour='"+id+"')";
         List<String> listeId = new ArrayList<>();
         listeId.add(id);
         try{
@@ -129,7 +154,7 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
         System.out.println("=========id sejour reservGroupeSejour "+id+" ==========");
 
         int nbReserv=0;
-        String sql="SELECT SUM(nbplace) FROM associationgroupesejour WHERE id_sejour ='"+id+"'";
+        String sql="SELECT SUM(nbplace) FROM associationgroupesejour WHERE sejour ='"+id+"'";
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
@@ -145,5 +170,4 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
         }
         return nbReserv;
     }
-
 }

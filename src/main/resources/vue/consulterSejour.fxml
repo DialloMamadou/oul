@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
+
 <StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.sejour.ConsulterSejour">
     <children>
         <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
@@ -37,19 +38,19 @@
                                 </JFXButton>
                             </children>
                         </Pane>
-                        <Pane layoutX="9.0" layoutY="346.0" prefHeight="200.0" prefWidth="378.0">
+                        <Pane layoutX="9.0" layoutY="344.0" prefHeight="200.0" prefWidth="378.0">
                             <children>
-                                <JFXButton buttonType="RAISED" layoutX="114.0" layoutY="100.0" onMouseClicked="#genereliste" prefHeight="30.0" prefWidth="162.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Générer la liste" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="40.0" onMouseClicked="#genereliste" prefHeight="30.0" prefWidth="103.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="generer liste" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
-                                <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="40.0" onMouseClicked="#genererattestation" prefHeight="30.0" prefWidth="148.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Générer Attestation/Facture" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="131.0" layoutY="40.0" onMouseClicked="#genereliste" prefHeight="30.0" prefWidth="103.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="convocation" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="235.0" layoutY="40.0" onMouseClicked="#envoieEmail" prefHeight="30.0" prefWidth="123.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Envoyer un mail" textFill="WHITE">
+                        <JFXButton buttonType="RAISED" layoutX="255.0" layoutY="40.0" onMouseClicked="#envoieEmail" prefHeight="30.0" prefWidth="103.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="email" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -127,6 +128,8 @@
                   <JFXRadioButton fx:id="retard" layoutX="9.0" layoutY="309.0" text="retard" />
                   <JFXRadioButton fx:id="regle" layoutX="89.0" layoutY="309.0" prefHeight="17.0" prefWidth="78.0" text="regle" />
                   <JFXRadioButton fx:id="tous" layoutX="155.0" layoutY="309.0" prefHeight="17.0" prefWidth="68.0" text="tous" />
+                  <Label layoutX="159.0" layoutY="271.0" text="ref sejour" />
+                  <Label fx:id="refsejour" layoutX="260.0" layoutY="271.0" prefHeight="17.0" prefWidth="116.0" />
 
 
 

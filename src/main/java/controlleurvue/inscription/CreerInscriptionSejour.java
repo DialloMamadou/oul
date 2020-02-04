@@ -11,6 +11,7 @@ import daos.impl.*;
 import dto.CentreDto;
 import dto.ClientDto;
 import enumerations.Depart;
+import enumerations.Paiement;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +24,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import modele.*;
@@ -54,7 +56,6 @@ public class CreerInscriptionSejour implements Initializable, Vue {
     public Label nom;
     public Label lprenom;
     public Label prenom;
-    public Label lage;
     public Label age;
     public Label lgroupe;
     public Label groupe;
@@ -199,51 +200,6 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
     }
 
-
-    private void chargementCentre() {
-
-        JFXTreeTableColumn<CentreDto,String> type=this.genererCentre();
-        ObservableList<CentreDto> centres = FXCollections.observableArrayList();
-        List<Centre>liste=centreDao.listeCentres();
-        for(Centre centre:liste){
-            centres.add(new CentreDto(centre.nom_centre.get()));
-        }
-        final TreeItem<CentreDto> root = new RecursiveTreeItem<CentreDto>(centres, RecursiveTreeObject::getChildren);
-        vueCentre.getColumns().setAll(type);
-        vueCentre.setRoot(root);
-        vueCentre.setShowRoot(false);
-        optimiserRechercheCentre();
-
-        vueCentre.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
-                ->
-                showCentre(newValue)
-        );
-
-
-
-        /*this.lduree//.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirtemp((String)newItem);
-        });*/
-        this.type.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirtemp((String)newItem);
-            });
-
-        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirDate((String)newItem);
-        });
-
-        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirDepart();
-        });
-
-        this.depart.valueProperty().addListener((obs, oldItem, newItem) -> {
-            remplirPrix();
-        });
-
-
-    }
-
-
     private void optimiserrechercheclient() {
         this.chercheClient.textProperty().addListener(new ChangeListener<String>() {
 
@@ -260,7 +216,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
                                         || t.getValue().prenom_client.getValue().contains(newValue)
                                         || t.getValue().groupe.getValue().contains(newValue)
                                         || t.getValue().datenaissance.getValue().equals(newValue)
-                                        ||t.getValue().id_client.getValue().equals(newValue);
+                                ||t.getValue().id_client.getValue().equals(newValue);
                         ;
                         if(flag)
                             System.out.println("trouve");
@@ -297,6 +253,46 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
 
 
+
+    private void chargementCentre() {
+
+        JFXTreeTableColumn<CentreDto,String> type=this.genererCentre();
+        ObservableList<CentreDto> centres = FXCollections.observableArrayList();
+        List<Centre>liste=centreDao.listeCentres();
+        for(Centre centre:liste){
+            centres.add(new CentreDto(centre.nom_centre.get()));
+        }
+        final TreeItem<CentreDto> root = new RecursiveTreeItem<CentreDto>(centres, RecursiveTreeObject::getChildren);
+        vueCentre.getColumns().setAll(type);
+        vueCentre.setRoot(root);
+        vueCentre.setShowRoot(false);
+        optimiserRechercheCentre();
+
+        vueCentre.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
+                ->
+                showCentre(newValue)
+        );
+
+
+
+        this.type.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirtemp((String)newItem);
+            });
+
+        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirDate((String)newItem);
+        });
+
+        this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirDepart();
+        });
+
+        this.depart.valueProperty().addListener((obs, oldItem, newItem) -> {
+            remplirPrix();
+        });
+
+
+    }
 
     private void optimiserRechercheCentre() {
         this.chercheCentre.textProperty().addListener(new ChangeListener<String>() {
@@ -483,6 +479,7 @@ for(Sejour sejour:liste){
         ok.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(javafx.event.ActionEvent event) {
                 enregistrerReservation();
+
                 dialog.close();
 
             }
@@ -503,7 +500,7 @@ for(Sejour sejour:liste){
         Client client=clientDao.getClientParId(iduser.getText());
         System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
         System.out.println("sejour :"+sejour.type.get()+" "+sejour.capacite.get());
-        String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        String aujourdhui = new SimpleDateFormat("dd-MM-yyyy ").format(new Date());
         String depart=(String)this.depart.getValue().toString();
 
         Reservation reservation=new Reservation( aujourdhui,
@@ -524,8 +521,20 @@ for(Sejour sejour:liste){
     private void lancerDemandeInscription() {
 
         JFXDialogLayout dialogLayout=new JFXDialogLayout();
-        dialogLayout.setHeading(new Text("ferme"));
-        dialogLayout.setBody(new Text("vous voulez finaliser cette inscription  ?"));
+        dialogLayout.setHeading(new Text("finaliser inscription"));
+      // dialogLayout.getBody().add(new Text("vous voulez finaliser cette inscription  ?"));
+        ComboBox comboBox=new ComboBox();
+        for(Paiement paiement:Paiement.values()){
+            comboBox.getItems().add(paiement);
+        }
+
+
+        VBox vbox=new VBox();
+        vbox.getChildren().add(new Text("vous voulez finaliser cette inscription  ?"));
+        vbox.getChildren().add(comboBox);
+
+        dialogLayout.getBody().add(vbox);
+
 
         JFXButton ok=new JFXButton("ok");
         JFXButton cancel=new JFXButton("annule");
@@ -534,7 +543,8 @@ for(Sejour sejour:liste){
 
         ok.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(javafx.event.ActionEvent event) {
-                enrergistrerInscription();
+                System.out.println("value ="+comboBox.getValue());
+                enrergistrerInscription(comboBox.getValue());
                 dialog.close();
 
             }
@@ -550,7 +560,7 @@ for(Sejour sejour:liste){
     }
 
 
-    public void enrergistrerInscription(){
+    public void enrergistrerInscription(Object value){
         String date=(String)this.date.getValue();
         String[] args = date.split(" au ");
         Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
@@ -565,7 +575,7 @@ for(Sejour sejour:liste){
         int res=inscriptionDao.insererInscription(inscription);
         if(res>0){
 
-            Evenement evenement=new Evenement(client.id.get(),sejour.id.get(),"paiement inscription",this.accompte.getText(),aujourdhui);
+            Evenement evenement=new Evenement("1",client.groupe.get(),sejour.id.get(),"paiement inscription",this.accompte.getText(),new Date().toString(),value.toString());
             evenementDao.insererEvenement(evenement);
             Notification.affichageSucces("succes","inscription faite avec succes");
             confirmationInscriptionPDF(client,sejour);
