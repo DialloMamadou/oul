@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import controlleurvue.Email;
 import controlleurvue.Vue;
 import controlleurvue.inscription.CreerInscriptionSejour;
 import daos.*;
@@ -19,7 +20,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -27,6 +30,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import modele.Centre;
 import modele.Client;
@@ -36,12 +41,15 @@ import notification.Notification;
 import principale.Controlleur;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConsulterSejour implements Initializable, Vue {
 
@@ -66,6 +74,7 @@ public class ConsulterSejour implements Initializable, Vue {
     public JFXRadioButton tous;
     public JFXRadioButton regle;
     public JFXRadioButton retard;
+    public Label refsejour;
 
     /**
      * Initializes the controller class.
@@ -189,6 +198,8 @@ public class ConsulterSejour implements Initializable, Vue {
         JFXTreeTableColumn<Sejour,String> sejour_datefin=this.genererDateFin();
         JFXTreeTableColumn<Sejour,String> sejour_type=this.genererSejourType();
         JFXTreeTableColumn<Sejour,String> sejour_centre=this.genererCentre();
+        JFXTreeTableColumn<Sejour,String> sejour_ref_sejour=this.genererSejourRef();
+
         ObservableList<Sejour> sejours = FXCollections.observableArrayList();
         List<Sejour> liste=sejourDao.listeSejour();
         for(Sejour sejour:liste){
@@ -198,7 +209,8 @@ public class ConsulterSejour implements Initializable, Vue {
 
         final TreeItem<Sejour> root = new RecursiveTreeItem<Sejour>(sejours, RecursiveTreeObject::getChildren);
 
-        treeView.getColumns().setAll(sejour_id, sejour_duree,sejour_datedebut,sejour_datefin,sejour_type,sejour_centre);
+        treeView.getColumns().setAll(sejour_id, sejour_duree,sejour_datedebut,sejour_datefin,sejour_type,sejour_centre,
+                sejour_ref_sejour);
 
         treeView.setRoot(root);
         treeView.setShowRoot(false);
@@ -362,6 +374,20 @@ public class ConsulterSejour implements Initializable, Vue {
     }
 
 
+    public JFXTreeTableColumn<Sejour,String> genererSejourRef(){
+        JFXTreeTableColumn<Sejour,String> nom_client=new JFXTreeTableColumn<>(" ref sejour");
+        nom_client.setPrefWidth(60);
+        nom_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Sejour, String> param) {
+                return param.getValue().getValue().refSejour;
+            }
+        });
+
+        return nom_client;
+    }
+
+
     public JFXTreeTableColumn<Client,String> genererPrenomClient(){
         JFXTreeTableColumn<Client,String> nom_client=new JFXTreeTableColumn<>(" prenom");
         nom_client.setPrefWidth(60);
@@ -393,6 +419,8 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
     public void RemplirClientSejour(Sejour value) {
+        Sejour sejour=sejourDao.getSejourParId(idsejour.getText());
+        this.refsejour.setText(sejour.refSejour.get());
         System.out.println("on remplit liste");
         List<Inscription>listeInscription=this.inscriptionDao.getInscriptionsParIdSejour(value.id.get());
         List<Client>listeClient=new ArrayList<>();
@@ -443,6 +471,7 @@ public class ConsulterSejour implements Initializable, Vue {
         for(Client client:listeClient){
             clients.add(client);
         }
+
 
 
         final TreeItem<Client> root = new RecursiveTreeItem<Client>(clients, RecursiveTreeObject::getChildren);
@@ -557,6 +586,7 @@ public class ConsulterSejour implements Initializable, Vue {
                                 ||t.getValue().nom_centre.get().toLowerCase().contains(newValue.toLowerCase())
                                 ||t.getValue().date_fin.get().toLowerCase().contains(newValue.toLowerCase())
                                 || t.getValue().date_debut.get().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().refSejour.get().toLowerCase().contains(newValue.toLowerCase())
 ;
                         if(flag)
                             System.out.println("trouve" + t.getValue().id.get());
@@ -621,27 +651,33 @@ public class ConsulterSejour implements Initializable, Vue {
         Document doc = new Document();
 
         try {
-            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/DocCentre.pdf"));
+            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/"+sejour.nom_centre.get()+".pdf"));
             doc.open();
 
             //Add Image
             Image img = Image.getInstance("src/main/resources/img/oul.jpg");
             //Fixed Positioning
-            img.setAbsolutePosition(30f, 700f);
+            img.setAbsolutePosition(25f, 750f);
             //Scale to new height and new width of image
-            img.scaleAbsolute(100, 100);
+            img.scaleAbsolute(80, 80);
             //Add to document
             doc.add(img);
             //doc.add(Chunk.SPACETABBING);
-            doc.add(new Paragraph("\n\n\n\n\n"));
-            Font font = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD);
+            doc.add(new Paragraph("\n\n"));
+            Font font = FontFactory.getFont(FontFactory.HELVETICA, 9, Font.BOLD);
             font.setColor(BaseColor.BLUE);
+            Font font1 =FontFactory.getFont(FontFactory.HELVETICA, 10);
+            font1.setColor(BaseColor.BLUE);
+
+            Font font0 =FontFactory.getFont(FontFactory.HELVETICA, 8);
+
+            Font font2 =FontFactory.getFont(FontFactory.HELVETICA, 10);
+
 
             doc.add(new Phrase("ŒUVRE UNIVERSITAIRE DU LOIRET\n",font));
-            doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61"+
-                    "\n"+"siege.asso@ouloiret.fr\n www.ouloiret.fr \nSIRET : 77550821100072 \nAPE : 552 E"));
-
-            //doc.add(new Paragraph("\n\n\n\n\n\n"));
+            doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61\n",font0));
+            doc.add(new Phrase("siege.asso@ouloiret.fr\nwww.ouloiret.fr \n",font1));
+            doc.add(new Phrase("SIRET : 77550821100072 \nAPE : 552 E",font0));
 
             Paragraph pCentre = new Paragraph("CENTRE"+"    " +centre.nom_centre.get()+" avec capacite "+centre.capacite_centre.get());
             Paragraph pdateSejour = new Paragraph("DATES DU SEJOUR"+"     "+ldate.getText());
@@ -659,7 +695,7 @@ public class ConsulterSejour implements Initializable, Vue {
             doc.add(new Paragraph(" "));
 
 
-            PdfPTable table = new PdfPTable(4);
+            PdfPTable table = new PdfPTable(8);
             table.setWidthPercentage(100);
 
             PdfPCell cell;
@@ -679,11 +715,30 @@ public class ConsulterSejour implements Initializable, Vue {
             cell.setBackgroundColor(BaseColor.GRAY);
             table.addCell(cell);
 
+            cell = new PdfPCell(new Phrase("date de nais", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
             cell = new PdfPCell(new Phrase("groupe", FontFactory.getFont("Comic Sans MS", 12)));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBackgroundColor(BaseColor.GRAY);
             table.addCell(cell);
 
+            cell = new PdfPCell(new Phrase("adresse", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("code postale", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("observation", FontFactory.getFont("Comic Sans MS", 12)));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(cell);
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -701,7 +756,23 @@ public class ConsulterSejour implements Initializable, Vue {
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
 
+                cell = new PdfPCell(new Phrase(client.datenaissance.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
                 cell = new PdfPCell(new Phrase(client.groupe.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(client.adresse.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(client.codePostale.get(), FontFactory.getFont("Arial", 12)));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(client.observation.get(), FontFactory.getFont("Arial", 12)));
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
             }
@@ -716,5 +787,34 @@ public class ConsulterSejour implements Initializable, Vue {
     }
 
 
+    public void envoieEmail(MouseEvent mouseEvent) {
+        Email.idclient="-1";
+        Email.idSejour=this.idsejour.getText();
+        System.out.println("id sejour "+this.idsejour.getText());
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
+            /*
+             * if "fx:controller" is not set in fxml
+             * fxmlLoader.setController(NewWindowController);
+             */
+            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+
+            FileChooser fileChooser = new FileChooser();
+
+
+
+            Stage stage = new Stage();
+
+            stage.setTitle("email");
+            stage.setScene(scene);
+            // Email.stage=stage;
+            System.out.println("sejour id "+Email.idSejour);
+            stage.show();
+        } catch (IOException e) {
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.log(Level.SEVERE, "Failed to create new Window.", e);
+        }
+    }
 }
 

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 public class CreerCentre implements Vue {
 
+
     public StackPane stackepane;
     public JFXTextField nom;
     public JFXTextField capacite;
@@ -36,14 +37,37 @@ public class CreerCentre implements Vue {
     }
     public void book(MouseEvent mouseEvent) {
         int res=0;
-        if(nom.getText().length()!=0) {
-            res=centreDaoImpl.inserrerCentre(nom.getText(),capacite.getText());
+        try {
+                String nomC = nom.getText();
+                String capaciteC = capacite.getText();
+                Integer.parseInt(capaciteC);
+
+            if (!testCentreExiste(nomC)) {
+                if (nomC.length() >= 3) {
+                    res = centreDaoImpl.inserrerCentre(nomC, capaciteC);
+                    if (res > 0) {
+                        Notification.affichageSucces("succes", "centre creer avec succes");
+                        back(mouseEvent);
+                    } else {
+                        Notification.affichageEchec("echec", "echec dans la creation du centre");
+                    }
+                }else {
+                    Notification.affichageEchec("Problème de donnees", "Le nom du centre incorrect");
+                }
+
+            }else {
+                Notification.affichageEchec("echec", "echec dans la creation, le centre existe deja");
+            }
+        }catch (NullPointerException | NumberFormatException e){
+            Notification.affichageEchec("Problème de donnees","veuillez saisir de(s) champ(s) non vide(s) et valide(s) ");
         }
-        if(res>0){
-            Notification.affichageSucces("succes","centre creer avec succes");
-        }else{
-            Notification.affichageEchec("echec","echec dans la creation du centre");
+    }
+
+    public boolean testCentreExiste(String nomC){
+        if(centreDaoImpl.trouverParNomCentre(nomC) != null){
+            return true;
         }
+        return false;
     }
     private CentreDao centreDaoImpl;
     public void setController(Controlleur controller) {

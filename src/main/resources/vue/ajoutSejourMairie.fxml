@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="stack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.groupe.AjoutSejourMairieClient">
+    <children>
+        <AnchorPane prefHeight="730.0" prefWidth="1317.0">
+            <children>
+                <Pane layoutX="62.0" layoutY="28.0" maxWidth="1095.0" opacity="0.7" prefHeight="591.0" prefWidth="1025.0" style="-fx-background-color: white; -fx-background-radius: 6px;">
+                    <children>
+                        <Label layoutX="371.0" layoutY="59.0" text="AJOUT CLIENT">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="nom" layoutX="412.0" layoutY="193.0" prefHeight="25.0" prefWidth="174.0" />
+                        <Label layoutX="333.0" layoutY="193.0" text="Nom ">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="prenom" layoutX="412.0" layoutY="241.0" prefHeight="25.0" prefWidth="174.0" />
+                        <Label layoutX="323.0" layoutY="245.0" text=" Prenom ">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="677.0" layoutY="378.0" text="Groupe ">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <ImageView fitHeight="118.0" fitWidth="128.0" layoutX="488.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../img/003-student.png" />
+                            </image>
+                        </ImageView>
+                        <Label layoutX="325.0" layoutY="433.0" text="Portable">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="portable" layoutX="419.0" layoutY="429.0" prefHeight="25.0" prefWidth="174.0" />
+                        <Label layoutX="653.0" layoutY="197.0" text="Observation">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="observation" layoutX="746.0" layoutY="197.0" prefHeight="25.0" prefWidth="174.0" />
+                        <Label layoutX="672.0" layoutY="257.0" text="Email">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="326.0" layoutY="297.0" text="Adresse">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="email" layoutX="746.0" layoutY="253.0" prefHeight="25.0" prefWidth="174.0" />
+                        <Label layoutX="651.0" layoutY="317.0" text="Code postale">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+
+                        <TextField fx:id="poste" layoutX="737.0" layoutY="313.0" prefHeight="25.0" prefWidth="174.0" />
+                        <Label layoutX="322.0" layoutY="362.0" text="Date naissance">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <DatePicker fx:id="annee" layoutX="412.0" layoutY="358.0" prefHeight="25.0" prefWidth="174.0" />
+                        <TextField fx:id="adresse" layoutX="412.0" layoutY="305.0" prefHeight="25.0" prefWidth="174.0" />
+                  <TextField fx:id="groupecomplet" disable="true" layoutX="737.0" layoutY="370.0" prefHeight="25.0" prefWidth="174.0" />
+                  <Label layoutX="681.0" layoutY="433.0" text="Depart">
+                      <font>
+                          <Font name="System Bold" size="12.0" />
+                      </font>
+                  </Label>
+                  <ComboBox fx:id="depart" layoutX="737.0" layoutY="429.0" prefHeight="25.0" prefWidth="174.0" />
+                  <Pane layoutX="156.0" layoutY="8.0" prefHeight="575.0" prefWidth="125.0">
+                     <children>
+                        <Label layoutX="122.0" layoutY="30.0">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="7.0" layoutY="150.0" prefHeight="17.0" prefWidth="55.0" text="Groupe" textFill="GREY">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label layoutX="10.0" layoutY="316.0" prefHeight="17.0" prefWidth="73.0" text="Prix unitaire" textFill="GREY">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label layoutX="15.0" layoutY="261.0" prefHeight="17.0" prefWidth="29.0" text="Date" textFill="GREY">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label layoutX="9.0" layoutY="211.0" prefHeight="17.0" prefWidth="40.0" text="Séjour" textFill="GREY">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label layoutX="11.0" layoutY="368.0" text=" Centre" textFill="GREY">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label fx:id="lgrouped" layoutX="76.0" layoutY="77.0" />
+                        <Label fx:id="date" layoutX="55.0" layoutY="150.0" prefHeight="17.0" prefWidth="126.0" />
+                        <Label fx:id="prix_unitaire" layoutX="94.0" layoutY="179.0" prefHeight="17.0" prefWidth="82.0" />
+                        <Label fx:id="centre" layoutX="62.0" layoutY="219.0" prefHeight="17.0" prefWidth="82.0" />
+                        <Label layoutX="12.0" layoutY="73.0" prefHeight="25.0" prefWidth="100.0" text="Données ">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font></Label>
+                        <Label fx:id="sejour" layoutX="62.0" layoutY="116.0" prefHeight="17.0" prefWidth="100.0" />
+                     </children>
+                  </Pane>
+
+                        <JFXButton buttonType="RAISED" layoutX="365.0" layoutY="484.0" onMouseClicked="#creer" prefHeight="40.0" prefWidth="100.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="creer" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </JFXButton>
+                        <JFXButton buttonType="RAISED" layoutX="536.0" layoutY="484.0" onMouseClicked="#back" prefHeight="40.0" prefWidth="100.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="retour" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </JFXButton>
+                  <Pane layoutX="-3.0" layoutY="-3.0" prefHeight="598.0" prefWidth="151.0" style="-fx-background-color: teal;">
+                     <children>
+                        <ImageView fitHeight="109.0" fitWidth="100.0" layoutX="21.0" layoutY="33.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/retour4.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                    </children>
+                </Pane>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

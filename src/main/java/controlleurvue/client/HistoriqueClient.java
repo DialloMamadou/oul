@@ -36,6 +36,7 @@ import java.util.ResourceBundle;
 
 public class HistoriqueClient implements Initializable, Vue {
 
+
     public JFXTreeTableView<Annulation> annulations;
     public JFXTreeTableView <Reservation>reservations;
     public JFXTreeTableView <Inscription>inscriptions;
@@ -44,6 +45,7 @@ public class HistoriqueClient implements Initializable, Vue {
     public JFXRadioButton btninscription;
     private Controlleur controlleur;
     public  static  int id;
+
     public Label lnom;
     public Label lprenom;
     public Label ldatenaissance;

@@ -8,18 +8,17 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-
 <StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.Loginscreen">
    <children>
-      <AnchorPane fx:id="ancre" prefHeight="800.0" prefWidth="800.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/login.jpeg)">
+      <AnchorPane fx:id="ancre" prefHeight="800.0" prefWidth="800.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/lggg.jpg)">
          <children>
-            <Pane layoutX="103.0" layoutY="59.0" opacity="0.7" prefHeight="400.0" prefWidth="496.0" style="-fx-background-color: #FFF;">
+            <Pane layoutX="118.0" layoutY="179.0" opacity="0.7" prefHeight="496.0" prefWidth="518.0" style="-fx-background-color: #FFF;" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="164.0" AnchorPane.topAnchor="179.0">
                <children>
-                  <TextField fx:id="password" layoutX="111.0" layoutY="270.0" prefHeight="25.0" prefWidth="270.0" promptText="entrer mot de passe" />
-                  <TextField fx:id="login" layoutX="113.0" layoutY="214.0" prefHeight="25.0" prefWidth="270.0" promptText="entrer pseudo" />
+                  <TextField fx:id="password" layoutX="111.0" layoutY="270.0" prefHeight="25.0" prefWidth="270.0" promptText="Mot de passe" />
+                  <TextField fx:id="login" layoutX="113.0" layoutY="214.0" prefHeight="25.0" prefWidth="270.0" promptText="Pseudo" />
                   <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="105.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button layoutX="113.0" layoutY="336.0" mnemonicParsing="false" onMouseClicked="#loginbouton" prefHeight="25.0" prefWidth="104.0" style="-fx-background-color: #09e2a7;" text="login" textFill="WHITE" />
-                  <Button layoutX="277.0" layoutY="336.0" mnemonicParsing="false" onMousePressed="#quitter" prefHeight="25.0" prefWidth="104.0" style="-fx-background-color: #09e2a7;" text="cancel" textFill="WHITE" />
+                  <Button layoutX="80.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#loginbouton" prefHeight="25.0" prefWidth="104.0" style="-fx-background-color: teal;" text="login" textFill="WHITE" />
+                  <Button layoutX="329.0" layoutY="322.0" mnemonicParsing="false" onMousePressed="#quitter" prefHeight="25.0" prefWidth="104.0" style="-fx-background-color: teal;" text="cancel" textFill="WHITE" />
                   <ImageView id="logo" fitHeight="173.0" fitWidth="200.0" layoutX="146.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../img/oul.jpg" />

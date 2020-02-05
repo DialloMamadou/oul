@@ -7,10 +7,12 @@ import javafx.beans.property.StringProperty;
 public class Annulation extends RecursiveTreeObject<Annulation> {
 
 
+
     public StringProperty id;
     public StringProperty motif;
     public StringProperty  idsejour;
     public StringProperty idclient;
+
 
     private  String triche="";
     private String triche2="";

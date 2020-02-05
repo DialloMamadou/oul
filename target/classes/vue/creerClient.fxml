@@ -12,69 +12,84 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="stack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.client.CreerClient">
+<StackPane fx:id="stack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/mt.jpg);" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.client.CreerClient">
     <children>
-        <AnchorPane prefHeight="730.0" prefWidth="1366.0">
+        <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1000.0">
+
             <children>
-                <Pane layoutX="435.0" layoutY="26.0" maxWidth="585.0" opacity="0.7" prefHeight="454.0" prefWidth="585.0" style="-fx-background-color: white; -fx-background-radius: 6px;">
+                <Pane layoutX="236.0" layoutY="104.0" maxWidth="952.0" prefHeight="523.0" prefWidth="900.0" style="-fx-background-color: white;">
                     <children>
-                        <TextField fx:id="nom" layoutX="100.0" layoutY="138.0" prefHeight="25.0" prefWidth="174.0" />
-                        <Label layoutX="27.0" layoutY="142.0" text="nom client:">
+                        <TextField fx:id="nom" layoutX="357.0" layoutY="138.0" prefHeight="25.0" prefWidth="166.0" />
+                        <Label layoutX="267.0" layoutY="142.0" text="Nom client">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="prenom" layoutX="100.0" layoutY="201.0" prefHeight="25.0" prefWidth="174.0" />
-                        <Label layoutX="14.0" layoutY="201.0" text=" prenom client">
+                        <TextField fx:id="prenom" layoutX="357.0" layoutY="189.0" prefHeight="25.0" prefWidth="166.0" />
+                        <Label layoutX="267.0" layoutY="193.0" text=" Prénom client">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
-                        <ComboBox fx:id="groupe" layoutX="392.0" layoutY="321.0" prefHeight="25.0" prefWidth="174.0" />
-                        <Label layoutX="312.0" layoutY="325.0" text="groupe ">
+                        <ComboBox fx:id="groupe" layoutX="690.0" layoutY="301.0" prefHeight="25.0" prefWidth="174.0" />
+                        <Label layoutX="609.0" layoutY="305.0" text="Groupe ">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
-                  <ImageView fitHeight="118.0" fitWidth="128.0" layoutX="253.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../img/003-student.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="33.0" layoutY="386.0" text="Portable">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="portable" layoutX="101.0" layoutY="374.0" prefHeight="25.0" prefWidth="174.0" />
-                  <Label layoutX="324.0" layoutY="142.0" text="Observation" />
-                  <TextField fx:id="observation" layoutX="401.0" layoutY="138.0" />
-                  <Label layoutX="324.0" layoutY="210.0" text="email" />
-                  <Label layoutX="27.0" layoutY="260.0" text="adresse" />
-                  <TextField fx:id="email" layoutX="395.0" layoutY="206.0" />
-                  <Label layoutX="312.0" layoutY="273.0" text="code postale" />
-                  <TextField fx:id="poste" layoutX="403.0" layoutY="269.0" />
-                  <Label layoutX="16.0" layoutY="325.0" text="date naissance" />
-                  <DatePicker fx:id="annee" layoutX="110.0" layoutY="321.0" />
-                  <TextField fx:id="adresse" layoutX="104.0" layoutY="265.0" />
-                    </children>
-                </Pane>
+                        <ImageView fitHeight="107.0" fitWidth="149.0" layoutX="355.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../img/oul.jpg" />
+                            </image>
+                        </ImageView>
+                        <Label layoutX="273.0" layoutY="378.0" text="Portable">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="portable" layoutX="353.0" layoutY="374.0" prefHeight="25.0" prefWidth="174.0" />
+                        <Label layoutX="612.0" layoutY="142.0" text="Observation">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font></Label>
+                        <TextField fx:id="observation" layoutX="693.0" layoutY="138.0" prefHeight="25.0" prefWidth="159.0" />
+                        <Label layoutX="616.0" layoutY="201.0" text="Email">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font></Label>
+                        <Label layoutX="275.0" layoutY="257.0" text="Adresse">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font></Label>
+                        <TextField fx:id="email" layoutX="693.0" layoutY="197.0" prefHeight="25.0" prefWidth="159.0" />
+                        <Label layoutX="610.0" layoutY="257.0" text="Code postale">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font></Label>
+                        <TextField fx:id="poste" layoutX="693.0" layoutY="254.0" prefHeight="25.0" prefWidth="159.0" />
+                        <Label layoutX="256.0" layoutY="314.0" text="Date naissance">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font></Label>
+                        <DatePicker fx:id="annee" layoutX="353.0" layoutY="309.0" />
+                        <TextField fx:id="adresse" layoutX="357.0" layoutY="249.0" prefHeight="25.0" prefWidth="166.0" />
 
-
-                <Pane layoutX="284.0" layoutY="590.0" opacity="0.7" prefHeight="100.0" prefWidth="781.0" style="-fx-background-color: white; -fx-background-radius: 6px;">
-                    <children>
-                        <JFXButton buttonType="RAISED" layoutX="364.0" layoutY="30.0" onMouseClicked="#back" prefHeight="40.0" prefWidth="100.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="retour" textFill="WHITE">
+                        <JFXButton buttonType="RAISED" layoutX="686.0" layoutY="444.0" onMouseClicked="#book" prefHeight="39.0" prefWidth="107.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="Valider" textFill="WHITE">
                             <font>
                                 <Font size="14.0" />
                             </font>
                         </JFXButton>
+                        <Pane layoutX="-3.0" layoutY="-1.0" prefHeight="523.0" prefWidth="203.0" style="-fx-background-color: teal;">
+                            <children>
 
-                        <JFXButton buttonType="RAISED" layoutX="254.0" layoutY="30.0" onMouseClicked="#book" prefHeight="40.0" prefWidth="100.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="creer" textFill="WHITE">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                        </JFXButton>
 
+                                <ImageView accessibleRole="BUTTON" fitHeight="85.0" fitWidth="95.0" layoutX="59.0" layoutY="43.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/retour4.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </Pane>
                     </children>
                 </Pane>
             </children>

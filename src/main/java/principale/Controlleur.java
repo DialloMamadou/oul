@@ -1,12 +1,16 @@
 package principale;
 
 import controlleurvue.client.HistoriqueClient;
+import controlleurvue.groupe.AjoutSejourMairieClient;
+import controlleurvue.groupe.Historique;
 import fabrique.FabriqueVue;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
-
+import modele.Sejour;
 
 
 public class Controlleur {
+
 
     private FabriqueVue fabriqueVue;
 
@@ -22,6 +26,7 @@ public class Controlleur {
     public void lancerPageCentre() {
         this.fabriqueVue.creerEcranVue();
     }
+
 
     public void creerCentre() {
         this.fabriqueVue.creerCentreVue();
@@ -100,5 +105,36 @@ public class Controlleur {
     public void envoyerEmail(String text) {
 
         fabriqueVue.creerVueEmail();
+    }
+
+    public void lancerPageAssocierSejourGroupe() {
+        fabriqueVue.creerVueSejourGroupe();
+    }
+
+    public void lancerPageConsulterGroupeSejour() {
+        this.fabriqueVue.creerVueGroupeSejourConsulter();
+    }
+
+    public void ajouterEnfantMairie(String groupe, String sejour, String nombre) {
+
+        AjoutSejourMairieClient.assocId=nombre;
+        AjoutSejourMairieClient.sejourId=sejour;
+        AjoutSejourMairieClient.groupe=groupe;
+
+        this.fabriqueVue.creerVueLieMairieSejourEnfant();
+    }
+
+    public void lancerHistoriquePaiementGroupeSejour(Label idsejour, Label idgroupe) {
+        Historique.id_groupe=idgroupe.getText();
+        Historique.id_sejour=idsejour.getText();
+        System.out.println("historique groupe "+Historique.id_groupe);
+        System.out.println("historique sejour "+Historique.id_sejour);
+
+        this.fabriqueVue.lancerVueHistoriquePaiementMairie();
+
+    }
+
+    public void lancerListeInscritSejourGroupe() {
+        this.fabriqueVue.lancerListeSejourClient();
     }
 }

@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
+
 <StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.inscription.ConsulterAnnulation">
     <children>
         <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
@@ -58,16 +59,6 @@
 
                         <Pane layoutX="5.0" layoutY="85.0" prefHeight="368.0" prefWidth="415.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="300.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="facture" textFill="WHITE">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </JFXButton>
-                                <JFXButton buttonType="RAISED" layoutX="114.0" layoutY="300.0" onMouseClicked="#paiement" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="paiement" textFill="WHITE">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </JFXButton>
                                 <GridPane layoutX="14.0" layoutY="72.0" prefHeight="150.0" prefWidth="195.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="174.0" minWidth="10.0" prefWidth="45.0" />
@@ -134,11 +125,6 @@
                                 <Label layoutX="187.0" layoutY="262.0" />
                                 <Label fx:id="lidclient" layoutX="244.0" layoutY="238.0" />
                                 <Label fx:id="lidsejour" layoutX="244.0" layoutY="262.0" />
-                                <JFXButton buttonType="RAISED" layoutX="221.0" layoutY="300.0" onMouseClicked="#annuler" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="annuler" textFill="WHITE">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </JFXButton>
                                 <Label layoutX="12.0" layoutY="262.0" text="id sejour" />
                                 <Label layoutX="14.0" layoutY="230.0" text="id client" />
                         <Label layoutX="230.0" layoutY="222.0" text="motif" />

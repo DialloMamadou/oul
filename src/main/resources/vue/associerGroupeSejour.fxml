@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.groupe.AssocierGroupeSejour">
+    <children>
+        <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-color: no-repeat;">
+            <children>
+                <JFXTreeTableView fx:id="sejourarbre" layoutX="587.0" layoutY="15.0" maxWidth="-Infinity" opacity="0.7" prefHeight="700.0" prefWidth="298.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="481.0" AnchorPane.topAnchor="15.0" />
+                <Pane layoutX="172.0" layoutY="7.0" prefHeight="700.0" prefWidth="403.0" style="-fx-background-color: #fff; -fx-background-radius: 6 px;" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="172.0" AnchorPane.rightAnchor="791.0" AnchorPane.topAnchor="7.0">
+                    <children>
+                        <Pane layoutX="22.0" layoutY="28.0" prefHeight="133.0" prefWidth="368.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                            <children>
+                                <JFXTextField id="chercherClient" fx:id="chercherSejour" focusColor="#09e2a7" labelFloat="true" layoutX="34.0" layoutY="29.0" prefHeight="25.0" prefWidth="313.0" promptText="chercher un sejour" />
+                                <JFXTextField id="cherchecentre" fx:id="chercherGroupe" focusColor="#09e2a7" labelFloat="true" layoutX="33.0" layoutY="80.0" prefHeight="25.0" prefWidth="313.0" promptText="chercher un groupe" />
+
+                                  </children>
+                        </Pane>
+
+
+
+
+                              <Pane layoutX="21.0" layoutY="170.0" prefHeight="473.0" prefWidth="368.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                            <children>
+                                <JFXButton fx:id="valider" buttonType="RAISED" layoutX="246.0" layoutY="407.0" onMouseClicked="#validerAssociation" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="valider" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                                <Pane fx:id="paneclient" prefHeight="255.0" prefWidth="171.0">
+                                    <children>
+                                        <Label layoutX="86.0" layoutY="14.0" text="Sejour">
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Label>
+                                          <Label layoutX="14.0" layoutY="81.0" text="Durée" />
+                                          <Label fx:id="lduree" layoutX="55.0" layoutY="81.0" prefHeight="17.0" prefWidth="63.0" />
+                                          <Label layoutX="14.0" layoutY="104.0" text="Type" />
+                                          <Label fx:id="type" layoutX="43.0" layoutY="104.0" prefHeight="17.0" prefWidth="150.0">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </Label>
+                                          <Label fx:id="lgroupe" layoutX="14.0" layoutY="127.0" text="Centre" />
+                                          <Label fx:id="centre" layoutX="52.0" layoutY="127.0" prefHeight="17.0" prefWidth="144.0" />
+                                          <Label layoutX="14.0" layoutY="165.0" prefHeight="17.0" prefWidth="53.0" text="Prix" />
+                                          <Label fx:id="prix" layoutX="49.0" layoutY="165.0" prefHeight="17.0" prefWidth="75.0" />
+                                          <Label layoutX="14.0" layoutY="60.0" text="Id" />
+                                          <Label fx:id="id" layoutX="34.0" layoutY="60.0" prefHeight="17.0" prefWidth="42.0" />
+                              <Label layoutX="14.0" layoutY="147.0" text="Age" />
+                              <Label layoutX="14.0" layoutY="181.0" prefHeight="17.0" prefWidth="32.0" text="Date" />
+                              <Label fx:id="date" layoutX="51.0" layoutY="182.0" prefHeight="15.0" prefWidth="162.0">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lage" layoutX="38.0" layoutY="147.0" />
+                                    </children>
+                                </Pane>
+                                <Pane fx:id="panesejour" layoutX="178.0" layoutY="7.0" prefHeight="255.0" prefWidth="190.0">
+                                    <children>
+                                        <Label layoutX="83.0" layoutY="14.0" text="Groupe">
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Label>
+                              <Label layoutX="12.0" layoutY="64.0" text="Nom du groupe">
+                                 <font>
+                                    <Font name="System Bold" size="10.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lnomGroupe" layoutX="100.0" layoutY="63.0" />
+                              <Label layoutX="12.0" layoutY="94.0" text="Id" />
+                              <Label fx:id="idgroupe" layoutX="35.0" layoutY="94.0" />
+                                    </children>
+                                </Pane>
+                                <Label layoutX="6.0" layoutY="269.0" prefHeight="17.0" prefWidth="90.0" text="Nombre place">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                                <JFXTextField fx:id="prixfixe" layoutX="111.0" layoutY="320.0" />
+                        <Label layoutX="12.0" layoutY="324.0" prefHeight="17.0" prefWidth="75.0" text="Prix unitaire">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField fx:id="nbplace" layoutX="111.0" layoutY="265.0" />
+                                <JFXButton buttonType="RAISED" layoutX="71.0" layoutY="407.0" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="Fermer" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                            </children>
+                        </Pane>
+
+
+
+
+
+                          </children>
+                </Pane>
+                <JFXTreeTableView fx:id="groupe" layoutX="904.0" layoutY="15.0" maxWidth="-Infinity" prefHeight="700.0" prefWidth="346.0" stylesheets="@../css/hotel.css" />
+            <Pane prefHeight="730.0" prefWidth="162.0" style="-fx-background-color: teal;">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="-43.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView accessibleRole="BUTTON" fitHeight="90.0" fitWidth="90.0" layoutX="36.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/retour4.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            </children>
+
+
+
+
+
+
+
+        </AnchorPane>
+
+
+
+
+    </children>
+
+
+</StackPane>

@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import modele.Groupe;
+import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
@@ -24,7 +26,9 @@ import java.util.logging.Logger;
 public class CreerGroupe implements Vue {
     public StackPane stackepane;
     public JFXTextField nom;
+    public JFXTextField tiers;
     private Controlleur controlleur;
+
 
     public void back(MouseEvent mouseEvent) {
         this.controlleur.lancerPageGroupe();
@@ -48,11 +52,11 @@ public class CreerGroupe implements Vue {
 
     }
 
-    private void messageErreur(){
+    private void messageErreur(String txt){
         Image image=new Image("img/delete.png");
         Notifications notification=Notifications.create()
                 .title("Error")
-                .text("il y a eu une erreur dans la creation")
+                .text(txt)
                 .hideAfter(Duration.seconds(3))
                 .position(Pos.BOTTOM_LEFT)
                 .graphic(new ImageView(image));
@@ -63,16 +67,26 @@ public class CreerGroupe implements Vue {
     public void book(MouseEvent mouseEvent) {
 
         int res=0;
-        if(nom.getText().length()!=0) {
-            res= groupeDao.inserrerGroupe(nom.getText());
-        }
+        if(nom.getText().length() >=3 && tiers.getText().length() >=3) {
+            Groupe findGrpByName = groupeDao.trouverGroupeParNomGroupe(nom.getText());
+            Groupe findGrpByTiers = groupeDao.trouverGroupeParCodeTiers(tiers.getText());
+            if (findGrpByName == null && findGrpByTiers == null) {
+                res = groupeDao.inserrerGroupe(nom.getText(), tiers.getText());
+                if(res>0){
+                    messageSuccess();
+                    back(mouseEvent);
+                }else{
+                    messageErreur("Il y a eu une erreur lors de la creation");
+                }
+            }else{
+                messageErreur("Le groupe exsiste dejà");
 
-        if(res>0){
-            messageSuccess();
-        }else{
-            messageErreur();
-        }
+            }
 
+        }else {
+
+            messageErreur("Veuillez remplir le(s) champ(s) avec de valeurs valides");
+        }
 
     }
 

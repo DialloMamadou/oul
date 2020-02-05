@@ -12,7 +12,9 @@ public interface SejourDao {
 
 
 
+
     List<Sejour> listeSejour();
+
 
 
     Sejour getSejourParId(String id_sejour);

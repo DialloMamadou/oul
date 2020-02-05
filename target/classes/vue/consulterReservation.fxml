@@ -4,6 +4,8 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,20 +16,20 @@
 
 <StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.inscription.ConsulterReservation">
     <children>
-        <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
+        <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0">
             <children>
-                <JFXTreeTableView fx:id="treeView" layoutX="445.0" layoutY="21.0" maxWidth="-Infinity" opacity="0.7" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                <Pane layoutX="29.0" layoutY="22.0" opacity="0.7" prefHeight="700.0" prefWidth="430.0" style="-fx-background-color: #fff; -fx-background-radius: 6 px;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="921.0" AnchorPane.topAnchor="15.0">
+                <JFXTreeTableView fx:id="treeView" layoutX="664.0" layoutY="15.0" maxWidth="-Infinity" opacity="0.7" prefHeight="700.0" prefWidth="580.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="122.0" AnchorPane.topAnchor="15.0" />
+                <Pane layoutX="220.0" layoutY="15.0" opacity="0.7" prefHeight="700.0" prefWidth="430.0" style="-fx-background-color: #fff; -fx-background-radius: 6 px;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="716.0" AnchorPane.topAnchor="15.0">
                     <children>
-                        <Pane layoutX="4.0" layoutY="14.0" prefHeight="65.0" prefWidth="415.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                        <Pane layoutX="8.0" layoutY="35.0" prefHeight="88.0" prefWidth="415.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXButton buttonType="RAISED" layoutX="335.0" layoutY="32.0" onMouseClicked="#cherchecentreparid" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="chercher" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="321.0" layoutY="44.0" onMouseClicked="#cherchecentreparid" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="Chercher" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
                                 <JFXTextField fx:id="search_text" focusColor="#09e2a7" labelFloat="true" layoutX="127.0" layoutY="2.0" prefHeight="25.0" prefWidth="286.0" promptText="id ,nom,sejour .etc " />
-                                <Label layoutY="-7.0" prefHeight="43.0" prefWidth="124.0" text="chercher reservation">
+                                <Label layoutY="-7.0" prefHeight="43.0" prefWidth="124.0" text=" Chercher réservation">
                                     <font>
                                         <Font name="System Bold" size="12.0" />
                                     </font>
@@ -38,32 +40,15 @@
 
 
 
-                        <Pane layoutX="21.0" layoutY="531.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+
+                        <Pane layoutX="8.0" layoutY="156.0" prefHeight="368.0" prefWidth="415.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXButton buttonType="RAISED" layoutX="83.0" layoutY="51.0" onMouseClicked="#goBack" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Back" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="21.0" layoutY="309.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="facture" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
-                                <JFXButton buttonType="RAISED" layoutX="218.0" layoutY="51.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Close" textFill="WHITE">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </JFXButton>
-                            </children>
-                        </Pane>
-
-
-
-
-                        <Pane layoutX="5.0" layoutY="85.0" prefHeight="368.0" prefWidth="415.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
-                            <children>
-                                <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="300.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="facture" textFill="WHITE">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </JFXButton>
-                                <JFXButton buttonType="RAISED" layoutX="114.0" layoutY="300.0" onMouseClicked="#paiement" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="paiement" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="150.0" layoutY="309.0" onMouseClicked="#paiement" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="paiement" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
@@ -133,15 +118,15 @@
                                 <Label layoutX="14.0" layoutY="238.0" text="id reservation" />
                                 <Label id="llidreservation" fx:id="idinscription" layoutX="114.0" layoutY="238.0" />
 
-                        <Label id="lllidclient" fx:id="lidclient" layoutX="244.0" layoutY="238.0" />
-                        <Label id="lllidsejour" fx:id="lidsejour" layoutX="244.0" layoutY="262.0" />
-                        <JFXButton buttonType="RAISED" layoutX="221.0" layoutY="300.0" onMouseClicked="#annuler" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="annuler" textFill="WHITE">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </JFXButton>
-                        <Label layoutX="154.0" layoutY="262.0" text="id sejour" />
-                        <Label layoutX="148.0" layoutY="238.0" text="id client" />
+                                <Label id="lllidclient" fx:id="lidclient" layoutX="244.0" layoutY="238.0" />
+                                <Label id="lllidsejour" fx:id="lidsejour" layoutX="244.0" layoutY="262.0" />
+                                <JFXButton buttonType="RAISED" layoutX="301.0" layoutY="309.0" onMouseClicked="#annuler" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="annuler" textFill="WHITE">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </JFXButton>
+                                <Label layoutX="154.0" layoutY="262.0" text="id sejour" />
+                                <Label layoutX="148.0" layoutY="238.0" text="id client" />
                             </children>
                         </Pane>
 
@@ -149,6 +134,15 @@
 
 
 
+                    </children>
+                </Pane>
+                <Pane prefHeight="730.0" prefWidth="200.0" style="-fx-background-color: teal;">
+                    <children>
+                        <ImageView accessibleRole="BUTTON" fitHeight="97.0" fitWidth="110.0" layoutX="55.0" layoutY="61.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../img/retour4.png" />
+                            </image>
+                        </ImageView>
                     </children>
                 </Pane>
             </children>

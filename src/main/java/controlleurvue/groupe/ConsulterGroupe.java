@@ -6,6 +6,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
 import daos.GroupeDao;
 import daos.impl.GroupeDaoImpl;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.image.Image;
@@ -23,6 +25,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import modele.Client;
 import modele.Groupe;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
@@ -30,13 +33,17 @@ import principale.Controlleur;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class ConsulterGroupe implements Initializable, Vue {
     public JFXTextField search_text2;
     public JFXTextField search_text3;
+    public JFXTextField nbplace;
+    public Label lnommairie;
     /**
      * Initializes the controller class.
      */
+
 
     private Controlleur controlleur;
 
@@ -66,6 +73,19 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
 
+    private JFXTreeTableColumn<Groupe,String> creerCodeTier(){
+        JFXTreeTableColumn<Groupe,String> groupe_id=new JFXTreeTableColumn<>("code tiers");
+        groupe_id.setPrefWidth(100);
+        groupe_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
+                return param.getValue().getValue().code_tiers;
+            }
+        });
+        return groupe_id;
+    }
+
+
     private JFXTreeTableColumn<Groupe,String> creernomgroupe(){
         JFXTreeTableColumn<Groupe,String> groupe_nom=new JFXTreeTableColumn<>("nom du groupe");
         groupe_nom.setPrefWidth(110);
@@ -86,22 +106,48 @@ public class ConsulterGroupe implements Initializable, Vue {
 
         JFXTreeTableColumn<Groupe,String> groupe_id=this.creerGroupeId();
         JFXTreeTableColumn<Groupe,String> groupe_nom=this.creernomgroupe();
+        JFXTreeTableColumn<Groupe,String> code_tiers=this.creerCodeTier();
+
         ObservableList<Groupe> groupes = FXCollections.observableArrayList();
         List<Groupe> liste=groupeDao.listeGroupes();
         for(Groupe groupe:liste){
             groupes.add(groupe);
         }
+
         final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(groupes, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(groupe_id,groupe_nom);
+        treeView.getColumns().setAll(groupe_id,groupe_nom,code_tiers);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
+
+        optimiserRechercheGroupe();
 
 
     }
 
+    private void optimiserRechercheGroupe() {
+
+        this.search_text.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                treeView.setPredicate(new Predicate<TreeItem<Groupe>>() {
+
+                    @Override
+                    public boolean test(TreeItem<Groupe> t) {
+                        boolean flag=t.getValue().id.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().nom_groupe.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().code_tiers.getValue().toLowerCase().contains(newValue.toLowerCase());
+
+                        return flag ;
 
 
+                    }
+                });
+            }
 
+        });
+    }
 
 
     private GroupeDao groupeDao;
@@ -164,7 +210,7 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
     private void loadAllgroupeParId() {
-        JFXTreeTableColumn<Groupe,String> groupe_id=this.creerGroupeId();
+        /*JFXTreeTableColumn<Groupe,String> groupe_id=this.creerGroupeId();
         JFXTreeTableColumn<Groupe,String> groupe_nom=this.creernomgroupe();
         ObservableList<Groupe> groupes = FXCollections.observableArrayList();
         Groupe groupe=this.groupeDao.getGroupeParId(search_text.getText().toString());
@@ -189,6 +235,12 @@ public class ConsulterGroupe implements Initializable, Vue {
             loadallgroupe();
 
         }
+
+         */
+    }
+
+    public void back(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageGroupe();
     }
 
     public void EditerCentre(MouseEvent mouseEvent) {

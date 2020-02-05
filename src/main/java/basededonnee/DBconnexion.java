@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 
 
 public class DBconnexion {
+
+
+
     public static Connection connexion=null;
 
     static Connection connection=null;

@@ -3,6 +3,7 @@ package daos.impl;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.centre.CreerCentre;
 import daos.GroupeDao;
+import java.sql.Array;
 import modele.Centre;
 import modele.Groupe;
 
@@ -21,38 +22,41 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
     }
 
 
-
     @Override
-    public int inserrerGroupe(String nom_groupe) {
-        int res=0;
-        String sql="INSERT INTO groupe (nom_groupe) VALUES (?)";
+    public int inserrerGroupe(String nom_groupe, String tiers) {
+
+        int res = 0;
+        String sql = "INSERT INTO groupe (nom_groupe,tiers) VALUES (?,?)";
         try {
-            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            PreparedStatement ps = (PreparedStatement) connect.prepareStatement(sql);
             ps.setString(1, nom_groupe);
+            ps.setString(2, tiers);
 
 
-            res=ps.executeUpdate();
+            res = ps.executeUpdate();
 
         } catch (SQLException ex) {
             Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return res;    }
+        return res;
+    }
 
     @Override
     public int supprimerGroupe(String id) {
-        String sql="DELETE FROM groupe WHERE id_groupe=?";
+        String sql = "DELETE FROM groupe WHERE id_groupe=?";
 
-        int res=0;
+        int res = 0;
 
         try {
 
 
-            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            PreparedStatement ps = (PreparedStatement) connect.prepareStatement(sql);
             ps.setString(1, id);
 
 
-            res=ps.executeUpdate();
+
+            res = ps.executeUpdate();
 
         } catch (SQLException ex) {
             Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
@@ -63,46 +67,72 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
     @Override
     public List<Groupe> listeGroupes() {
-        String sql="SELECT * FROM groupe";
-        List<Groupe>liste=new ArrayList<>();
+        String sql = "SELECT * FROM groupe";
+        List<Groupe> liste;
+        liste = new ArrayList<>() ;
 
-        try{
-            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
-            ResultSet rs=ps.executeQuery();
+        try {
+            PreparedStatement ps = (PreparedStatement) connect.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
 
-                liste.add(new Groupe(rs.getInt(1)+"",rs.getString(2)));
-
-            }
-
-
-        }catch (Exception e){
-
-        }
-
-        return liste;    }
-
-    @Override
-    public Groupe trouverGroupeParNomGroupe(String nom_groupe) {
-        String sql="SELECT * FROM groupe WHERE nom_groupe ='"+nom_groupe+"'";
-        Groupe liste=null;
-        try{
-            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
-            ResultSet rs=ps.executeQuery();
-
-            while(rs.next()){
-
-                liste=new Groupe(rs.getInt(1)+"",rs.getString(2));
+                liste.add(new Groupe(rs.getInt(1) + "", rs.getString(2),rs.getString(3)));
 
             }
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
         return liste;
+    }
+
+    @Override
+    public Groupe trouverGroupeParNomGroupe(String nom_groupe) {
+        String sql = "SELECT * FROM groupe WHERE nom_groupe ='" + nom_groupe + "'";
+        Groupe liste = null;
+        try {
+            PreparedStatement ps = (PreparedStatement) connect.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                liste = new Groupe(rs.getInt(1) + "", rs.getString(2),rs.getString(3));
+
+            }
+            return liste;
+
+
+        } catch (Exception e) {
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public Groupe trouverGroupeParCodeTiers(String tiers) {
+        String sql = "SELECT * FROM groupe WHERE tiers ='" + tiers + "'";
+        Groupe liste = null;
+        try {
+            PreparedStatement ps = (PreparedStatement) connect.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                liste = new Groupe(rs.getInt(1) + "", rs.getString(2),
+                        rs.getString(3));
+
+            }
+
+            return liste;
+
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
 
@@ -117,7 +147,8 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
             while(rs.next()){
 
-                liste=new Groupe(rs.getInt(1)+"",rs.getString(2));
+                liste=new Groupe(rs.getInt(1)+"",rs.getString(2),
+                        rs.getString(3));
 
             }
 

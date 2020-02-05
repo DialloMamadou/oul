@@ -9,6 +9,7 @@ import modele.Centre;
 import modele.Client;
 import modele.Inscription;
 import modele.Sejour;
+import notification.Notification;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -57,6 +58,9 @@ public class InscriptionDaoImpl extends Dao<Inscription> implements InscriptionD
         String sql="INSERT INTO inscription (paiement,date_inscription,code_client,id_sejour,depart)" +
                 " VALUES (?,?,?,?,?)";
         try {
+
+            System.out.println("sejour ou on inscrit "+inscription2.id_sejour.get());
+            System.out.println("client inscrit "+inscription2.code_client.get());
 
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1, inscription2.paiement.get());
@@ -140,6 +144,7 @@ return x;
 
 
         try{
+
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
 
@@ -159,10 +164,40 @@ return x;
 
     }
 
+
+
     @Override
-    public Inscription getInscriptionsParIdSejourEtIdClient(String text, String s) {
-        String sql="SELECT * FROM inscription WHERE id_sejour ='"+text+"' AND code_client="+s;
+    public Inscription getInscritptionParIdInscription(String s) {
+        String sql="SELECT * FROM inscription WHERE id_inscription ='"+s+"'";
+        Inscription liste=new Inscription();
+
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste=new Inscription(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;
+
+    }
+
+
+    @Override
+    public Inscription getInscriptionsParIdSejourEtIdClient(String id_sejour, String code_client) {
+        String sql="SELECT * FROM inscription WHERE id_sejour ='"+id_sejour+"' AND code_client="+code_client;
         Inscription inscription =null;
+
 
 
         try{
@@ -207,6 +242,29 @@ return x;
         }
 
         return liste;    }
+
+
+    public int  nbInscriptionForId(String id) {
+        System.out.println("id sejour inscr"+id);
+
+        int nbInsc=0;
+        String sql="SELECT COUNT(*) FROM inscription WHERE id_sejour ='"+id+"'";
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()) {
+                System.out.println("Count nb sejour dans inscription pour id:" + id + " = " + rs.getInt(1));
+                nbInsc = rs.getInt(1);
+            }
+            return nbInsc;
+
+        }catch (Exception e){
+
+        }
+        return nbInsc;
+
+    }
 
 
 }

@@ -10,6 +10,8 @@ public class Inscription extends RecursiveTreeObject<Inscription> {
     private  String triche="";
     private String triche2="";
 
+
+
     public StringProperty id;
     public StringProperty paiement;
     public StringProperty  dateinscription;
@@ -34,6 +36,16 @@ public class Inscription extends RecursiveTreeObject<Inscription> {
 
 
     public Inscription( String paiement, String dateinscription, String code_client, String id_sejour, String depart) {
+        System.out.println("*************************************************************");
+        System.out.println("paiement "+paiement);
+        System.out.println("date "+dateinscription);
+        System.out.println("client "+code_client);
+        System.out.println("sejour "+id_sejour);
+        System.out.println("paiement "+depart);
+        System.out.println("*************************************************************");
+
+
+
         this.paiement = new SimpleStringProperty(paiement);
         this.depart =new SimpleStringProperty(depart);
         this.dateinscription = new SimpleStringProperty(dateinscription);

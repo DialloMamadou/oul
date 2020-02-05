@@ -44,6 +44,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ConsulterCentre  implements Initializable, Vue {
+    public void back(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageCentre();
+    }
 
 
     public JFXTextField textnom;
@@ -102,6 +105,7 @@ public class ConsulterCentre  implements Initializable, Vue {
         });
 
         return capaciteCentre;
+
 
     }
 
@@ -249,33 +253,37 @@ public class ConsulterCentre  implements Initializable, Vue {
     public void EditerCentre(MouseEvent mouseEvent) {
 
         if (this.lid.getText() != null) {
-            if (this.lid.getText() != "") {
-
+            try {
                 String id = this.lid.getText();
                 Centre centre = centreDao.getCentreParId(id);
-                centre.nom_centre.setValue(this.textnom.getText());
-                centre.capacite_centre.setValue(this.textcapacite.getText());
-                int res = centreDao.mettreAjourCentre(this.lid.getText(), centre);
-                if (res != 0) {
-                    Notification.affichageSucces("succes", "centre mis a jour");
-                    loadallcentre();
-                    return;
+                Integer.parseInt(this.textcapacite.getText());
+                if (this.textnom.getText().length() >= 3) {
+                    centre.nom_centre.setValue(this.textnom.getText());
+                    centre.capacite_centre.setValue(this.textcapacite.getText());
+                    int res = centreDao.mettreAjourCentre(this.lid.getText(), centre);
+                    if (res != 0) {
+                        Notification.affichageSucces("succes", "centre mis a jour");
+                        //loadallcentre();
+                        this.controlleur.consulterCentre();
+                        return;
+                    } else {
+                        Notification.affichageEchec("echec", "echec mise a jour centre");
+                        this.controlleur.consulterCentre();
+                        return;
+
+                    }
+
                 } else {
-                    Notification.affichageEchec("echec", "echec mise a jour centre");
+
+                    Notification.affichageEchec("echec", "Nom du centre incorrect");
                     return;
-
                 }
-
-            } else {
-
+            } catch (NullPointerException | NumberFormatException e) {
+                Notification.affichageEchec("Problème de donnees", "veuillez saisir de(s) champ(s) non vide(s) et valide(s) ");
             }
+        }else {
             Notification.affichageEchec("echec", "il faut selectionner un centre");
-            return;
 
-
-        } else {
-            Notification.affichageEchec("echec", "il faut selectionner un centre");
-            return;
         }
     }
 
@@ -283,7 +291,6 @@ public class ConsulterCentre  implements Initializable, Vue {
     public void SupprimerCentre(MouseEvent mouseEvent) {
         if (this.lid != null && this.lid.getText() != "") {
             lancerSuppresion(mouseEvent);
-
 
         } else {
             Notification.affichageEchec("echec", "il faut selectionner un centre");
@@ -307,11 +314,15 @@ public class ConsulterCentre  implements Initializable, Vue {
         cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             public void handle(javafx.event.ActionEvent event) {
                 dialog.close();
+
             }
         });
         dialogLayout.setActions(ok, cancel);
         dialog.show();
+
+        //this.controlleur.consulterCentre();
     }
+
 
 
     private void finaliser(MouseEvent mouseEvent, JFXDialog dialogLayout) {
@@ -324,6 +335,7 @@ public class ConsulterCentre  implements Initializable, Vue {
             Notification.affichageSucces("succes", "centre supprimer avec succes");
             loadallcentre();
             dialogLayout.close();
+            this.controlleur.consulterCentre();
             return;
         } else {
             Notification.affichageEchec("echec", "echec dans la suppresion du centre");
