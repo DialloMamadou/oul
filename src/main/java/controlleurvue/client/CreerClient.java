@@ -148,6 +148,22 @@ public class CreerClient  implements Initializable, Vue {
 
 
 
+    private JFXTreeTableColumn<Groupe,String> creerGroupeCodeTiers(){
+        JFXTreeTableColumn<Groupe,String> groupe_nom=new JFXTreeTableColumn<>("code tiers");
+        groupe_nom.setPrefWidth(110);
+        groupe_nom.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
+                return param.getValue().getValue().code_tiers;
+            }
+        });
+
+        return groupe_nom;
+    }
+
+
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -160,6 +176,7 @@ public class CreerClient  implements Initializable, Vue {
 
         JFXTreeTableColumn<Groupe,String> groupe_nom=this.creernomgroupe();
         JFXTreeTableColumn<Groupe,String> groupe_id=this.creerGroupeId();
+        JFXTreeTableColumn<Groupe,String> groupe_codetiers=this.creerGroupeCodeTiers();
 
         ObservableList<Groupe> groupes = FXCollections.observableArrayList();
         List<Groupe> liste=groupeDao.listeGroupes();
@@ -167,7 +184,7 @@ public class CreerClient  implements Initializable, Vue {
             groupes.add(groupe);
         }
         final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(groupes, RecursiveTreeObject::getChildren);
-        this.tablegroupe.getColumns().setAll(groupe_id,groupe_nom);
+        this.tablegroupe.getColumns().setAll(groupe_id,groupe_nom,groupe_codetiers);
         tablegroupe.setRoot(root);
         tablegroupe.setShowRoot(false);
 
@@ -198,6 +215,7 @@ public class CreerClient  implements Initializable, Vue {
                     @Override
                     public boolean test(TreeItem<Groupe> t) {
                         boolean flag=t.getValue().nom_groupe.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().code_tiers.getValue().toLowerCase().contains(newValue.toLowerCase())
                               ;
 
 

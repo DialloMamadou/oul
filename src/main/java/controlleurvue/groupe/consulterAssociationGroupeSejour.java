@@ -38,7 +38,9 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class consulterAssociationGroupeSejour implements Initializable, Vue {
-
+    public void back(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageGroupe();
+    }
     public JFXTreeTableView<Associationgroupesejour> association;
     public JFXTextField chercherAssoc;
     public Label nomgroupe;
@@ -261,6 +263,10 @@ evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
     }
 
     public void ajoutenfant(MouseEvent mouseEvent) {
+
+        AjoutSejourMairieClient.sejourId=this.idsejour.getText();
+
+        AjoutSejourMairieClient.assocId=this.idassoc.getText();
 
         this.controlleur.ajouterEnfantMairie(this.nomgroupe.getText(),this.idsejour.getText(),this.idassoc.getText());
     }

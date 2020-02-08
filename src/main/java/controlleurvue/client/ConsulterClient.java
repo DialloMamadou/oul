@@ -277,7 +277,7 @@ public class ConsulterClient implements Initializable, Vue {
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
 
-        int res=clientDao.supprimerClient(search_text2.getText().toString());
+        int res=clientDao.supprimerClient(chercherclient.getText().toString());
 
         if(res>0){
             Notification.affichageSucces("succes","client supprimer avec succes");
@@ -333,5 +333,10 @@ public class ConsulterClient implements Initializable, Vue {
     }
 
     public void editerclient(MouseEvent mouseEvent) {
+        if(!this.idclient.getText().isEmpty()){
+            EditerClient.id=Integer.parseInt(this.idclient.getText());
+        }
+
+
     }
 }

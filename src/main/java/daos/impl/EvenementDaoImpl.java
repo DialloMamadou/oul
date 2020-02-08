@@ -3,12 +3,17 @@ package daos.impl;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.centre.CreerCentre;
 import daos.EvenementDao;
+import javafx.beans.property.StringProperty;
 import modele.Annulation;
 import modele.Centre;
 import modele.Evenement;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +32,8 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
 
         try {
 
+            String sdf=new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1, evenement.codeclient);
             ps.setString(2,evenement.codesejour);
@@ -34,15 +41,15 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
             ps.setString(3,evenement.event);
             ps.setString(4,evenement.somme);
             System.out.println("somme "+evenement.somme);
-            ps.setString(5,evenement.dateEvent);
+            ps.setString(5,sdf);
             ps.setString(6,evenement.methode);
 
 
             res=ps.executeUpdate();
 
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
             System.out.println("echec echec echec");
-            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, e);
         }
 
         return res;

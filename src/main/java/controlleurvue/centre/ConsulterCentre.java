@@ -44,6 +44,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ConsulterCentre  implements Initializable, Vue {
+    public JFXTextField search_text2;
+
+    public void back(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageCentre();
+    }
 
 
     public JFXTextField textnom;
@@ -286,7 +291,8 @@ public class ConsulterCentre  implements Initializable, Vue {
 
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
-        if (this.lid != null && this.lid.getText() != "") {
+        String s=this.search_text2.getText();
+        if (s != null && s != "") {
             lancerSuppresion(mouseEvent);
 
         } else {
@@ -326,7 +332,8 @@ public class ConsulterCentre  implements Initializable, Vue {
 
         int res = 0;
 
-        res = centreDao.supprimerCentre(this.lid.getText().toString());
+        String s=this.search_text2.getText();
+        res = centreDao.supprimerCentre(s);
 
         if (res > 0) {
             Notification.affichageSucces("succes", "centre supprimer avec succes");

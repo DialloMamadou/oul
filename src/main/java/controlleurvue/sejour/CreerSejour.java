@@ -42,12 +42,13 @@ import java.util.logging.Logger;
 public class CreerSejour implements Initializable, Vue {
 
 
+
+
     public StackPane stack;
     public TextField type;
     public DatePicker dateD;
     public DatePicker dateF;
     public ComboBox centre;
-    public String duree;
     public TextField capacite;
     public TextField agemax;
     public TextField agemin;
@@ -66,6 +67,9 @@ public class CreerSejour implements Initializable, Vue {
         Connection connection= DBconnexion.getConnection();
         List<Centre> centres=centreDao.listeCentres();
         for(Centre centre:centres){
+            if(this.centre==null){
+                Notification.affichageSucces("centre null","null");
+            }
             this.centre.getItems().add(centre.nom_centre.get());
         }
     }
@@ -82,7 +86,7 @@ public class CreerSejour implements Initializable, Vue {
 
     public void book(MouseEvent mouseEvent) {
 
-        try{
+
             String centr =this.centre.getValue().toString();
             String datedebut= this.dateD.getValue().toString();
             String datefin= this.dateF.getValue().toString();
@@ -118,10 +122,6 @@ public class CreerSejour implements Initializable, Vue {
             } else {
                 Notification.affichageEchec("echec", "donnée(s) incorrecte(s)");
             }
-        }catch (NullPointerException | NumberFormatException e ){
-            Notification.affichageEchec("Problème de donnees","veuillez saisir de(s) champ(s) non vides et valide(s) ");
-
-        }
 
 
         

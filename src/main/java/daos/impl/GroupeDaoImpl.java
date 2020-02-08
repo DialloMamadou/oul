@@ -77,7 +77,7 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
             while (rs.next()) {
 
-                liste.add(new Groupe(rs.getInt(1) + "", rs.getString(2)));
+                liste.add(new Groupe(rs.getInt(1) + "", rs.getString(2),rs.getString(3)));
 
             }
 
@@ -99,7 +99,7 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
             while (rs.next()) {
 
-                liste = new Groupe(rs.getInt(1) + "", rs.getString(2));
+                liste = new Groupe(rs.getInt(1) + "", rs.getString(2),rs.getString(3));
 
             }
             return liste;
@@ -122,7 +122,8 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
             while (rs.next()) {
 
-                liste = new Groupe(rs.getInt(1) + "", rs.getString(2));
+                liste = new Groupe(rs.getInt(1) + "", rs.getString(2),
+                        rs.getString(3));
 
             }
 
@@ -146,7 +147,8 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
             while(rs.next()){
 
-                liste=new Groupe(rs.getInt(1)+"",rs.getString(2));
+                liste=new Groupe(rs.getInt(1)+"",rs.getString(2),
+                        rs.getString(3));
 
             }
 

@@ -71,7 +71,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
 
     public Sejour(String id, String duree, String date_debut, String date_fin,
                   String type, String nom_centre,String prix,
-                  String ageMax, String ageMin, String capacite,String refSejour) {
+                  String ageMin, String ageMax, String capacite,String refSejour) {
         this.id = new SimpleStringProperty(id);
         this.duree = new SimpleStringProperty(duree);
         this.date_debut =new SimpleStringProperty( date_debut);
@@ -88,7 +88,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
 
     public Sejour(String duree, String date_debut, String date_fin,
                   String type, String nom_centre,String prix,
-                  String ageMax, String ageMin, String capacite,String refSejour) {
+                   String ageMin, String ageMax,String capacite,String refSejour) {
         this.duree = new SimpleStringProperty(duree);
         this.date_debut =new SimpleStringProperty( date_debut);
         this.date_fin = new SimpleStringProperty( date_fin);

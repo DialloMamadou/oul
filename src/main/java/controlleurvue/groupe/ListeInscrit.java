@@ -98,7 +98,7 @@ this.resteapayer.setText(ListeInscrit.reste);
 
     private JFXTreeTableColumn<Client, String> client_id() {
         JFXTreeTableColumn<Client, String> capaciteCentre = new JFXTreeTableColumn<>("id");
-        capaciteCentre.setPrefWidth(110);
+        capaciteCentre.setPrefWidth(20);
         capaciteCentre.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Client, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
@@ -347,5 +347,9 @@ this.resteapayer.setText(ListeInscrit.reste);
             }
             centres.add(client);
         }
+    }
+
+    public void back(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageConsulterGroupeSejour();
     }
 }

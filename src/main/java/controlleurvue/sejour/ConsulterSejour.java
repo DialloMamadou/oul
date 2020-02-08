@@ -198,6 +198,8 @@ public class ConsulterSejour implements Initializable, Vue {
         JFXTreeTableColumn<Sejour,String> sejour_datefin=this.genererDateFin();
         JFXTreeTableColumn<Sejour,String> sejour_type=this.genererSejourType();
         JFXTreeTableColumn<Sejour,String> sejour_centre=this.genererCentre();
+        JFXTreeTableColumn<Sejour,String> sejour_ref_sejour=this.genererSejourRef();
+
         ObservableList<Sejour> sejours = FXCollections.observableArrayList();
         List<Sejour> liste=sejourDao.listeSejour();
         for(Sejour sejour:liste){
@@ -207,7 +209,8 @@ public class ConsulterSejour implements Initializable, Vue {
 
         final TreeItem<Sejour> root = new RecursiveTreeItem<Sejour>(sejours, RecursiveTreeObject::getChildren);
 
-        treeView.getColumns().setAll(sejour_id, sejour_duree,sejour_datedebut,sejour_datefin,sejour_type,sejour_centre);
+        treeView.getColumns().setAll(sejour_id, sejour_duree,sejour_datedebut,sejour_datefin,sejour_type,sejour_centre,
+                sejour_ref_sejour);
 
         treeView.setRoot(root);
         treeView.setShowRoot(false);
@@ -364,6 +367,20 @@ public class ConsulterSejour implements Initializable, Vue {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Client, String> param) {
                 return param.getValue().getValue().nom_client;
+            }
+        });
+
+        return nom_client;
+    }
+
+
+    public JFXTreeTableColumn<Sejour,String> genererSejourRef(){
+        JFXTreeTableColumn<Sejour,String> nom_client=new JFXTreeTableColumn<>(" ref sejour");
+        nom_client.setPrefWidth(60);
+        nom_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Sejour, String> param) {
+                return param.getValue().getValue().refSejour;
             }
         });
 
@@ -569,6 +586,7 @@ public class ConsulterSejour implements Initializable, Vue {
                                 ||t.getValue().nom_centre.get().toLowerCase().contains(newValue.toLowerCase())
                                 ||t.getValue().date_fin.get().toLowerCase().contains(newValue.toLowerCase())
                                 || t.getValue().date_debut.get().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().refSejour.get().toLowerCase().contains(newValue.toLowerCase())
 ;
                         if(flag)
                             System.out.println("trouve" + t.getValue().id.get());
@@ -772,7 +790,6 @@ public class ConsulterSejour implements Initializable, Vue {
     public void envoieEmail(MouseEvent mouseEvent) {
         Email.idclient="-1";
         Email.idSejour=this.idsejour.getText();
-        Notification.affichageSucces("ici","ici");
         System.out.println("id sejour "+this.idsejour.getText());
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -799,5 +816,10 @@ public class ConsulterSejour implements Initializable, Vue {
             logger.log(Level.SEVERE, "Failed to create new Window.", e);
         }
     }
-}
+
+    public void back(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageSejour();
+    }
+    }
+
 

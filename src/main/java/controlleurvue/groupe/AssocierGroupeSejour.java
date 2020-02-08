@@ -172,7 +172,7 @@ public class AssocierGroupeSejour implements Vue, Initializable {
     public JFXTreeTableColumn<Groupe,String> genererGroupeId(){
 
         JFXTreeTableColumn<Groupe,String> groupe_id=new JFXTreeTableColumn<>(" Id");
-        groupe_id.setPrefWidth(100);
+        groupe_id.setPrefWidth(20);
         groupe_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
@@ -196,10 +196,26 @@ public class AssocierGroupeSejour implements Vue, Initializable {
     }
 
 
+
+    public JFXTreeTableColumn<Groupe,String> genererCodeTiers(){
+
+        JFXTreeTableColumn<Groupe,String> groupenom=new JFXTreeTableColumn<>("code tiers");
+        groupenom.setPrefWidth(100);
+        groupenom.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
+                return param.getValue().getValue().code_tiers;
+            }
+        });
+        return groupenom;
+    }
+
+
     private void genererLesGroupes() {
 
-        JFXTreeTableColumn<Groupe,String> inscription_id=this.genererGroupeId();
-        JFXTreeTableColumn<Groupe,String> inscription_dateinscription=this.genererGroupeNom();
+        JFXTreeTableColumn<Groupe,String> groupe_id=this.genererGroupeId();
+        JFXTreeTableColumn<Groupe,String> groupe_nom=this.genererGroupeNom();
+        JFXTreeTableColumn<Groupe,String> groupeCodeTiers=this.genererCodeTiers();
 
         ObservableList<Groupe> inscriptions = FXCollections.observableArrayList();
         List<Groupe> reservations=groupeDao.listeGroupes();
@@ -209,7 +225,7 @@ public class AssocierGroupeSejour implements Vue, Initializable {
             inscriptions.add(groupe);
         }
         final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(inscriptions, RecursiveTreeObject::getChildren);
-        groupe.getColumns().setAll(inscription_id,inscription_dateinscription);
+        groupe.getColumns().setAll(groupe_id,groupe_nom,groupeCodeTiers);
         groupe.setRoot(root);
         groupe.setShowRoot(false);
         optimiserRechercheGroupe();
@@ -240,9 +256,8 @@ public class AssocierGroupeSejour implements Vue, Initializable {
 
                         boolean flag =t.getValue().id.get().toLowerCase().contains(newValue.toLowerCase())||
                                 t.getValue().nom_groupe.get().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().code_tiers.get().toLowerCase().contains(newValue.toLowerCase())
 ;
-                        if(flag)
-                            System.out.println("trouve" + t.getValue().id.get());
 
                         return flag;
 
@@ -406,5 +421,9 @@ public class AssocierGroupeSejour implements Vue, Initializable {
             }
 
         });
+    }
+
+    public void back(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageGroupe();
     }
 }

@@ -253,6 +253,7 @@ public class ConsulterReservation implements Initializable, Vue {
     private EvenementDao evenementDao;
 
 
+    private GroupeDao groupeDao;
     public void initialize(URL location, ResourceBundle resources) {
         groupeSejourClientDao=new GroupeSejourClientDaoImpl(DBconnexion.getConnection());
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
@@ -262,6 +263,7 @@ public class ConsulterReservation implements Initializable, Vue {
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         annulationDao=new AnnulationDaoImpl(DBconnexion.getConnection());
         evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
+        groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         genererTouteslesreservations();
     }
 
@@ -361,7 +363,10 @@ public class ConsulterReservation implements Initializable, Vue {
 
         result.ifPresent(pair -> {
 
-            Evenement evenement=new Evenement("1",this.lidclient.getText(),this.lidsejour.getText(),"paiement",pair.getKey(),
+            Client client=clientDao.getClientParId(this.lidclient.getText());
+            Groupe groupe=groupeDao.getGroupeParId(client.groupe.get());
+            Sejour sejour=sejourDao.getSejourParId(this.lidsejour.getText());
+            Evenement evenement=new Evenement("1",groupe.code_tiers.get(),sejour.refSejour.get(),"paiement",pair.getKey(),
                     new Date().toString().toString(),pair.getValue().toString());
             int res=evenementDao.insererEvenement(evenement);
             if(res==0){
@@ -457,16 +462,20 @@ public class ConsulterReservation implements Initializable, Vue {
         if(result.isPresent()){
             System.out.println("motif "+result.get());
 
-            Annulation annulation=new Annulation(result.get(),this.lidsejour.getText(),this.lidclient.getText());
+            Annulation annulation=new Annulation(result.get(),this.lidsejour.getText(),this.lidclient.getText(),this.lidsejour.getText());
             int res=annulationDao.insererAnnulation(annulation);
             if(res==0){
                 Notification.affichageEchec("echec annulation ", "il y a eu une erreur ");
 
             }else{
 
+                Client client=clientDao.getClientParId(this.lidclient.getText());
+                Groupe groupe=groupeDao.getGroupeParId(client.groupe.get());
+                Sejour sejour=sejourDao.getSejourParId(this.lidsejour.getText());
 
 
-                Evenement evenement = new Evenement("1", this.lidclient.getText(), this.lidsejour.getText(), "anulation-reservation", String.valueOf(0), new Date().toString(),"annulation");
+
+                Evenement evenement = new Evenement("1", groupe.code_tiers.get(), sejour.refSejour.get(), "anulation-reservation", String.valueOf(0), new Date().toString(),"annulation");
                 int x=evenementDao.insererEvenement(evenement);
                 if(x==0){
                     System.out.println("evenenement non enregistre");

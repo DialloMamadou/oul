@@ -595,4 +595,7 @@ public class HistoriqueClient implements Initializable, Vue {
     }
 
 
+    public void back(MouseEvent mouseEvent) {
+        controlleur.consulterClient();
+    }
 }

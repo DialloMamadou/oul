@@ -98,7 +98,7 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
     }
 
     private void remplirData() {
-        Sejour sejour=sejourDao.getSejourParId(AjoutSejourMairieClient.sejourId);
+        Sejour sejour=sejourDao.getSejourParId(sejourId);
         Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
 
         this.dD = sejour.date_debut.get();
@@ -107,6 +107,7 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
         this.aMax = Integer.parseInt(sejour.ageMax.get());
 
         this.date.setText(dD+" "+dF);
+
         this.sejour.setText(sejour.type.get());
         this.centre.setText(centre.nom_centre.get());
         this.lgrouped.setText(groupe);
@@ -196,5 +197,6 @@ public class AjoutSejourMairieClient implements Vue, Initializable {
         m = p.matcher(email.toUpperCase());
         return m.matches();
     }
+
 }
     

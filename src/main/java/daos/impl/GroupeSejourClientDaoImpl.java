@@ -117,9 +117,7 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
         }catch (Exception e){
 
         }
-        if(list==null){
-            Notification.affichageEchec("objet null","null");
-        }
+
         return list;
     }
 

@@ -11,9 +11,11 @@ public class Evenement {
 
 
 
+
+
     public Evenement(String id, String codeclient, String codesejour, String event, String somme, String date
     ,String methode) {
-        this.id = id;
+       this.id = id;
         this.codeclient = codeclient;
         this.codesejour = codesejour;
         this.event = event;
@@ -21,6 +23,8 @@ public class Evenement {
         this.dateEvent = date;
         this.methode=methode;
     }
+
+
 
 /*
 

@@ -54,6 +54,8 @@ public class ConsulterAnnulation implements Initializable, Vue {
     public Label lidclient;
     public Label lidsejour;
     public Label lmotif;
+    private GroupeDao groupeDao;
+
     /**
      * Initializes the controller class.
      */
@@ -111,7 +113,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
 
 
     public JFXTreeTableColumn<Annulation,String> genererIdClient(){
-        JFXTreeTableColumn<Annulation,String> inscription_dateinscription=new JFXTreeTableColumn<>("date inscription");
+        JFXTreeTableColumn<Annulation,String> inscription_dateinscription=new JFXTreeTableColumn<>("client");
         inscription_dateinscription.setPrefWidth(110);
         inscription_dateinscription.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
             @Override
@@ -124,7 +126,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
 
 
     public JFXTreeTableColumn<Annulation,String> genererInscriptionClient(){
-        JFXTreeTableColumn<Annulation,String> inscription_client=new JFXTreeTableColumn<>(" Client");
+        JFXTreeTableColumn<Annulation,String> inscription_client=new JFXTreeTableColumn<>(" motif");
         inscription_client.setPrefWidth(110);
         inscription_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Annulation, String>, ObservableValue<String>>() {
             @Override
@@ -177,7 +179,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
 
     private void showDetailsSejour(TreeItem<Annulation> newValue) {
 
-        this.idinscription.setText(newValue.getValue().id.get());
+        //this.idinscription.setText(newValue.getValue().id.get());
         Sejour sejour=sejourDao.getSejourParId(newValue.getValue().getTriche());
         System.out.println(sejour.toString());
         Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
@@ -253,6 +255,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         annulationDao=new AnnulationDaoImpl(DBconnexion.getConnection());
         evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
+        groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         chargertouslesinscriptions();
     }
 
@@ -365,7 +368,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
         if(result.isPresent()){
             System.out.println("motif "+result.get());
 
-            Annulation annulation=new Annulation(result.get(),this.lidsejour.getText(),this.lidclient.getText());
+            Annulation annulation=new Annulation(result.get(),this.lidsejour.getText(),this.lidclient.getText(),this.lidsejour.getText());
             int res=annulationDao.insererAnnulation(annulation);
             if(res==0){
                 Notification.affichageEchec("echec annulation ", "il y a eu une erreur ");
@@ -374,7 +377,12 @@ public class ConsulterAnnulation implements Initializable, Vue {
 
 
                 Notification.affichageSucces("annulation","l annulation a bien ete effectue");
-                Evenement evenement=new Evenement("1",this.lidclient.getText(),this.lidsejour.getText(),
+
+                Client client=clientDao.getClientParId(this.lidclient.getText());
+                Groupe groupe=groupeDao.getGroupeParId(client.groupe.get());
+                Sejour sejour=sejourDao.getSejourParId(this.lidsejour.getText());
+
+                Evenement evenement=new Evenement("1",groupe.code_tiers.get(),sejour.refSejour.get(),
                         "annulation","0",new Date().toString(),"annultation");
                 evenementDao.insererEvenement(evenement);
                 int bis=reservationDao.supprimerParId(this.idinscription.getText());

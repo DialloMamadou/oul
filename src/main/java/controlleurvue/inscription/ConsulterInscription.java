@@ -59,6 +59,7 @@ public class ConsulterInscription implements Initializable, Vue {
     public Label idclient;
     public Label idsejour;
     public Label groupe;
+    private GroupeDao groupeDao;
     /**
      * Initializes the controller class.
      */
@@ -246,8 +247,11 @@ public class ConsulterInscription implements Initializable, Vue {
                 sejour.id.get(),client.id.get());
         if(groupeSejourClient==null){
             this.groupe.setText("faux");
+            this.groupe.setTextFill(Color.web("#ff0000"));
         }else{
-            this.groupe.setText("true");
+            this.groupe.setText("vrai");
+            this.groupe.setTextFill(Color.web("#00ff00"));
+
         }
     }
 
@@ -306,6 +310,7 @@ public class ConsulterInscription implements Initializable, Vue {
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         annulationDao=new AnnulationDaoImpl(DBconnexion.getConnection());
         evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
+        groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         chargertouslesinscriptions();
     }
 
@@ -406,7 +411,10 @@ public class ConsulterInscription implements Initializable, Vue {
 
         result.ifPresent(pair -> {
 
-            Evenement evenement=new Evenement("1",this.idclient.getText(),this.idsejour.getText(),"paiement",pair.getKey(),
+            Client client=clientDao.getClientParId(this.idclient.getText());
+            Groupe groupe=groupeDao.getGroupeParId(client.groupe.get());
+            Sejour sejour=sejourDao.getSejourParId(this.idsejour.getText());
+            Evenement evenement=new Evenement("1",groupe.code_tiers.get(),sejour.refSejour.get(),"paiement",pair.getKey(),
                     new Date().toString().toString(),pair.getValue().toString());
             int res=evenementDao.insererEvenement(evenement);
             if(res==0){
@@ -517,14 +525,18 @@ public class ConsulterInscription implements Initializable, Vue {
 
             System.out.println("motif "+result.get());
 
-            Annulation annulation=new Annulation(result.get(),this.idsejour.getText(),this.idclient.getText());
+            Annulation annulation=new Annulation(result.get(),this.idsejour.getText(),this.idclient.getText(),this.idsejour.getText());
             int res=annulationDao.insererAnnulation(annulation);
             if(res==0){
                 Notification.affichageEchec("echec annulation ", "il y a eu une erreur ");
 
             }else{
 
-                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "annulation inscription",String.valueOf(0), new Date().toString(),"aucune");
+
+                Client client=clientDao.getClientParId(this.idclient.getText());
+                Groupe groupe=groupeDao.getGroupeParId(client.groupe.get());
+                Sejour sejour=sejourDao.getSejourParId(this.idsejour.getText());
+                Evenement evenement = new Evenement("1", groupe.code_tiers.get(), sejour.refSejour.get(), "annulation inscription",String.valueOf(0), new Date().toString(),"aucune");
                 evenementDao.insererEvenement(evenement);
                 Notification.affichageSucces("annulation","l annulation a bien ete effectue");
                 int bis=inscriptionDao.supperimerParId(this.idinscription.getText());
