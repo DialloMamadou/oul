@@ -383,6 +383,48 @@ evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
         }
     }
 
+    public void supprimer(MouseEvent mouseEvent) {
+
+
+        JFXDialogLayout dialogLayout=new JFXDialogLayout();
+        dialogLayout.setHeading(new Text("ferme"));
+        dialogLayout.setBody(new Text("vous voulez vraiment annuler cette asssociation ?"));
+
+        JFXButton ok=new JFXButton("oui");
+        JFXButton cancel=new JFXButton("non");
+
+        final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
+
+        ok.setOnAction(MouseEvent ->    annulerFinal(dialog));
+        cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            public void handle(javafx.event.ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialogLayout.setActions(ok,cancel);
+        dialog.show();
+
+    }
+
+    private void annulerFinal(JFXDialog dialog) {
+
+        int res=associationGroupeSejourDao.supprimerById(this.idassoc.getText());
+        if (res > 0) {
+            Notification.affichageSucces("succes", "association supprimer avec succes");
+            this.loadallassociation();
+            dialog.close();
+            return;
+        } else {
+            Notification.affichageEchec("echec", "echec dans la suppresion de l association");
+            dialog.close();
+            return;
+
+
+        }
+
+    }
+
+
     public void listeinscrit(MouseEvent mouseEvent) {
         if (this.idsejour.getText().isEmpty()){
             Notification.affichageEchec("Message", "Veuillez selectionner un sejour(un groupe) SVP  ");

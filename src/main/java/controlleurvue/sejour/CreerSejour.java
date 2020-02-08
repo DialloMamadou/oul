@@ -52,6 +52,8 @@ public class CreerSejour implements Initializable, Vue {
     public TextField agemax;
     public TextField agemin;
     public TextField prix;
+    public TextField refsejour;
+
 
     private SejourDao sejourDao;
     private CentreDao centreDao;
@@ -91,6 +93,7 @@ public class CreerSejour implements Initializable, Vue {
             String min=this.agemin.getText();
             String prix=this.prix.getText();
             String capacite=this.capacite.getText();
+            String refSejour=this.refsejour.getText();
 
             Integer.parseInt(max);
             Integer.parseInt(min);
@@ -99,17 +102,20 @@ public class CreerSejour implements Initializable, Vue {
 
             Centre centre=centreDao.trouverParNomCentre(centr);
 
-            //String duree= String.valueOf(Period.between(dateD.getValue(),dateF.getValue()).getDays());
-
-            long diff = java.sql.Date.valueOf(dateF.getValue()).getTime() - java.sql.Date.valueOf(dateD.getValue()).getTime();
-            String duree = String.valueOf(diff+1 / (1000*60*60*24));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateAvant = sdf.parse(dateD.getValue().toString());
+            Date dateApres = sdf.parse(dateF.getValue().toString());
+            long diff = dateApres.getTime() - dateAvant.getTime();
+            long nbJours = (diff / (1000*60*60*24));
+            String duree = String.valueOf(nbJours);
             System.out.println("duree = "+duree);
 
             if (controleDate(datedebut, datefin) && Integer.parseInt(min) >= 4 && Integer.parseInt(min) <= 17 && type.length() >=5 ) {
-                Sejour sejour = new Sejour(duree, datedebut, datefin, type, centre.id.get(), prix, min, max, capacite);
+                Sejour sejour = new Sejour(duree, datedebut, datefin, type, centre.id.get(), prix, min, max, capacite, refSejour);
                 int res = sejourDao.insererSejour(sejour);
-                if (res > 0) {
-                    Notification.affichageSucces("succes", "Sejour creer avec succes");
+                if (nbJours > 0) {
+                    Notification.affichageSucces("succes", "Séjour créé avec succès");
+                    this.back(mouseEvent);
 
                 } else {
                     Notification.affichageEchec("echec", "echec dans la création du sejour");
@@ -117,7 +123,7 @@ public class CreerSejour implements Initializable, Vue {
             } else {
                 Notification.affichageEchec("echec", "donnée(s) incorrecte(s)");
             }
-        }catch (NullPointerException | NumberFormatException e ){
+        }catch (NullPointerException | NumberFormatException | ParseException e ){
             Notification.affichageEchec("Problème de donnees","veuillez saisir de(s) champ(s) non vides et valide(s) ");
 
         }

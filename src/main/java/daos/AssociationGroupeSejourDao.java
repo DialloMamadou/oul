@@ -15,6 +15,8 @@ public interface AssociationGroupeSejourDao {
 
     Associationgroupesejour getById(String s);
 
+    int supprimerById(String text);
+
     List<String> testCapaciteCentre(String id);
 
     int nbReservationGroupSejourForId(String id);

@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane fx:id="stackepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.sejour.ConsulterSejour">
     <children>
         <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/combaz.jpg);">
@@ -38,19 +37,19 @@
                                 </JFXButton>
                             </children>
                         </Pane>
-                        <Pane layoutX="9.0" layoutY="344.0" prefHeight="200.0" prefWidth="378.0">
+                        <Pane layoutX="9.0" layoutY="346.0" prefHeight="200.0" prefWidth="378.0">
                             <children>
-                                <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="40.0" onMouseClicked="#genereliste" prefHeight="30.0" prefWidth="103.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="generer liste" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="114.0" layoutY="100.0" onMouseClicked="#genereliste" prefHeight="30.0" prefWidth="162.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Générer la liste" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
-                                <JFXButton buttonType="RAISED" layoutX="131.0" layoutY="40.0" onMouseClicked="#genereliste" prefHeight="30.0" prefWidth="103.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="convocation" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="40.0" onMouseClicked="#genererattestation" prefHeight="30.0" prefWidth="148.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Générer Attestation/Facture" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="255.0" layoutY="40.0" onMouseClicked="#envoieEmail" prefHeight="30.0" prefWidth="103.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="email" textFill="WHITE">
+                        <JFXButton buttonType="RAISED" layoutX="235.0" layoutY="40.0" onMouseClicked="#envoieEmail" prefHeight="30.0" prefWidth="123.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="Envoyer un mail" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -75,10 +74,10 @@
                                     <children>
                                         <Label text="CENTRE" />
                                         <Label text="SEJOUR" GridPane.rowIndex="1" />
-                                        <Label text="date" GridPane.rowIndex="2" />
-                                        <Label text="age min max" GridPane.rowIndex="3" />
+                                        <Label text="DATE" GridPane.rowIndex="2" />
+                                        <Label text="AGE" GridPane.rowIndex="3" />
                                         <Label text="PRIX" GridPane.rowIndex="4" />
-                                        <Label text="capacite" GridPane.rowIndex="5" />
+                                        <Label text="CAPACITE" GridPane.rowIndex="5" />
                                         <Label fx:id="lcentre" GridPane.columnIndex="1" />
                                         <Label id="lsejour" fx:id="lsejour" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <font>
@@ -122,7 +121,7 @@
                            </font></Label>
                             </children>
                         </GridPane>
-                        <Label layoutX="14.0" layoutY="224.0" prefHeight="17.0" prefWidth="59.0" text="id sejour" />
+                        <Label layoutX="14.0" layoutY="224.0" prefHeight="17.0" prefWidth="85.0" text="Ref SEJOUR " />
                         <Label layoutX="21.0" layoutY="267.0" text="reste a payer" />
                         <Label fx:id="reste" layoutX="107.0" layoutY="267.0" />
                   <JFXRadioButton fx:id="retard" layoutX="9.0" layoutY="309.0" text="retard" />

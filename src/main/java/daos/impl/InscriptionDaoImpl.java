@@ -168,13 +168,13 @@ return x;
         String sql="SELECT * FROM inscription WHERE id_sejour ='"+id_sejour+"' AND code_client="+code_client;
         Inscription inscription =null;
 
-        Notification.affichageSucces("voici la requete ",sql);
+        //Notification.affichageSucces("voici la requete ",sql);
 
 
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
-            Notification.affichageSucces(" trouve ",sql);
+            //Notification.affichageSucces(" trouve ",sql);
 
             while(rs.next()){
 
@@ -182,13 +182,13 @@ return x;
                         rs.getString(4),rs.getString(5),rs.getString(6));
 
             }
-
+        return inscription;
 
         }catch (Exception e){
 
         }
 
-        return inscription;
+        return null;
     }
 
     @Override
@@ -236,6 +236,31 @@ return x;
         }
         return nbInsc;
 
+    }
+
+    @Override
+    public Inscription getInscritptionParIdInscription(String s) {
+        String sql="SELECT * FROM inscription WHERE id_inscription ='"+s+"'";
+        Inscription liste=new Inscription();
+
+
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+
+                liste=new Inscription(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6));
+
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+        return liste;
     }
 
 

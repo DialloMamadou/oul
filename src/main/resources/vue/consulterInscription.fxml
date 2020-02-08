@@ -59,7 +59,7 @@
 
                         <Pane layoutX="5.0" layoutY="85.0" prefHeight="368.0" prefWidth="415.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="300.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="facture" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="300.0" onMouseClicked="#EditerFacture" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: #09e2a7;" text="facture" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>

@@ -12,6 +12,7 @@ import controlleurvue.Vue;
 import controlleurvue.inscription.CreerInscriptionSejour;
 import daos.*;
 import daos.impl.*;
+import gestiondocuments.*;
 import dto.ClientDto;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -43,13 +44,15 @@ import principale.Controlleur;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+//import java.text.DateFormat;
+//import java.text.SimpleDateFormat;
 
 public class ConsulterSejour implements Initializable, Vue {
 
@@ -74,6 +77,7 @@ public class ConsulterSejour implements Initializable, Vue {
     public JFXRadioButton tous;
     public JFXRadioButton regle;
     public JFXRadioButton retard;
+    public Label refsejour;
 
     /**
      * Initializes the controller class.
@@ -96,6 +100,9 @@ public class ConsulterSejour implements Initializable, Vue {
 
     private CentreDao centreDao;
     private GroupeDao groupeDao;
+
+    private GestionDocs gestionDocs;
+    private Client client = null;
 
 
     public JFXTreeTableColumn<Sejour,String> genererSejourId(){
@@ -124,7 +131,6 @@ public class ConsulterSejour implements Initializable, Vue {
         });
         return sejour_duree;
     }
-
 
 
 
@@ -231,6 +237,7 @@ public class ConsulterSejour implements Initializable, Vue {
         clientDao=new ClientDaoImpl(DBconnexion.getConnection());
         groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
+        gestionDocs = new GestionDocsImpl();
 
 
 
@@ -401,6 +408,9 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
     public void RemplirClientSejour(Sejour value) {
+        Sejour sejour=sejourDao.getSejourParId(idsejour.getText());
+        System.out.println("ref="+sejour.refSejour.get());
+       // this.refsejour.setText(sejour.refSejour.getValue());
         System.out.println("on remplit liste");
         List<Inscription>listeInscription=this.inscriptionDao.getInscriptionsParIdSejour(value.id.get());
         List<Client>listeClient=new ArrayList<>();
@@ -415,7 +425,7 @@ public class ConsulterSejour implements Initializable, Vue {
                     int prixTotal=Integer.parseInt(lprix.getText());
 
 
-                    System.out.println("selected retard");
+                    System.out.println("selected regle");
                     if(payer==prixTotal){
                         Client client=clientDao.getClientParId(inscription.code_client.get());
                         listeClient.add(client);
@@ -520,8 +530,8 @@ public class ConsulterSejour implements Initializable, Vue {
     private void showDetailsClient(TreeItem<Client> newValue) {
 
         if(newValue!=null) {
-            System.out.println("client " + newValue);
-            Client client = clientDao.getClientParId(newValue.getValue().id.get());
+            System.out.println("client alscma " + newValue);
+            client = clientDao.getClientParId(newValue.getValue().id.get());
 
 
             this.idclient.setText(client.id.get());
@@ -604,166 +614,182 @@ public class ConsulterSejour implements Initializable, Vue {
     public void hideSignupPane(ActionEvent actionEvent) {
     }
 
-    public void genereliste(MouseEvent mouseEvent) {
-        Sejour sejour=sejourDao.getSejourParId(this.idsejour.getText());
-        List<Inscription>inscriptions=inscriptionDao.getInscriptionsParIdSejour(sejour.id.get());
-        List<Client>clients=new ArrayList<>();
-        for(Inscription inscription:inscriptions){
-            Client client=clientDao.getClientParId(inscription.code_client.get());
-            clients.add(client);
+    public void genererattestation(MouseEvent mouseEvent){
+        if (this.client != null) {
+            Sejour sejour = sejourDao.getSejourParId(this.idsejour.getText());
+
+            gestionDocs.genereAttestationFacture(this.client, sejour);
+        }else {
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
+
         }
 
+        /*if(client != null){
+            Document doc = new Document();
 
-        Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
+            try {
+                PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/Inscription_"+client.prenom_client.get()+".pdf"));
+                doc.open();
 
-        System.out.println("centre ");
-        System.out.println(centre.nom_centre.get()+" avec capacite "+centre.capacite_centre.get());
-        System.out.println("********************************");
-        System.out.println(" sejour");
-        System.out.println(sejour.type.get()+" age "+sejour.ageMin.get()+" "+sejour.ageMax.get());
-        System.out.println("*************************************");
-        for(Client client:clients){
-            System.out.println(client.prenom_client.get()+" "+client.nom_client.get());
-        }
+                //Add Image
+                Image img = Image.getInstance("src/main/resources/img/oul.jpg");
+                //Fixed Positioning
+                img.setAbsolutePosition(25f, 750f);
+                //Scale to new height and new width of image
+                img.scaleAbsolute(80, 80);
+                //Add to document
+                doc.add(img);
+                //doc.add(Chunk.SPACETABBING);
+                doc.add(new Paragraph("\n\n"));
+                Font font = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD);
+                font.setColor(BaseColor.BLUE);
+                Font font1 =FontFactory.getFont(FontFactory.HELVETICA, 10);
+                font1.setColor(BaseColor.BLUE);
 
-        Document doc = new Document();
+                Font font0 =FontFactory.getFont(FontFactory.HELVETICA, 8);
 
-        try {
-            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/"+sejour.nom_centre.get()+".pdf"));
-            doc.open();
-
-            //Add Image
-            Image img = Image.getInstance("src/main/resources/img/oul.jpg");
-            //Fixed Positioning
-            img.setAbsolutePosition(25f, 750f);
-            //Scale to new height and new width of image
-            img.scaleAbsolute(80, 80);
-            //Add to document
-            doc.add(img);
-            //doc.add(Chunk.SPACETABBING);
-            doc.add(new Paragraph("\n\n"));
-            Font font = FontFactory.getFont(FontFactory.HELVETICA, 9, Font.BOLD);
-            font.setColor(BaseColor.BLUE);
-            Font font1 =FontFactory.getFont(FontFactory.HELVETICA, 10);
-            font1.setColor(BaseColor.BLUE);
-
-            Font font0 =FontFactory.getFont(FontFactory.HELVETICA, 8);
-
-            Font font2 =FontFactory.getFont(FontFactory.HELVETICA, 10);
+                Font font2 =FontFactory.getFont(FontFactory.HELVETICA, 10);
 
 
-            doc.add(new Phrase("ŒUVRE UNIVERSITAIRE DU LOIRET\n",font));
-            doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61\n",font0));
-            doc.add(new Phrase("siege.asso@ouloiret.fr\nwww.ouloiret.fr \n",font1));
-            doc.add(new Phrase("SIRET : 77550821100072 \nAPE : 552 E",font0));
+                doc.add(new Phrase("ŒUVRE UNIVERSITAIRE DU LOIRET\n",font));
+                doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61\n",font0));
+                doc.add(new Phrase("siege.asso@ouloiret.fr\nwww.ouloiret.fr \n",font1));
+                doc.add(new Phrase("SIRET : 77550821100072 \nAPE : 552 E",font0));
 
-            Paragraph pCentre = new Paragraph("CENTRE"+"    " +centre.nom_centre.get()+" avec capacite "+centre.capacite_centre.get());
-            Paragraph pdateSejour = new Paragraph("DATES DU SEJOUR"+"     "+ldate.getText());
-            pCentre.setAlignment(Element.ALIGN_CENTER);
-            pdateSejour.setAlignment(Element.ALIGN_CENTER);
+                Paragraph dest = new Paragraph("Mme ou M. "+client.observation.get()+"              \n"+client.codePostale.get()+" "+client.adresse.get()+"             ",font2);
+                dest.setAlignment(Element.ALIGN_RIGHT);
+                doc.add(dest);
 
-            doc.add(pCentre);
-            doc.add(pdateSejour);
+                Paragraph p = new Paragraph("\n\n");
 
-
-            Paragraph titre =new Paragraph(" \nListe des enfants inscritent à ce sejour:\n");
-            titre.setAlignment(Element.ALIGN_CENTER);
-            doc.add(titre);
-
-            doc.add(new Paragraph(" "));
+                doc.add(p);
+                Paragraph titre = new Paragraph("ATTESTATION / FACTURE",font);
+                titre.setAlignment(Element.ALIGN_CENTER);
+                doc.add(titre);
+                doc.add(p);
 
 
-            PdfPTable table = new PdfPTable(8);
-            table.setWidthPercentage(100);
+                String lettre = "Je soussigné, M. JOBERT, Directeur de l’Œuvre Universitaire du Loiret, certifie que :\n\n"+
+                        "L’enfant : " + client.prenom_client.get()+" "+client.nom_client.get()+"\n\n"+
+                         "Né(e) le : " + client.datenaissance.get()+"\n"+
+                         "A participé à l'activité "+sejour.type.get()+" de l’Œuvre Universitaire du Loiret  à : "+sejour.nom_centre.get()+"  du  date.getValue()      soit :"+sejour.duree.get()+" jours.\n\n"+
+                        "Le coût du séjour  pour la famille s’élève à : "+sejour.prix.get()+" €       EUROS.\n\n";
 
-            PdfPCell cell;
+                        String numDec = "";
+                        if(sejour.type.get() == "classe de découverte") {
+                            numDec = "N°de Déclaration de l’Inspection Académique :" ;
+                        }else{
+                            numDec = "N° de Déclaration à la D.D.C.S du Loiret :";
+                        }
+                        lettre+=numDec;
 
-            cell = new PdfPCell(new Phrase("id", FontFactory.getFont("Comic Sans MS", 12)));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBackgroundColor(BaseColor.GRAY);
-            table.addCell(cell);
+                Paragraph par = new Paragraph(lettre);
 
-            cell = new PdfPCell(new Phrase("nom", FontFactory.getFont("Comic Sans MS", 12)));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBackgroundColor(BaseColor.GRAY);
-            table.addCell(cell);
+                doc.add(par);
+                doc.add(p);
+                Paragraph st = new Paragraph(" FACTURE ACQUITTEE",font);
+                st.setAlignment(Element.ALIGN_CENTER);
+                doc.add(st);
 
-            cell = new PdfPCell(new Phrase("prenom", FontFactory.getFont("Comic Sans MS", 12)));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBackgroundColor(BaseColor.GRAY);
-            table.addCell(cell);
+                DateFormat fullDateFormat = DateFormat.getDateInstance(DateFormat.FULL);
+                Paragraph dt = new Paragraph("Orléans, le "+fullDateFormat.format(new Date()),font2);
 
-            cell = new PdfPCell(new Phrase("date de nais", FontFactory.getFont("Comic Sans MS", 12)));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBackgroundColor(BaseColor.GRAY);
-            table.addCell(cell);
+                dt.setAlignment(Element.ALIGN_CENTER);
+                doc.add(dt);
 
-            cell = new PdfPCell(new Phrase("groupe", FontFactory.getFont("Comic Sans MS", 12)));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBackgroundColor(BaseColor.GRAY);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("adresse", FontFactory.getFont("Comic Sans MS", 12)));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBackgroundColor(BaseColor.GRAY);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("code postale", FontFactory.getFont("Comic Sans MS", 12)));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBackgroundColor(BaseColor.GRAY);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("observation", FontFactory.getFont("Comic Sans MS", 12)));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBackgroundColor(BaseColor.GRAY);
-            table.addCell(cell);
-
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
+                Paragraph dir = new Paragraph(" Le directeur: \nM. JOBERT",font);
+                dir.setAlignment(Element.ALIGN_CENTER);
+                doc.add(dir);
 
 
-            for (Client client : clients){
-                cell = new PdfPCell(new Phrase(client.id.get(), FontFactory.getFont("Arial", 12)));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                /*Paragraph par = new Paragraph("       Madame, Monsieur,\n " +
+                        "     Nous avons le plaisir de vous confirmer l’inscription de votre enfant " + client.prenom_client.get()+" "+client.nom_client.get()+"\n"+
+                        "     •  au centre de vacances de CV "+sejour.nom_centre.get()+",\n     •  pour le séjour du "+date.getValue()+"\n     •  pour une durée de "+sejour.duree.get()+" jours.\n"+
+                        "     Les frais de séjour et de voyage s’élèvent  à : "+sejour.prix.get()+" €, auxquels s’ajoute le montant de l’adhésion, soit 3,00 € par famille et par année.\n\n"+
+                        "     Vous avez versé des arrhes pour un montant de  50 € ainsi que l’adhésion de 3 € (sauf si elle a déjà été réglée lors d’un précédent séjour). Le solde est à régler entre trois et quatre semaines avant le départ. Nous vous rappelons que notre association est habilitée pour accepter les paiements par Chèques-Vacances.\n\n"+
+                        "     Deux à trois semaines avant le départ, une fois le séjour soldé, nous vous ferons parvenir les documents suivants :\n"+
+                        "     •  la convocation avec les lieux et heures de départ et retour\n"+
+                        "     •  le dossier du jeune ou de l’enfant à compléter\n"+
+                        "     •  la lettre du directeur vous donnant des informations sur le déroulement du séjour.\n"+
+                        "     Nous vous rappelons que pour toutes les activités nautiques (voile, kayak, canyoning, surf, plongée…) le test de natation est obligatoire (le brevet de 25 ou 50 m est non valable).\n"+
+                        "     Attention : Pour la plongée un certificat médical est également demandé.\n"+
+                        "     Si vous êtes en possession de Bons-Vacances CAF ou MSA et si vous ne nous les avez pas encore transmis, veuillez nous les adresser dans les meilleurs délais (ou votre numéro d’allocataire pour les VACAF).\n"+
+                        "     En souhaitant que votre enfant passe un agréable séjour en Centre de Vacances, nous vous adressons nos respectueuses salutations.",font2);
 
-                cell = new PdfPCell(new Phrase(client.nom_client.get(), FontFactory.getFont("Arial", 12)));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                doc.add(par);
+                Paragraph dir = new Paragraph(" Le directeur: \nM. JOBERT",font);
+                dir.setAlignment(Element.ALIGN_CENTER);
+                doc.add(dir);
 
-                cell = new PdfPCell(new Phrase(client.prenom_client.get(), FontFactory.getFont("Arial", 12)));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
 
-                cell = new PdfPCell(new Phrase(client.datenaissance.get(), FontFactory.getFont("Arial", 12)));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                doc.add(new Phrase("-------------------------------------------------------------------------------------------------------------------- "));
+                Paragraph p = new Paragraph(" PAPILLON à DETACHER ET à RETOURNER A L’O.U.L.AVEC VOTRE REGLEMENT\n (si séjour NON SOLDÉ ou non pris en charge)",font);
+                p.setAlignment(Element.ALIGN_CENTER);
+                doc.add(p);
+                doc.add(new Phrase("NOM :",font2));
+                doc.add(new Phrase(client.nom_client.get()+"\n",font));
+                doc.add(new Phrase("REFERENCE :",font2));
+                font.setSize(8);
+                doc.add(new Phrase("159297 /  1112 - 8V0 /  CV "+sejour.nom_centre.get()+" du "+sejour.duree.get()+"\n",font));
+                doc.add(new Phrase("     (votre dossier ne pourra être pris en compte sans cette référence)\n\n",font2));
+                Image alerte1 = Image.getInstance("src/main/resources/img/alerte.jpg");
 
-                cell = new PdfPCell(new Phrase(client.groupe.get(), FontFactory.getFont("Arial", 12)));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                alerte1.setAbsolutePosition(40f, 90f);
 
-                cell = new PdfPCell(new Phrase(client.adresse.get(), FontFactory.getFont("Arial", 12)));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                alerte1.scaleAbsolute(10, 10);
+                doc.add(alerte1);
 
-                cell = new PdfPCell(new Phrase(client.codePostale.get(), FontFactory.getFont("Arial", 12)));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-
-                cell = new PdfPCell(new Phrase(client.observation.get(), FontFactory.getFont("Arial", 12)));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                doc.add(new Paragraph("Le transport n’est pas compris pour les centres du Loiret, (INGRANNES, LES CAILLETTES, L’ETANG DU PUITS)\n"+
+                        "vous devez conduire votre enfant sur place. Cependant un départ d’ORLEANS est possible (20 € ALLER/RETOUR),\n"+
+                        "        le nombre de places étant limité, veuillez nous en informer par téléphone ou par courrier.",font));
+                doc.close();
+                writer.close();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
             }
+        }else{
+            Notification.affichageEchec("erreur", "Veuillez selectionner le client");
+        }*/
 
-            doc.add(table);
-
-            doc.close();
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void genereliste(MouseEvent mouseEvent) {
+        if (this.idsejour.getText().isEmpty()) {
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
+
+        } else {
+
+            Sejour sejour = sejourDao.getSejourParId(this.idsejour.getText());
+            List<Inscription> inscriptions = inscriptionDao.getInscriptionsParIdSejour(sejour.id.get());
+            List<Client> clients = new ArrayList<>();
+            for (Inscription inscription : inscriptions) {
+                Client client = clientDao.getClientParId(inscription.code_client.get());
+                clients.add(client);
+            }
+
+            Centre centre = centreDao.getCentreParId(sejour.nom_centre.get());
+
+            gestionDocs.genereListeInscrit(clients, sejour, centre);
+
+        }
+    }
 
     public void envoieEmail(MouseEvent mouseEvent) {
         Email.idclient="-1";
