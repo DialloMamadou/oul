@@ -37,11 +37,15 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CreerClient  implements Initializable, Vue {
 
@@ -59,7 +63,7 @@ public class CreerClient  implements Initializable, Vue {
     public TextField poste;
     public DatePicker annee;
     public TextField adresse;
-    public Label groupelabel;
+    public TextField groupelabel;
     public JFXTreeTableView<Groupe> tablegroupe;
     public JFXTextField chercher;
 
@@ -87,35 +91,81 @@ public class CreerClient  implements Initializable, Vue {
 
 
     public void book(MouseEvent mouseEvent) {
-    //    Groupe groupe=groupeDao.trouverGroupeParNomGroupe(this.groupe.getValue().toString().trim());
+        try {
 
-        String prenom=this.prenom.getText();
-        String nom=this.nom.getText();
-      //  String id_group=groupe.id.get();
-        String portable=this.portable.getText();
-        String observation=this.observation.getText();
-        String email=this.email.getText();
-        String adresse=this.adresse.getText();
-        String poste=this.poste.getText();
-        System.out.println("poste =="+poste);
-        String dateNaissance=this.annee.getValue().toString();
+        //    Groupe groupe=groupeDao.trouverGroupeParNomGroupe(this.groupe.getValue().toString().trim());
 
+            String prenom=this.prenom.getText();
+            String nom=this.nom.getText();
+          //  String id_group=groupe.id.get();
+            String portable=this.portable.getText();
+            String observation=this.observation.getText();
+            String email=this.email.getText();
+            String adresse=this.adresse.getText();
+            String poste=this.poste.getText();
+            System.out.println("poste =="+poste);
+            String dateNaissance=this.annee.getValue().toString();
+            String groupeL=this.groupelabel.getText();
 
+            if (!nom.isEmpty() && !prenom.isEmpty() && !portable.isEmpty() && !adresse.isEmpty() && !poste.isEmpty() && !dateNaissance.isEmpty()) {
 
-        String groupeL=this.groupelabel.getText();
+                if ( !id_Groupe.isEmpty()) {
+                        if (isEmailAdress(email)){
+                            if (isCodePostale(poste)){
+                                Client cl = testClientExiste(nom , prenom, dateNaissance, id_Groupe);
+                                if ( cl== null) {
+                                    Client client = new Client("", nom, prenom, id_Groupe, portable, observation, email, adresse, poste, dateNaissance);
 
-        Client client=new Client("",nom,prenom,id_Groupe,portable,observation,email,adresse,poste,dateNaissance);
+                                    int res = this.clientDao.insererClient(client);
 
-        int res=this.clientDao.insererClient(client);
+                                    if (res > 0) {
+                                        Notification.affichageSucces("succes", "client creer avec succes");
+                                        this.controlleur.creerInscription();
+                                    } else {
+                                        Notification.affichageEchec("erreur", "il y a eu une erreur au moment de la creation");
+                                    }
+                                }else {
+                                    Notification.affichageEchec("erreur", "le client existe déjà avec ce groupe ");
+                                }
+                            }else {
+                                Notification.affichageEchec("erreur","le code poste est incorrect ");
+                            }
+                        }
+                        else {
+                            Notification.affichageEchec("erreur","l'Email est incorrect ");
+                        }
+                }else {
+                    Notification.affichageEchec("erreur", "Veuillez selectionner son groupe");
 
-        if(res>0){
-            Notification.affichageSucces("succes","client creer avec succes");
-
-        }else{
-            Notification.affichageEchec("erreur","il y a eu une erreur au moment de la creation");
-
+                }
+            }else {
+                Notification.affichageEchec("Problème de donnees", "veuillez saisir de(s) champ(s) non vide(s)");
+            }
+        }catch (NullPointerException | NumberFormatException e){
+            Notification.affichageEchec("Problème de donnees","veuillez saisir de(s) champ(s) non vide(s)et valide(s) ");
         }
 
+    }
+
+
+
+    public static boolean isEmailAdress(String email){
+        Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
+        Matcher m;
+        m = p.matcher(email.toUpperCase());
+        return m.matches();
+    }
+
+    public static boolean isCodePostale(String codePostale){
+        Pattern p = Pattern.compile("^(([0-8][0-9])|(9[0-5])|(2[ab]))[0-9]{3}$");
+        Matcher m;
+        m = p.matcher(codePostale.toUpperCase());
+        return m.matches();
+    }
+
+    public Client testClientExiste(String nom , String prenom, String dN, String idGrp){
+        System.out.println("dans testClientExiste");
+        return clientDao.getClient( nom , prenom, dN, idGrp);
     }
 
 

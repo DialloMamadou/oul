@@ -12,6 +12,8 @@ import dto.CentreDto;
 import dto.ClientDto;
 import enumerations.Depart;
 import enumerations.Paiement;
+import gestiondocuments.GestionDocs;
+import gestiondocuments.GestionDocsImpl;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -79,6 +81,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
     public Label iduser;
 
     private Controlleur controlleur;
+    private GestionDocs gestionDocs;
 
 
     private void chargementClients(){
@@ -216,7 +219,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
                                         || t.getValue().prenom_client.getValue().contains(newValue)
                                         || t.getValue().groupe.getValue().contains(newValue)
                                         || t.getValue().datenaissance.getValue().equals(newValue)
-                                ||t.getValue().id_client.getValue().equals(newValue);
+                                        ||t.getValue().id_client.getValue().equals(newValue);
                         ;
                         if(flag)
                             System.out.println("trouve");
@@ -277,7 +280,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
         this.type.valueProperty().addListener((obs, oldItem, newItem) -> {
             remplirtemp((String)newItem);
-            });
+        });
 
         this.duree.valueProperty().addListener((obs, oldItem, newItem) -> {
             remplirDate((String)newItem);
@@ -351,9 +354,9 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
         List<Sejour>liste=sejourDao.getSejourParTypeEtDuree(type.getValue(),newItem);
 
-for(Sejour sejour:liste){
-    this.date.getItems().add(sejour.date_debut.get()+" au "+sejour.date_fin.get());
-}
+        for(Sejour sejour:liste){
+            this.date.getItems().add(sejour.date_debut.get()+" au "+sejour.date_fin.get());
+        }
 
     }
 
@@ -446,6 +449,7 @@ for(Sejour sejour:liste){
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         reservationDao=new ReservationDaoImpl(DBconnexion.getConnection());
+        gestionDocs =new GestionDocsImpl();
 
     }
 
@@ -456,13 +460,42 @@ for(Sejour sejour:liste){
 
     public void validerinscription(MouseEvent mouseEvent) {
 
-        String montant=this.accompte.getText();
-        System.out.println("accompte :"+montant);
-        int x=Integer.parseInt(montant);
-        if(x>0){
-            lancerDemandeInscription();
-        }else{
-            lancerDemandeReservation();
+        try {
+            String date=(String)this.date.getValue();
+            String[] args = date.split(" au ");
+            Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
+            Client client=clientDao.getClientParId(iduser.getText());
+            Inscription inscription = inscriptionDao.getInscriptionsParIdSejourEtIdClient(sejour.id.get(), client.id.get());
+            Reservation reservation = reservationDao.getReservationParIdClientEtIdSejour(client.id.get(), sejour.id.get());
+
+            String montant = this.accompte.getText();
+            System.out.println("accompte :" + montant);
+            int x = Integer.parseInt(montant);
+
+            if (x>Integer.parseInt(sejour.prix.get())) {
+                Notification.affichageEchec("Echec", "L'acompte ne doit pas être superieur au prix du séjour");
+            }else if (x<0){
+                Notification.affichageEchec("Echec", "Le montant ne doit être négatif");
+            }else {
+
+                if (x > 0) {
+                    if (inscription == null) {
+                        lancerDemandeInscription();
+                    } else {
+                        Notification.affichageEchec("Echec", "Cet enfant est déjà inscrit pour ce sejour");
+                    }
+                } else {
+                    if (reservation == null) {
+                        lancerDemandeReservation();
+                    } else {
+                        Notification.affichageEchec("Echec", "Cet enfant à déjà une reservtion pour ce sejour");
+                    }
+                }
+            }
+
+        }catch (NullPointerException | NumberFormatException e){
+            Notification.affichageEchec("Echec","Veuillez remplir le(s) champ(s) vide(s) avec des bonnes valeurs");
+
         }
 
 
@@ -494,6 +527,7 @@ for(Sejour sejour:liste){
     }
 
     private void enregistrerReservation() {
+
         String date=(String)this.date.getValue();
         String[] args = date.split(" au ");
         Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
@@ -522,7 +556,7 @@ for(Sejour sejour:liste){
 
         JFXDialogLayout dialogLayout=new JFXDialogLayout();
         dialogLayout.setHeading(new Text("finaliser inscription"));
-      // dialogLayout.getBody().add(new Text("vous voulez finaliser cette inscription  ?"));
+        // dialogLayout.getBody().add(new Text("vous voulez finaliser cette inscription  ?"));
         ComboBox comboBox=new ComboBox();
         for(Paiement paiement:Paiement.values()){
             comboBox.getItems().add(paiement);
@@ -530,7 +564,7 @@ for(Sejour sejour:liste){
 
 
         VBox vbox=new VBox();
-        vbox.getChildren().add(new Text("vous voulez finaliser cette inscription  ?"));
+        vbox.getChildren().add(new Text("Voulez vous finaliser cette inscription  ?\nMerci de séléctionner le type de paiement"));
         vbox.getChildren().add(comboBox);
 
         dialogLayout.getBody().add(vbox);
@@ -561,116 +595,39 @@ for(Sejour sejour:liste){
 
 
     public void enrergistrerInscription(Object value){
-        String date=(String)this.date.getValue();
-        String[] args = date.split(" au ");
-        Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
-        System.out.println("sejour ="+sejour);
-       Client client=clientDao.getClientParId(iduser.getText());
-       System.out.println("client :"+client.prenom_client.get()+" "+client.nom_client.get());
-        System.out.println("sejour :"+sejour.type.get()+" "+sejour.capacite.get());
-        String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-        String depart=(String)this.depart.getValue().toString();
-        Inscription inscription=new Inscription(this.accompte.getText().toString(), aujourdhui,
-        client.id.get(),sejour.id.get(),depart) ;
-        int res=inscriptionDao.insererInscription(inscription);
-        if(res>0){
-
-            Evenement evenement=new Evenement("1",client.groupe.get(),sejour.id.get(),"paiement inscription",this.accompte.getText(),new Date().toString(),value.toString());
-            evenementDao.insererEvenement(evenement);
-            Notification.affichageSucces("succes","inscription faite avec succes");
-            confirmationInscriptionPDF(client,sejour);
-
-        }else{
-            Notification.affichageEchec("erreur","echec dans la creation de la reservation");
-        }
-    }
-    public void confirmationInscriptionPDF(Client client,Sejour sejour){
-        Document doc = new Document();
-
         try {
-            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/Inscription_"+client.prenom_client.get()+".pdf"));
-            doc.open();
 
-            //Add Image
-            Image img = Image.getInstance("src/main/resources/img/oul.jpg");
-            //Fixed Positioning
-            img.setAbsolutePosition(30f, 700f);
-            //Scale to new height and new width of image
-            img.scaleAbsolute(100, 80);
-            //Add to document
-            doc.add(img);
-            //doc.add(Chunk.SPACETABBING);
-            doc.add(new Paragraph("\n\n\n\n\n"));
-            Font font = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD);
-            font.setColor(BaseColor.BLUE);
-            Font font1 =FontFactory.getFont(FontFactory.HELVETICA, 10);
-            font1.setColor(BaseColor.BLUE);
-
-            Font font2 =FontFactory.getFont(FontFactory.HELVETICA, 8);
+            String modePaiemt =value.toString();
+            System.out.println("value =" + value.toString());
 
 
-            doc.add(new Phrase("ŒUVRE UNIVERSITAIRE DU LOIRET\n",font));
-            doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61\n",font2));
-            doc.add(new Phrase("siege.asso@ouloiret.fr\nwww.ouloiret.fr \n",font1));
-            doc.add(new Phrase("SIRET : 77550821100072 \nAPE : 552 E",font2));
+            String date = (String) this.date.getValue();
+            String[] args = date.split(" au ");
+            Sejour sejour = sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(), this.duree.getValue(), args[0], args[1]);
+            System.out.println("sejour =" + sejour);
+            Client client = clientDao.getClientParId(iduser.getText());
+            System.out.println("client :" + client.prenom_client.get() + " " + client.nom_client.get());
+            System.out.println("sejour :" + sejour.type.get() + " " + sejour.capacite.get());
+            String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+            String depart = (String) this.depart.getValue().toString();
+            Inscription inscription = new Inscription(this.accompte.getText().toString(), aujourdhui,
+                    client.id.get(), sejour.id.get(), depart);
+            int res = inscriptionDao.insererInscription(inscription);
+            if (res > 0) {
 
-            DateFormat fullDateFormat = DateFormat.getDateInstance(DateFormat.FULL);
-            Paragraph jour = new Paragraph("Le "+fullDateFormat.format(new Date()));
-            jour.setAlignment(Element.ALIGN_CENTER);
-            doc.add(jour);
+                Evenement evenement = new Evenement("1", client.groupe.get(), sejour.id.get(), "paiement inscription", this.accompte.getText(), new Date().toString(), value.toString());
+                evenementDao.insererEvenement(evenement);
+                Notification.affichageSucces("succes", "inscription faite avec succes \nEt une attestaion d'inscription à été générée ");
+                gestionDocs.genereConfirmationInscription(client,sejour);
 
-            Paragraph dest = new Paragraph("Mme ou M. "+client.observation.get()+"\n\n"+client.codePostale.get()+" "+client.adresse.get()+"\n");
-            dest.setAlignment(Element.ALIGN_RIGHT);
-            doc.add(dest);
 
-            doc.add(new Paragraph("Référence à rappeler :( 159297 / 1112 - 8V0)"));
-            Image alerte = Image.getInstance("src/main/resources/img/alerte.jpg");
+            } else {
+                Notification.affichageEchec("erreur", "echec dans la creation l'nscription'");
+            }
 
-            alerte.setAbsolutePosition(30f, 492f);
+        }catch (NullPointerException e){
+        Notification.affichageEchec("Echec","Veuillez séléctionner le type de paiement svp");
 
-            alerte.scaleAbsolute(10, 10);
-            doc.add(alerte);
-
-            font.setColor(BaseColor.BLACK);
-            doc.add(new Paragraph("    (votre dossier ne pourra être pris en compte sans cette référence)\n\n",font));
-            Paragraph titre = new Paragraph("CONFIRMATION D’INSCRIPTION",font);
-            titre.setAlignment(Element.ALIGN_CENTER);
-            doc.add(titre);
-
-            Paragraph par = new Paragraph("       Madame, Monsieur,\n\n " +
-                    "     Nous avons le plaisir de vous confirmer l’inscription de votre enfant " + client.prenom_client.get()+" "+client.nom_client.get()+"\n"+
-                    "     •  au centre de vacances de CV INGRANNES,\n     •  pour le séjour du"+date.getValue()+"\n     •  pour une durée de 6  jours.\n\n"+
-                    "     Les frais de séjour et de voyage s’élèvent  à : "+sejour.prix.get()+" €, auxquels s’ajoute le montant de l’adhésion, soit 3,00 € par famille et par année.\n\n"+
-                    "     Vous avez versé des arrhes pour un montant de  50 € ainsi que l’adhésion de 3 € (sauf si elle a déjà été réglée lors d’un précédent séjour). Le solde est à régler entre trois et quatre semaines avant le départ. Nous vous rappelons que notre association est habilitée pour accepter les paiements par Chèques-Vacances.\n");
-
-                  /*
-    •
-                  Deux à trois semaines avant le départ, une fois le séjour soldé, nous vous ferons parvenir les documents suivants :
-    ► la convocation avec les lieux et heures de départ et retour
-    ► le dossier du jeune ou de l’enfant à compléter
-    ► la lettre du directeur vous donnant des informations sur le déroulement du séjour.
-                    Nous vous rappelons que pour toutes les activités nautiques (voile, kayak, canyoning, surf, plongée…) le test de natation est obligatoire (le brevet de 25 ou 50 m est non valable).
-            Attention : Pour la plongée un certificat médical est également demandé.
-                    Si vous êtes en possession de Bons-Vacances CAF ou MSA et si vous ne nous les avez pas encore transmis, veuillez nous les adresser dans les meilleurs délais (ou votre numéro d’allocataire pour les VACAF).
-                    En souhaitant que votre enfant passe un agréable séjour en Centre de Vacances, nous vous adressons nos respectueuses salutations.
-            ");
-                    Le directeur.
-                    M. JOBERT
-
-            PAPILLON à DETACHER ET à RETOURNER A L’O.U.L.AVEC VOTRE REGLEMENT
-                    (si séjour NON SOLDÉ ou non pris en charge)
-            NOM : AUDIER ISAAC
-            REFERENCE : 159297 /  1112 - 8V0 /  CV INGRANNES du 20/08/2018 au 25/08/2018
-            (votre dossier ne pourra être pris en compte sans cette référence)
-            Le transport n’est pas compris pour les centres du Loiret, (INGRANNES, LES CAILLETTES, L’ETANG DU PUITS)
-            vous devez conduire votre enfant sur place. Cependant un départ d’ORLEANS est possible (20 € ALLER/RETOUR),        le nombre de places étant limité, veuillez nous en informer par téléphone ou par courrier.
-*/
-            doc.add(par);
-            doc.close();
-            writer.close();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
         }
     }
 }

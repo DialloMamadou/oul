@@ -9,6 +9,8 @@ import daos.impl.*;
 import dto.CentreDto;
 import dto.ClientDto;
 import enumerations.Paiement;
+import gestiondocuments.GestionDocs;
+import gestiondocuments.GestionDocsImpl;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -59,13 +61,13 @@ public class ConsulterInscription implements Initializable, Vue {
     public Label idclient;
     public Label idsejour;
     public Label groupe;
-    private GroupeDao groupeDao;
     /**
      * Initializes the controller class.
      */
 
 
     private Controlleur controlleur;
+    private GestionDocs gestionDocs;
 
 
 
@@ -247,11 +249,8 @@ public class ConsulterInscription implements Initializable, Vue {
                 sejour.id.get(),client.id.get());
         if(groupeSejourClient==null){
             this.groupe.setText("faux");
-            this.groupe.setTextFill(Color.web("#ff0000"));
         }else{
-            this.groupe.setText("vrai");
-            this.groupe.setTextFill(Color.web("#00ff00"));
-
+            this.groupe.setText("true");
         }
     }
 
@@ -276,7 +275,7 @@ public class ConsulterInscription implements Initializable, Vue {
                         ;
                         if(flag)
                             remplirGrideSejour(t);
-                            System.out.println("trouve");
+                        System.out.println("trouve");
 
 
                         return flag;
@@ -310,7 +309,7 @@ public class ConsulterInscription implements Initializable, Vue {
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         annulationDao=new AnnulationDaoImpl(DBconnexion.getConnection());
         evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
-        groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
+        gestionDocs=new GestionDocsImpl();
         chargertouslesinscriptions();
     }
 
@@ -356,128 +355,143 @@ public class ConsulterInscription implements Initializable, Vue {
         chargertouslesinscriptions();
     }
 
-    public void EditerCentre(MouseEvent mouseEvent) {
+    public void EditerFacture(MouseEvent mouseEvent) {
+        if (!this.idclient.getText().isEmpty() && !this.idsejour.getText().isEmpty()) {
+            gestionDocs.genereAttestationFacture(clientDao.getClientParId(this.idclient.getText()), sejourDao.getSejourParId(this.idsejour.getText()));
+            Notification.affichageSucces("Message Succes", "Facture générée avec succès");
+
+        }else {
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
+        }
     }
 
 
     public void paiement(MouseEvent mouseEvent) {
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("paiement");
+        if (!this.idclient.getText().isEmpty()) {
+            System.out.println("ID Client"+this.idclient.getText());
+            Dialog<Pair<String, String>> dialog = new Dialog<>();
+            dialog.setTitle("paiement");
 
-        // Set the button types.
-        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+            // Set the button types.
+            ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(20, 10, 10, 10));
+            GridPane gridPane = new GridPane();
+            gridPane.setHgap(10);
+            gridPane.setVgap(10);
+            gridPane.setPadding(new Insets(20, 10, 10, 10));
 
-        Label label=new Label("somme paye");
-        Label label2=new Label("methode");
+            Label label = new Label("somme paye");
+            Label label2 = new Label("methode");
 
-        TextField from = new TextField();
-        from.setPromptText("From");
-        TextField to = new TextField();
-        to.setPromptText("To");
+            TextField from = new TextField();
+            from.setPromptText("From");
+            TextField to = new TextField();
+            to.setPromptText("To");
 
-        ComboBox comboBox=new ComboBox();
-        for(Paiement paiement:Paiement.values()){
-            comboBox.getItems().add(paiement);
+            ComboBox comboBox = new ComboBox();
+            for (Paiement paiement : Paiement.values()) {
+                comboBox.getItems().add(paiement);
+            }
+
+            gridPane.add(label, 0, 0);
+            gridPane.add(from, 1, 0);
+            gridPane.add(comboBox, 1, 3);
+            gridPane.add(label2, 0, 3);
+
+
+            dialog.getDialogPane().setContent(gridPane);
+
+            // Request focus on the username field by default.
+            Platform.runLater(() -> from.requestFocus());
+
+            // Convert the result to a username-password-pair when the login button is clicked.
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == loginButtonType) {
+                    return new Pair<>(from.getText(), comboBox.getValue().toString());
+                }
+                return null;
+            });
+
+
+            Optional<Pair<String, String>> result = dialog.showAndWait();
+
+            result.ifPresent(pair -> {
+                if(Integer.parseInt(pair.getKey()) < 0){
+                    Notification.affichageEchec("Echec", "Le montant ne doit être négatif");
+                }else if (Integer.parseInt(pair.getKey()) > Integer.parseInt(this.lreste.getText())){
+                    Notification.affichageEchec("Echec", "Le montant ne doit pas être superieur au montant restant");
+                }else {
+
+                    Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "paiement", pair.getKey(),
+                            new Date().toString().toString(), pair.getValue().toString());
+                    int res = evenementDao.insererEvenement(evenement);
+                    if (res == 0) {
+
+                        Notification.affichageEchec("echec ", "la paiement n a pas ete pris en comtpe");
+
+                    } else {
+                        Notification.affichageSucces("succes ", "la paiement a ete pris en comtpe");
+                        int rest = Integer.parseInt(this.lreste.getText());
+                        int somme = Integer.parseInt(pair.getKey());
+                        System.out.println("reste " + rest);
+                        System.out.println("somme " + somme);
+
+                        Inscription inscription = inscriptionDao.getInscritptionParIdInscription(idinscription.getText());
+
+                        System.out.println("paiement actuelle " + inscription.paiement.get());
+                        int paiementActuelle = Integer.parseInt(inscription.paiement.get());
+
+                        int sommetotal = somme + paiementActuelle;
+                        System.out.println("id inscription = " + idinscription.getText());
+                        int sommef = rest + somme;
+                        inscriptionDao.mettreAjourPaiement(idinscription.getText(), pair.getKey());
+                        this.chargertouslesinscriptions();
+                        // inscriptionDao.mettreAjourPaiement(idinscription.getText(),String.valueOf(x));
+                    }
+
+                }});
+
+        }else {
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
+
         }
-
-        gridPane.add(label,0,0);
-        gridPane.add(from,1,0);
-        gridPane.add(comboBox,1,3);
-        gridPane.add(label2,0,3);
-
-
-        dialog.getDialogPane().setContent(gridPane);
-
-        // Request focus on the username field by default.
-        Platform.runLater(() -> from.requestFocus());
-
-        // Convert the result to a username-password-pair when the login button is clicked.
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
-                return new Pair<>(from.getText(), comboBox.getValue().toString());
-            }
-            return null;
-        });
-
-
-
-        Optional<Pair<String, String>> result = dialog.showAndWait();
-
-        result.ifPresent(pair -> {
-
-            Client client=clientDao.getClientParId(this.idclient.getText());
-            Groupe groupe=groupeDao.getGroupeParId(client.groupe.get());
-            Sejour sejour=sejourDao.getSejourParId(this.idsejour.getText());
-            Evenement evenement=new Evenement("1",groupe.code_tiers.get(),sejour.refSejour.get(),"paiement",pair.getKey(),
-                    new Date().toString().toString(),pair.getValue().toString());
-            int res=evenementDao.insererEvenement(evenement);
-            if(res==0){
-
-                Notification.affichageEchec("echec ","la paiement n a pas ete pris en comtpe");
-
-            }else{
-                Notification.affichageSucces("succes ","la paiement a ete pris en comtpe");
-                int rest=Integer.parseInt(this.lreste.getText());
-                int somme=Integer.parseInt(pair.getKey());
-                System.out.println("reste "+rest);
-                System.out.println("somme "+somme);
-
-                Inscription inscription=inscriptionDao.getInscritptionParIdInscription(idinscription.getText());
-
-                System.out.println("paiement actuelle "+inscription.paiement.get());
-                int paiementActuelle=Integer.parseInt(inscription.paiement.get());
-
-                int sommetotal=somme+paiementActuelle;
-                System.out.println("id inscription = "+idinscription.getText());
-                int sommef=rest+somme;
-                inscriptionDao.mettreAjourPaiement(idinscription.getText(),pair.getKey());
-                this.chargertouslesinscriptions();
-               // inscriptionDao.mettreAjourPaiement(idinscription.getText(),String.valueOf(x));
-            }
-
-        });
     }
 
 
-        public void genererBis () {
+    public void genererBis () {
 
-            JFXTreeTableColumn<Inscription,String> inscription_id=this.genererInscriptionId();
-            JFXTreeTableColumn<Inscription,String> inscription_paiement=this.genererInscriptionPaiement();
-            JFXTreeTableColumn<Inscription,String> inscription_dateinscription=this.genererDataInscriptioninscription();
-            JFXTreeTableColumn<Inscription,String> inscription_client=this.genererInscriptionClient();
-            JFXTreeTableColumn<Inscription,String> inscription_sejour=this.genererInscriptionSejour();
-            JFXTreeTableColumn<Inscription,String> inscription_depart=this.genererDepart();
-            ObservableList<Inscription> inscriptions = FXCollections.observableArrayList();
-            List<Inscription> inscription=inscriptionDao.getInscriptions();
-            for(Inscription inscription1: inscription){
+        JFXTreeTableColumn<Inscription,String> inscription_id=this.genererInscriptionId();
+        JFXTreeTableColumn<Inscription,String> inscription_paiement=this.genererInscriptionPaiement();
+        JFXTreeTableColumn<Inscription,String> inscription_dateinscription=this.genererDataInscriptioninscription();
+        JFXTreeTableColumn<Inscription,String> inscription_client=this.genererInscriptionClient();
+        JFXTreeTableColumn<Inscription,String> inscription_sejour=this.genererInscriptionSejour();
+        JFXTreeTableColumn<Inscription,String> inscription_depart=this.genererDepart();
+        ObservableList<Inscription> inscriptions = FXCollections.observableArrayList();
+        List<Inscription> inscription=inscriptionDao.getInscriptions();
+        for(Inscription inscription1: inscription){
 
 
-                Client client=clientDao.getClientParId(inscription1.code_client.get());
-                System.out.println("id sejour :"+inscription1.id_sejour.get());
-                Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
-                String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
-                String id_sejour=sejour.id.get();
+            Client client=clientDao.getClientParId(inscription1.code_client.get());
+            System.out.println("id sejour :"+inscription1.id_sejour.get());
+            Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
+            String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
+            String id_sejour=sejour.id.get();
 
-                Sejour sejour1=sejourDao.getSejourParId(id_sejour);
-                Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),
-                        inscription1.dateinscription.get(),  nom_client,sejour1.type.get(),  inscription1.depart.get()
-                );
+            Sejour sejour1=sejourDao.getSejourParId(id_sejour);
+            Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),
+                    inscription1.dateinscription.get(),  nom_client,sejour1.type.get(),  inscription1.depart.get()
+            );
 
-                inscription2.setTriche(sejour1.id.get());
-                inscription2.setTriche2(client.id.get());
-                inscriptions.add(inscription2);
-            }
-            final TreeItem<Inscription> root = new RecursiveTreeItem<Inscription>(inscriptions, RecursiveTreeObject::getChildren);
-            treeView.getColumns().setAll(inscription_id,inscription_paiement,inscription_dateinscription,inscription_client,inscription_sejour,inscription_depart);
-            treeView.setRoot(root);
-            treeView.setShowRoot(false);
+            inscription2.setTriche(sejour1.id.get());
+            inscription2.setTriche2(client.id.get());
+            inscriptions.add(inscription2);
         }
+        final TreeItem<Inscription> root = new RecursiveTreeItem<Inscription>(inscriptions, RecursiveTreeObject::getChildren);
+        treeView.getColumns().setAll(inscription_id,inscription_paiement,inscription_dateinscription,inscription_client,inscription_sejour,inscription_depart);
+        treeView.setRoot(root);
+        treeView.setShowRoot(false);
+    }
 
 // The Java 8 way to get the response value (with lambda expression).
 
@@ -525,18 +539,14 @@ public class ConsulterInscription implements Initializable, Vue {
 
             System.out.println("motif "+result.get());
 
-            Annulation annulation=new Annulation(result.get(),this.idsejour.getText(),this.idclient.getText(),this.idsejour.getText());
+            Annulation annulation=new Annulation(result.get(),this.idsejour.getText(),this.idclient.getText());
             int res=annulationDao.insererAnnulation(annulation);
             if(res==0){
                 Notification.affichageEchec("echec annulation ", "il y a eu une erreur ");
 
             }else{
 
-
-                Client client=clientDao.getClientParId(this.idclient.getText());
-                Groupe groupe=groupeDao.getGroupeParId(client.groupe.get());
-                Sejour sejour=sejourDao.getSejourParId(this.idsejour.getText());
-                Evenement evenement = new Evenement("1", groupe.code_tiers.get(), sejour.refSejour.get(), "annulation inscription",String.valueOf(0), new Date().toString(),"aucune");
+                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "annulation inscription",String.valueOf(0), new Date().toString(),"aucune");
                 evenementDao.insererEvenement(evenement);
                 Notification.affichageSucces("annulation","l annulation a bien ete effectue");
                 int bis=inscriptionDao.supperimerParId(this.idinscription.getText());
