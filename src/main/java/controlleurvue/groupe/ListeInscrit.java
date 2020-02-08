@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 
 public class ListeInscrit implements Initializable, Vue {
 
+
     public static  String id_sejour;
     public static  String id_groupe;
     public static String assoc_id;
@@ -287,8 +288,6 @@ this.resteapayer.setText(ListeInscrit.reste);
                         }
 
                     }
-
-                    System.out.println("id Resevation == "+reservation.id.get());
                     reservationDao.supprimerParId(reservation.id.get());
 
 

@@ -321,6 +321,7 @@ public class ConsulterCentre  implements Initializable, Vue {
     }
 
 
+
     private void finaliser(MouseEvent mouseEvent, JFXDialog dialogLayout) {
 
         int res = 0;

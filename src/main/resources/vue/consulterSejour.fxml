@@ -74,10 +74,10 @@
                                     <children>
                                         <Label text="CENTRE" />
                                         <Label text="SEJOUR" GridPane.rowIndex="1" />
-                                        <Label text="date" GridPane.rowIndex="2" />
-                                        <Label text="age min max" GridPane.rowIndex="3" />
+                                        <Label text="DATE" GridPane.rowIndex="2" />
+                                        <Label text="AGE" GridPane.rowIndex="3" />
                                         <Label text="PRIX" GridPane.rowIndex="4" />
-                                        <Label text="capacite" GridPane.rowIndex="5" />
+                                        <Label text="CAPACITE" GridPane.rowIndex="5" />
                                         <Label fx:id="lcentre" GridPane.columnIndex="1" />
                                         <Label id="lsejour" fx:id="lsejour" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <font>
@@ -121,12 +121,14 @@
                            </font></Label>
                             </children>
                         </GridPane>
-                        <Label layoutX="14.0" layoutY="224.0" prefHeight="17.0" prefWidth="59.0" text="id sejour" />
+                        <Label layoutX="14.0" layoutY="224.0" prefHeight="17.0" prefWidth="85.0" text="Ref SEJOUR " />
                         <Label layoutX="21.0" layoutY="267.0" text="reste a payer" />
                         <Label fx:id="reste" layoutX="107.0" layoutY="267.0" />
                   <JFXRadioButton fx:id="retard" layoutX="9.0" layoutY="309.0" text="retard" />
                   <JFXRadioButton fx:id="regle" layoutX="89.0" layoutY="309.0" prefHeight="17.0" prefWidth="78.0" text="regle" />
                   <JFXRadioButton fx:id="tous" layoutX="155.0" layoutY="309.0" prefHeight="17.0" prefWidth="68.0" text="tous" />
+                  <Label layoutX="159.0" layoutY="271.0" text="ref sejour" />
+                  <Label fx:id="refsejour" layoutX="260.0" layoutY="271.0" prefHeight="17.0" prefWidth="116.0" />
 
 
 
