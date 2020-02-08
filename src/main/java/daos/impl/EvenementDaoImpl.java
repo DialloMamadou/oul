@@ -22,7 +22,6 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
         super(conn);
     }
 
-
     @Override
     public int insererEvenement(Evenement evenement) {
 
