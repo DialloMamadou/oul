@@ -9,7 +9,6 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Email;
 import controlleurvue.Vue;
-import controlleurvue.inscription.CreerInscriptionSejour;
 import daos.*;
 import daos.impl.*;
 import gestiondocuments.*;
