@@ -41,6 +41,7 @@ public class ConsulterGroupe implements Initializable, Vue {
      * Initializes the controller class.
      */
 
+
     private Controlleur controlleur;
 
 

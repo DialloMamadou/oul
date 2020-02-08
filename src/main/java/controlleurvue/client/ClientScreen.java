@@ -12,6 +12,7 @@ public class ClientScreen implements Vue {
     public Pane pane_2;
     public Pane pane_3;
 
+
     private Controlleur controlleur;
 
 

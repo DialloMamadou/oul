@@ -7,6 +7,7 @@ import java.util.List;
 public abstract class Dao<T> {
 
 
+
     protected Connection connect = null;
 
 

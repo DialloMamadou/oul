@@ -127,6 +127,8 @@
                   <JFXRadioButton fx:id="retard" layoutX="9.0" layoutY="309.0" text="retard" />
                   <JFXRadioButton fx:id="regle" layoutX="89.0" layoutY="309.0" prefHeight="17.0" prefWidth="78.0" text="regle" />
                   <JFXRadioButton fx:id="tous" layoutX="155.0" layoutY="309.0" prefHeight="17.0" prefWidth="68.0" text="tous" />
+                  <Label layoutX="159.0" layoutY="271.0" text="ref sejour" />
+                  <Label fx:id="refsejour" layoutX="260.0" layoutY="271.0" prefHeight="17.0" prefWidth="116.0" />
 
 
 
