@@ -33,7 +33,6 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
         try {
 
             String sdf=new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1, evenement.codeclient);
             ps.setString(2,evenement.codesejour);
