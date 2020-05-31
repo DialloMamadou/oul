@@ -28,7 +28,6 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
 
         int res=0;
         String sql="INSERT INTO evenement (codeclient,codesejour,evenementa,somme,dateevenement,methode)VALUES (?,?,?,?,?,?)";
-        System.out.println("evenemnt "+sql);
 
         try {
 
@@ -36,10 +35,8 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1, evenement.codeclient);
             ps.setString(2,evenement.codesejour);
-            System.out.println("evenement "+evenement.event);
             ps.setString(3,evenement.event);
             ps.setString(4,evenement.somme);
-            System.out.println("somme "+evenement.somme);
             ps.setString(5,sdf);
             ps.setString(6,evenement.methode);
 
@@ -47,7 +44,6 @@ public class EvenementDaoImpl extends Dao<Annulation> implements EvenementDao {
             res=ps.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("echec echec echec");
             Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, e);
         }
 

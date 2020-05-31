@@ -61,7 +61,6 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
         List<GroupeSejourClient>list=new ArrayList<>();
         String sql="SELECT * FROM groupe_sejour_client where id_groupe ='"+id_groupe+"' AND id_sejour='"+id_sejour+"'";
 
-        System.out.println("requete sql "+sql);
 
 
         Connection connection= DBconnexion.getConnection();
@@ -75,7 +74,6 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
                         rs.getString(4),rs.getString(5));
                 list.add(groupeSejourClient);
 
-                System.out.println("right here right now");
 
             }
         }catch (Exception e){
@@ -94,7 +92,6 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
        //         "' AND id_client='"+id_client;
         String sql="SELECT * FROM groupe_sejour_client where id_groupe = ? AND id_sejour= ? AND id_client=?";
 
-        System.out.println("requete sql "+sql);
 
 
 
@@ -111,13 +108,33 @@ public class GroupeSejourClientDaoImpl extends Dao<Associationgroupesejour> impl
                 list=new GroupeSejourClient(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5));
 
-                System.out.println("right here right now");
 
             }
         }catch (Exception e){
 
         }
 
+        return list;
+    }
+
+    @Override
+    public List<GroupeSejourClient> getGroupeSejourClientByIdSejour(String s) {
+        List<GroupeSejourClient>list=new ArrayList<>();
+        String sql="SELECT * FROM groupe_sejour_client where id_sejour '="+s+"'";
+        Connection connection=DBconnexion.getConnection();
+        try{
+            PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                GroupeSejourClient groupeSejourClient=new GroupeSejourClient(rs.getString(1),
+                        rs.getString(2),rs.getString(3),rs.getString(4),
+                        rs.getString(5));
+                list.add(groupeSejourClient);
+
+            }
+        }catch (Exception e){
+
+        }
         return list;
     }
 

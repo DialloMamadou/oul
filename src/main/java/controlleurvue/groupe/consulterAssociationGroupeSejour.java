@@ -55,6 +55,8 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
     public StackPane stackepane;
     public Label prixtotal;
     public Label resteapayer1;
+    public Label refsejour;
+    public Label codetiers;
 
     private  Controlleur controlleur;
     @Override
@@ -65,7 +67,7 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
 
     private JFXTreeTableColumn<Associationgroupesejour,String> creerGroupeId(){
         JFXTreeTableColumn<Associationgroupesejour,String> groupe_id=new JFXTreeTableColumn<>(" Id");
-        groupe_id.setPrefWidth(100);
+        groupe_id.setPrefWidth(30);
         groupe_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Associationgroupesejour, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Associationgroupesejour, String> param) {
@@ -89,7 +91,7 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
 
     private JFXTreeTableColumn<Associationgroupesejour,String> creerAssocSejour(){
         JFXTreeTableColumn<Associationgroupesejour,String> groupe_id=new JFXTreeTableColumn<>("sejour");
-        groupe_id.setPrefWidth(100);
+        groupe_id.setPrefWidth(160);
         groupe_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Associationgroupesejour, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Associationgroupesejour, String> param) {
@@ -98,6 +100,8 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
         });
         return groupe_id;
     }
+
+
 
     private JFXTreeTableColumn<Associationgroupesejour,String> creerAssocNbPlace(){
         JFXTreeTableColumn<Associationgroupesejour,String> groupe_id=new JFXTreeTableColumn<>("nb place");
@@ -144,6 +148,7 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
             if (associationgroupesejour.id == null) {
                 Notification.affichageEchec("null", "variables a null");
             }
+
             groupes.add(new Associationgroupesejour(associationgroupesejour.id.get(), associationgroupesejour.prix_unitaire.get(),
                     groupe.nom_groupe.get(), sejour.type.get(), associationgroupesejour.nbPlace.get()));
         }
@@ -171,18 +176,23 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
                 Associationgroupesejour associationgroupesejour=associationGroupeSejourDao.getById(newValue.getValue().id.get());
                 Sejour sejour=sejourDao.getSejourParId(associationgroupesejour.sejour.get());
 
+                this.refsejour.setText(sejour.refSejour.get());
 
-                this.age.setText(sejour.ageMin.get()+" "+sejour.ageMax.get());
-                this.duree.setText(sejour.duree.get());
-                this.date.setText(sejour.date_debut.get()+" "+sejour.date_fin.get());
+
+                this.age.setText(sejour.ageMin.get()+"-"+sejour.ageMax.get());
+                this.duree.setText(sejour.duree.get()+" jours");
+                this.date.setText(sejour.date_debut.get()+" au "+sejour.date_fin.get());
                 this.typesejour.setText(sejour.type.get());
                 this.idsejour.setText(associationgroupesejour.sejour.get());
-                System.out.println("groupe id "+newValue.getValue().groupe.get());
+                this.idsejour.setVisible(false);
                 this.idassoc.setText(newValue.getValue().id.get());
+                this.idassoc.setVisible(false);
 
                 this.prix_unitaire.setText(newValue.getValue().prix_unitaire.get());
                 Groupe groupe=groupeDao.getGroupeParId(associationgroupesejour.groupe.get());
                 this.idgroupe.setText(groupe.id.get());
+                this.codetiers.setText(groupe.code_tiers.get());
+                this.idgroupe.setVisible(false);
                 this.nomgroupe.setText(newValue.getValue().groupe.get());
                 this.prix_unitaire.setText(newValue.getValue().prix_unitaire.get());
                 this.nombre_place.setText(newValue.getValue().nbPlace.get());
@@ -191,7 +201,6 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
                 List<PaiementMarie>list=paiementMairieDao.listePaimenent(Integer.parseInt(idsejour.getText()),Integer.parseInt(idgroupe.getText()));
                 int prixPaye=0;
                 for(PaiementMarie paiementMarie:list){
-                    System.out.println("paiemeent maiiirie "+paiementMarie.paiement.get());
                     prixPaye+=Integer.parseInt(paiementMarie.paiement.get());
                 }
                 this.resteapayer1.setText(String.valueOf(prix_total-prixPaye));
@@ -206,6 +215,7 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
                     association.setPredicate(new Predicate<TreeItem<Associationgroupesejour>>() {
+
 
                         @Override
                         public boolean test(TreeItem<Associationgroupesejour> t) {
@@ -233,10 +243,10 @@ public class consulterAssociationGroupeSejour implements Initializable, Vue {
 
 
 
-
+private EvenementDao evenementDao;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
+        evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
         associationGroupeSejourDao=new AssociationGroupeSejourDaoImpl(DBconnexion.getConnection());
         groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
@@ -248,7 +258,6 @@ evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
     private GroupeDao groupeDao;
     private SejourDao sejourDao;
     private AssociationGroupeSejourDao associationGroupeSejourDao;
-    private EvenementMairieDao evenementMairieDao;
 
     public void retour(MouseEvent mouseEvent) {
         this.controlleur.lancerPageGroupe();
@@ -262,8 +271,11 @@ evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
 
     public void ajoutenfant(MouseEvent mouseEvent) {
 
-        this.controlleur.ajouterEnfantMairie(this.nomgroupe.getText(),this.idsejour.getText(),this.idassoc.getText());
-    }
+        if (this.idsejour.getText().isEmpty()){
+            Notification.affichageEchec("Message", "Veuillez selectionner un sejour(un groupe) SVP  ");
+        }else {
+            this.controlleur.ajouterEnfantMairie(this.nomgroupe.getText(), this.idsejour.getText(), this.idassoc.getText());
+        }    }
 
 
     public void paiement(MouseEvent mouseEvent) {
@@ -347,19 +359,17 @@ evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
 
 
             result.ifPresent(pair -> {
-                System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
 
 
-                System.out.println(" groupe " + idgroupe);
-                System.out.println(" sejour " + idsejour);
 
                 PaiementMarie paiementMarie = new PaiementMarie(String.valueOf(idgroupe.getText()), pair.getKey(), String.valueOf(idsejour.getText()), pair.getValue());
                 String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
                 int res = paiementMairieDao.inserrerPaiement(paiementMarie);
-                Evenement_Mairie evenement_mairie = new Evenement_Mairie(idgroupe.getText(), idsejour.getText(), "paiement_mairie", pair.getKey(),
-                        aujourdhui, pair.getValue());
-                evenementMairieDao.insererEvenement(evenement_mairie);
+
+                Groupe groupe = groupeDao.getGroupeParId(idgroupe.getText());
+                Evenement evenement=new Evenement("1",groupe.code_tiers.get(),idsejour.getText(),"paiement groupe mairie",pair.getKey(),aujourdhui,pair.getValue());
+                evenementDao.insererEvenement(evenement);
                 if (res != 0) {
                     Notification.affichageSucces("succes", "le paiement a bien ete pris en compte");
                 }
@@ -374,92 +384,61 @@ evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
     }
 
     public void historiquePaiement(MouseEvent mouseEvent) {
-        this.controlleur.lancerHistoriquePaiementGroupeSejour(idsejour,idgroupe);
-    }
+        if (this.idsejour.getText().isEmpty()){
+            Notification.affichageEchec("Message", "Veuillez selectionner un sejour(un groupe) SVP  ");
+        }else {
+            this.controlleur.lancerHistoriquePaiementGroupeSejour(idsejour, idgroupe);
+        }    }
 
 
 
     public void supprimer(MouseEvent mouseEvent) {
 
-
-        JFXDialogLayout dialogLayout=new JFXDialogLayout();
-        dialogLayout.setHeading(new Text("ferme"));
-        dialogLayout.setBody(new Text("vous voulez vraiment annuler cette asssociation ?"));
-
-        JFXButton ok=new JFXButton("oui");
-        JFXButton cancel=new JFXButton("non");
-
-        final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
-
-        ok.setOnAction(MouseEvent ->    annulerFinal(dialog));
-        cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            public void handle(javafx.event.ActionEvent event) {
-                dialog.close();
-            }
-        });
-        dialogLayout.setActions(ok,cancel);
-        dialog.show();
-
-    }
-
-    private void annulerFinal(JFXDialog dialog) {
-
-        int res=associationGroupeSejourDao.supprimerById(this.idassoc.getText());
-        if (res > 0) {
-            Notification.affichageSucces("succes", "association supprimer avec succes");
-            this.loadallassociation();
-            dialog.close();
-            return;
+        if (this.idsejour.getText().isEmpty()) {
+            Notification.affichageEchec("Message", "Veuillez selectionner un sejour(un groupe) SVP  ");
         } else {
-            Notification.affichageEchec("echec", "echec dans la suppresion de l association");
-            dialog.close();
-            return;
+            JFXDialogLayout dialogLayout = new JFXDialogLayout();
+            dialogLayout.setHeading(new Text("ferme"));
+            dialogLayout.setBody(new Text("vous voulez vraiment annuler cette asssociation ?"));
 
+            JFXButton ok = new JFXButton("oui");
+            JFXButton cancel = new JFXButton("non");
+
+            final JFXDialog dialog = new JFXDialog(stackepane, dialogLayout, JFXDialog.DialogTransition.CENTER);
+
+            ok.setOnAction(MouseEvent -> annulerFinal(dialog));
+            cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+                public void handle(javafx.event.ActionEvent event) {
+                    dialog.close();
+                }
+            });
+            dialogLayout.setActions(ok, cancel);
+            dialog.show();
 
         }
-
     }
 
-    public void supprimer(MouseEvent mouseEvent) {
+    private void annulerFinal(JFXDialog dialog){
 
-
-        JFXDialogLayout dialogLayout=new JFXDialogLayout();
-        dialogLayout.setHeading(new Text("ferme"));
-        dialogLayout.setBody(new Text("vous voulez vraiment annuler cette asssociation ?"));
-
-        JFXButton ok=new JFXButton("oui");
-        JFXButton cancel=new JFXButton("non");
-
-        final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
-
-        ok.setOnAction(MouseEvent ->    annulerFinal(dialog));
-        cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            public void handle(javafx.event.ActionEvent event) {
+            int res = associationGroupeSejourDao.supprimerById(this.idassoc.getText());
+            if (res > 0) {
+                Notification.affichageSucces("succes", "association supprimer avec succes");
+                this.loadallassociation();
                 dialog.close();
+                return;
+            } else {
+                Notification.affichageEchec("echec", "echec dans la suppresion de l association");
+                dialog.close();
+                return;
+
+
             }
-        });
-        dialogLayout.setActions(ok,cancel);
-        dialog.show();
+
 
     }
 
-    private void annulerFinal(JFXDialog dialog) {
-
-        int res=associationGroupeSejourDao.supprimerById(this.idassoc.getText());
-        if (res > 0) {
-            Notification.affichageSucces("succes", "association supprimer avec succes");
-            this.loadallassociation();
-            dialog.close();
-            return;
-        } else {
-            Notification.affichageEchec("echec", "echec dans la suppresion de l association");
-            dialog.close();
-            return;
 
 
-        }
-
-    }
 
 
     public void listeinscrit(MouseEvent mouseEvent) {
@@ -469,10 +448,29 @@ evenementMairieDao=new EvenementMairieDaoImpl(DBconnexion.getConnection());
             ListeInscrit.assoc_id = this.idassoc.getText();
             ListeInscrit.id_sejour = this.idsejour.getText();
             ListeInscrit.id_groupe = this.idgroupe.getText();
-            System.out.println("reste a payer " + resteapayer1.getText());
             ListeInscrit.reste = this.resteapayer1.getText();
             this.controlleur.lancerListeInscritSejourGroupe();
         }
 
     }
+
+    public void back(MouseEvent mouseEvent) {
+        this.controlleur.lancerPageGroupe();
+    }
+
+    public void editerAssoc(MouseEvent mouseEvent) {
+        if(this.idassoc.getText().isEmpty()){
+            Notification.affichageEchec("Message", "Veuillez selectionner une association (un groupe) SVP  ");
+
+        }else{
+            Associationgroupesejour associationgroupesejour=associationGroupeSejourDao.getById(this.idassoc.getText());
+            if(associationgroupesejour==null){
+                Notification.affichageEchec("id incorrecte","aucune association avec cet id n'à été trouve");
+            }else {
+                EditerAssociation.id = this.idassoc.getText();
+                controlleur.lancerEditionAssociation();
+            }
+        }
+    }
+
 }

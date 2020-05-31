@@ -28,6 +28,17 @@ public class AccueilScreen implements Vue {
     public StackPane stack;
 
 
+    public void souris_dessus_7(MouseEvent mouseEvent) {
+        pane_31.setStyle("-fx-background-color: #377ce5; -fx-background-radius: 6px;");
+
+    }
+
+
+    public void souris_sort_7(MouseEvent mouseEvent) {
+        pane_31.setStyle("-fx-background-color: white; -fx-background-radius: 6px;");
+
+    }
+
 
 
 
@@ -179,7 +190,6 @@ public class AccueilScreen implements Vue {
 
     public void centreecran(MouseEvent mouseEvent) {
 /*
-        System.out.println("iciii");
 
         Stage home=new Stage();
         Parent root=null;
@@ -200,14 +210,10 @@ public class AccueilScreen implements Vue {
         home.initStyle(StageStyle.TRANSPARENT);
         home.show();*/
         controlleur.lancerPageCentre();
-        System.out.println("iciii");
     }
 
     public void gestiongroupe(MouseEvent mouseEvent) {
-        System.out.println("1 :");
-        if(controlleur!=null){
-            System.out.println("controlleur non null");
-        }
+
         controlleur.lancerPageGroupe();
     }
 
@@ -251,6 +257,9 @@ public class AccueilScreen implements Vue {
 
     }
 
-    public void optionavance(MouseEvent mouseEvent) {
+    public void optionavancee(MouseEvent mouseEvent) {
+        controlleur.lancerOptionAvancerVue();
     }
+
+
 }

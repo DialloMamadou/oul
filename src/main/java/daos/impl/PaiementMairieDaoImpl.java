@@ -54,7 +54,6 @@ public class PaiementMairieDaoImpl extends Dao<Dao> implements PaiementMairieDao
         List<PaiementMarie>list=new ArrayList<>();
         String sql="SELECT * FROM paiement_mairie where groupe ='"+idGroupe+"' AND sejour='"+idSejour+"'";
 
-        System.out.println("requete sql "+sql);
 
 
         Connection connection= DBconnexion.getConnection();
@@ -68,7 +67,6 @@ public class PaiementMairieDaoImpl extends Dao<Dao> implements PaiementMairieDao
                         rs.getString(4),rs.getString(5));
                 list.add(paiementMarie);
 
-                System.out.println("right here right now");
 
             }
         }catch (Exception e){
@@ -85,7 +83,6 @@ public class PaiementMairieDaoImpl extends Dao<Dao> implements PaiementMairieDao
         List<PaiementMarie>list=new ArrayList<>();
         String sql="SELECT * FROM paiement_mairie where groupe ='"+idGroupe+"' AND sejour='"+idSejour+"'";
 
-        System.out.println("requete sql "+sql);
 
 
         Connection connection= DBconnexion.getConnection();
@@ -99,7 +96,6 @@ public class PaiementMairieDaoImpl extends Dao<Dao> implements PaiementMairieDao
                         rs.getString(4),rs.getString(5));
                 list.add(paiementMarie);
 
-                System.out.println("right here right now");
 
             }
         }catch (Exception e){

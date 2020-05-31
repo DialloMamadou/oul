@@ -38,6 +38,8 @@ import java.net.URL;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 import java.util.List;
 import java.util.function.Predicate;
@@ -83,6 +85,20 @@ public class CreerInscriptionSejour implements Initializable, Vue {
     private Controlleur controlleur;
     private GestionDocs gestionDocs;
 
+    private String nomCentre="";
+
+    private ClientDao clientDao;
+    private GroupeDao groupeDao;
+    private InscriptionDao inscriptionDao;
+    private CentreDao centreDao;
+    private SejourDao sejourDao;
+    private ReservationDao reservationDao;
+    private EvenementDao evenementDao;
+
+    private AssociationGroupeSejourDao associationGroupeSejourDao;
+
+
+    Sejour sejour;
 
     private void chargementClients(){
 
@@ -332,7 +348,12 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
     private void remplirPrix() {
         String date=(String)this.date.getValue();
+        System.out.println("Date"+date);
         String[] args = date.split(" au ");
+        for (String s:args){
+            System.out.println("Date"+s);
+
+        }
 
         List<Sejour>liste=sejourDao.getSejourParTypeEtDate((String)this.type.getValue(),args[0],args[1]);
 
@@ -391,7 +412,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         this.prix.setText("");
         this.duree.getItems().clear();
         Centre centre=centreDao.trouverParNomCentre(value.get());
-        System.out.println("centre ici "+centre.nom_centre);
+        this.nomCentre = centre.nom_centre.get();
         List<Sejour> sejour=sejourDao.getSejourParCentre(centre.id.get());
         System.out.println("liste sejour "+sejour.size());
         List<String> listeSejour=new ArrayList<>();
@@ -432,14 +453,6 @@ public class CreerInscriptionSejour implements Initializable, Vue {
 
 
 
-    private ClientDao clientDao;
-    private GroupeDao groupeDao;
-    private InscriptionDao inscriptionDao;
-    private CentreDao centreDao;
-    private SejourDao sejourDao;
-    private ReservationDao reservationDao;
-    private EvenementDao evenementDao;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
@@ -450,6 +463,7 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         reservationDao=new ReservationDaoImpl(DBconnexion.getConnection());
         gestionDocs =new GestionDocsImpl();
+        associationGroupeSejourDao=new AssociationGroupeSejourDaoImpl(DBconnexion.getConnection());
 
     }
 
@@ -461,34 +475,149 @@ public class CreerInscriptionSejour implements Initializable, Vue {
     public void validerinscription(MouseEvent mouseEvent) {
 
         try {
-            String date=(String)this.date.getValue();
-            String[] args = date.split(" au ");
-            Sejour sejour=sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(),this.duree.getValue(),args[0],args[1]);
-            Client client=clientDao.getClientParId(iduser.getText());
-            Inscription inscription = inscriptionDao.getInscriptionsParIdSejourEtIdClient(sejour.id.get(), client.id.get());
-            Reservation reservation = reservationDao.getReservationParIdClientEtIdSejour(client.id.get(), sejour.id.get());
+            if (iduser.getText().isEmpty() || this.nomCentre.isEmpty() ) {
+                Notification.affichageEchec("Alerte","Veuillez séléctionner le centre et le client");
 
-            String montant = this.accompte.getText();
-            System.out.println("accompte :" + montant);
-            int x = Integer.parseInt(montant);
-
-            if (x>Integer.parseInt(sejour.prix.get())) {
-                Notification.affichageEchec("Echec", "L'acompte ne doit pas être superieur au prix du séjour");
-            }else if (x<0){
-                Notification.affichageEchec("Echec", "Le montant ne doit être négatif");
             }else {
+                String date = (String) this.date.getValue();
+                String[] args = date.split(" au ");
+                sejour = sejourDao.getSejourPartypeetdureeetdate(this.type.getValue(), this.duree.getValue(), args[0], args[1]);
+                Centre centre = centreDao.trouverParNomCentre(this.nomCentre);
+                System.out.println("centre.capacite= "+centre.capacite_centre.get());
 
-                if (x > 0) {
-                    if (inscription == null) {
-                        lancerDemandeInscription();
-                    } else {
-                        Notification.affichageEchec("Echec", "Cet enfant est déjà inscrit pour ce sejour");
+                Client client = clientDao.getClientParId(iduser.getText());
+
+                int nbTotalResev_Insc = 0;
+                int nbTotalResev_Insc_this_sejour = 0;
+
+                List<String> listeIdSejour = associationGroupeSejourDao.testCapaciteCentre(sejour.id.get());
+
+                    for (String id : listeIdSejour) {
+                    int nb0 = associationGroupeSejourDao.nbReservationGroupSejourForId(id);
+                    int nb1 = reservationDao.nbReservationForId(id);
+                    int nb2 = inscriptionDao.nbInscriptionForId(id);
+                    nbTotalResev_Insc += nb1 + nb2 + nb0;
+                    if (id == sejour.id.get()){
+                        nbTotalResev_Insc_this_sejour=nbTotalResev_Insc;
                     }
-                } else {
-                    if (reservation == null) {
-                        lancerDemandeReservation();
+                }
+
+                if (nbTotalResev_Insc_this_sejour >= Integer.parseInt(sejour.capacite.get())) {
+                    int diff = Integer.parseInt(sejour.capacite.get()) - nbTotalResev_Insc_this_sejour;
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Alerte");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Vous souhaitez reserver une place alors que vous avez atteint la capacite du séjour qui est de  " + sejour.capacite.get()+" places");
+                }else {
+                    int capaciteCentre = Integer.parseInt(centre.capacite_centre.get());
+                    if (nbTotalResev_Insc + 1 > capaciteCentre) {
+                        int dif = capaciteCentre - nbTotalResev_Insc;
+                        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+                        dialogLayout.setHeading(new Text("Attention !"));
+                        if (dif <= 0) {
+                            dialogLayout.setBody(new Text("Vous souhaitez reserver une place alors que vous avez atteint la capacite du centre qui est de " + capaciteCentre +
+                                    " places.\nVoulez vous quand meme valider la reservation ?"));
+                        }
+                        JFXButton ok = new JFXButton("oui");
+                        JFXButton cancel = new JFXButton("non");
+
+                        final JFXDialog dialog = new JFXDialog(stackepane, dialogLayout, JFXDialog.DialogTransition.CENTER);
+
+                        ok.setOnAction(new EventHandler<ActionEvent>() {
+                            public void handle(javafx.event.ActionEvent event) {
+                                if (controleDate(client.datenaissance.get(), sejour.date_debut.get(), sejour.date_fin.get())) {
+                                    Inscription inscription = inscriptionDao.getInscriptionsParIdSejourEtIdClient(sejour.id.get(), client.id.get());
+                                    Reservation reservation = reservationDao.getReservationParIdClientEtIdSejour(client.id.get(), sejour.id.get());
+
+                                    String montant = accompte.getText();
+                                    System.out.println("accompte :" + montant);
+                                    int x = Integer.parseInt(montant);
+
+                                    if (x > Integer.parseInt(sejour.prix.get())) {
+                                        Notification.affichageEchec("Echec", "L'acompte ne doit pas être superieur au prix du séjour");
+                                    } else if (x < 0) {
+                                        Notification.affichageEchec("Echec", "Le montant ne doit pas être négatif");
+                                    } else {
+
+                                        if (x > 0) {
+                                            if (inscription == null) {
+                                                lancerDemandeInscription();
+                                            } else {
+                                                Notification.affichageEchec("Echec", "Cet enfant est déjà inscrit pour ce sejour");
+                                            }
+                                        } else {
+                                            if (reservation == null) {
+                                                lancerDemandeReservation();
+                                            } else {
+                                                Notification.affichageEchec("Echec", "Cet enfant à déjà une reservtion pour ce sejour");
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                                    alert.setTitle("ERROR");
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("L'enfant n'a pas l'âge requise pour ce séjour.");
+                                    alert.showAndWait();
+                                }
+                                dialog.close();
+
+
+                            }
+                        });
+                        cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+                            public void handle(javafx.event.ActionEvent event) {
+                                dialog.close();
+
+                            }
+                        });
+                        dialogLayout.setActions(ok, cancel);
+                        dialog.show();
                     } else {
-                        Notification.affichageEchec("Echec", "Cet enfant à déjà une reservtion pour ce sejour");
+
+                        if (controleDate(client.datenaissance.get(), sejour.date_debut.get(), sejour.date_fin.get())) {
+                            Inscription inscription = inscriptionDao.getInscriptionsParIdSejourEtIdClient(sejour.id.get(), client.id.get());
+                            Reservation reservation = reservationDao.getReservationParIdClientEtIdSejour(client.id.get(), sejour.id.get());
+
+                            String montant = this.accompte.getText();
+                            System.out.println("accompte :" + montant);
+                            int x = Integer.parseInt(montant);
+
+                            if (x > Integer.parseInt(sejour.prix.get())) {
+                                Notification.affichageEchec("Echec", "L'acompte ne doit pas être superieur au prix du séjour");
+                            } else if (x < 0) {
+                                Notification.affichageEchec("Echec", "Le montant ne doit pas être négatif");
+                            } else {
+
+                                if (x > 0) {
+                                    if (inscription == null) {
+                                        if (reservation != null){
+                                            Notification.affichageEchec("Echec", "Cet enfant à déjà une reservation pour ce sejour");
+                                        }else {
+                                            lancerDemandeInscription();
+                                        }
+                                    } else {
+                                        Notification.affichageEchec("Echec", "Cet enfant est déjà inscrit pour ce sejour");
+                                    }
+                                } else {
+                                    if (reservation == null) {
+                                        if (inscription == null) {
+                                            lancerDemandeReservation();
+                                        }else {
+                                            Notification.affichageEchec("Echec", "Cet enfant est déjà inscrit pour ce sejour");
+                                        }
+                                    } else {
+                                        Notification.affichageEchec("Echec", "Cet enfant à déjà une reservtion pour ce sejour");
+                                    }
+                                }
+                            }
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("ERROR");
+                            alert.setHeaderText(null);
+                            alert.setContentText("L'enfant n'a pas l'âge requise pour ce séjour.");
+                            alert.showAndWait();
+                        }
                     }
                 }
             }
@@ -578,8 +707,8 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         ok.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(javafx.event.ActionEvent event) {
                 System.out.println("value ="+comboBox.getValue());
-                enrergistrerInscription(comboBox.getValue());
                 dialog.close();
+                enrergistrerInscription(comboBox.getValue());
 
             }
         });
@@ -610,12 +739,13 @@ public class CreerInscriptionSejour implements Initializable, Vue {
             System.out.println("sejour :" + sejour.type.get() + " " + sejour.capacite.get());
             String aujourdhui = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
             String depart = (String) this.depart.getValue().toString();
-            Inscription inscription = new Inscription(this.accompte.getText().toString(), aujourdhui,
+            Inscription inscription = new Inscription(this.accompte.getText(), aujourdhui,
                     client.id.get(), sejour.id.get(), depart);
             int res = inscriptionDao.insererInscription(inscription);
             if (res > 0) {
 
-                Evenement evenement = new Evenement("1", client.groupe.get(), sejour.id.get(), "paiement inscription", this.accompte.getText(), new Date().toString(), value.toString());
+                Groupe groupe = groupeDao.getGroupeParId(client.groupe.get());
+                Evenement evenement = new Evenement("1",groupe.code_tiers.get(), sejour.refSejour.get(), "inscription", this.accompte.getText(), new Date().toString(), value.toString());
                 evenementDao.insererEvenement(evenement);
                 Notification.affichageSucces("succes", "inscription faite avec succes \nEt une attestaion d'inscription à été générée ");
                 gestionDocs.genereConfirmationInscription(client,sejour);
@@ -629,5 +759,83 @@ public class CreerInscriptionSejour implements Initializable, Vue {
         Notification.affichageEchec("Echec","Veuillez séléctionner le type de paiement svp");
 
         }
+    }
+    public boolean controleDate(String dateNaiss, String dateDebut, String dateFin){
+
+        LocalDate dN = LocalDate.parse(dateNaiss);
+        LocalDate dD = LocalDate.parse(dateDebut);
+        LocalDate dF = LocalDate.parse(dateFin);
+        int aMin = Integer.parseInt(sejour.ageMin.get());
+        int aMax = Integer.parseInt(sejour.ageMax.get());
+        Boolean b ;
+        if (Period.between(dN, dD).getYears() < aMin) {
+            b=false;
+            System.out.println("Y"+Period.between(dN, dD).getYears()+" L'enfant n'auras pas l'age min "+aMin+" ans avant le debut du sejour");
+            Notification.affichageEchec("Date incorrecte"," L'enfant n'auras pas l'age min "+aMin+" ans avant le debut du sejour");
+
+        } else if (Period.between(dN, dD).getYears() == aMin) {
+            if (Period.between(dN, dD).getMonths() < 0) {
+                b=false;
+                System.out.println("M"+Period.between(dN, dD).getMonths()+" L'enfant n'auras pas l'age min "+aMin+" ans avant le debut du sejour");
+                Notification.affichageEchec("Date incorrecte"," L'enfant n'auras pas l'age min "+aMin+" ans avant le debut du sejour");
+
+            } else if (Period.between(dN, dD).getMonths() == 0) {
+                if (Period.between(dN, dD).getDays() < 0) {
+                    b=false;
+                    System.out.println("D"+Period.between(dN, dD).getMonths()+" L'enfant n'auras pas l'age min "+aMin+" ans avant le debut du sejour");
+                    Notification.affichageEchec("Date incorrecte"," L'enfant n'auras pas l'age min "+aMin+" ans avant le debut du sejour");
+
+                } else {
+                    b=true;
+                    System.out.println("OK");
+
+                }
+            } else {
+                b=true;
+                System.out.println("OK");
+
+            }
+
+        } else {
+            b=true;
+            System.out.println("OK");
+        }
+
+        if (Period.between(dN, dF).getYears() > aMax) {
+            b=false;
+            System.out.println("Y"+Period.between(dN, dF).getYears()+"L'enfant auras dépassé l'age max "+aMax+" ans avant la fin du sejour");
+            Notification.affichageEchec("Date incorrecte"," L'enfant auras dépassé l'age max "+aMax+" ans avant la fin du sejour");
+
+        } else if (Period.between(dN, dF).getYears() == aMax) {
+            if (Period.between(dN, dF).getMonths() < 0) {
+                b=false;
+                System.out.println("M"+Period.between(dN, dD).getMonths()+" L'enfant auras dépassé l'age max "+aMax+" ans avant la fin du sejour");
+                Notification.affichageEchec("Date incorrecte"," L'enfant auras dépassé l'age max "+aMax+" ans  avant la fin du sejour");
+
+            } else if (Period.between(dN, dF).getMonths() == 0) {
+                if (Period.between(dN, dF).getDays() < 0) {
+                    b=false;
+                    System.out.println("D"+Period.between(dN, dF).getMonths()+" L'enfant auras dépassé l'age max "+aMax+" ans avant la fin du sejour");
+                    Notification.affichageEchec("Date incorrecte"," L'enfant auras dépassé l'age max "+aMax+" ans avant la fin du sejour");
+
+                } else {
+                    b=true;
+                    System.out.println("OK");
+
+                }
+            } else {
+                b=true;
+                System.out.println("OK");
+
+            }
+
+        } else {
+            b=true;
+            System.out.println("OK");
+        }
+        System.out.println("Annee= "+Period.between(dN, dD).getYears()+" Mois= "+Period.between(dN, dD).getMonths()+" Days= "+Period.between(dN, dD).getDays());
+
+        System.out.println("Annee= "+Period.between(dN, dD).getYears()+" Mois= "+Period.between(dN, dD).getMonths()+" Days= "+Period.between(dN, dD).getDays());
+        return b;
     }
 }

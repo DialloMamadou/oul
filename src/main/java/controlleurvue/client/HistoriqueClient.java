@@ -77,7 +77,6 @@ public class HistoriqueClient implements Initializable, Vue {
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
         reservationDao=new ReservationDaoImpl(DBconnexion.getConnection());
 
-        System.out.println("id = "+id);
         Client client=clientDao.getClientParId(String.valueOf(id));
         this.lnom.setText(client.nom_client.get());
         this.lprenom.setText(client.prenom_client.get());
@@ -157,7 +156,6 @@ public class HistoriqueClient implements Initializable, Vue {
             String id_sejour=sejour.id.get();
 
             Sejour sejour1=sejourDao.getSejourParId(id_sejour);
-            System.out.println("nom client :"+nom_client);
 
 
             Annulation annulation1=new Annulation(annulation.id.get(),annulation.motif.get(),nom_client,sejour1.type.get());
@@ -314,7 +312,6 @@ public class HistoriqueClient implements Initializable, Vue {
 
 
             Client client=clientDao.getClientParId(reservation.code_client.get());
-            System.out.println("id sejour :"+reservation.id_sejour.get());
             Sejour sejour=sejourDao.getSejourParId(reservation.id_sejour.get());
             String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
             String id_sejour=sejour.id.get();
@@ -355,7 +352,6 @@ public class HistoriqueClient implements Initializable, Vue {
 
 
             Client client=clientDao.getClientParId(inscription1.code_client.get());
-            System.out.println("id sejour :"+inscription1.id_sejour.get());
             Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
             String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
             String id_sejour=sejour.id.get();
@@ -485,7 +481,6 @@ public class HistoriqueClient implements Initializable, Vue {
 
     public void genererDocument(MouseEvent mouseEvent) {
         if(!this.inscriptions.getSelectionModel().isEmpty()){
-            System.out.println("clicker generation");
             test();
         }else{
             Notification.affichageEchec("echec","il faut selectionner une inscription");
@@ -563,7 +558,6 @@ public class HistoriqueClient implements Initializable, Vue {
             // Send message
             Transport.send(message);
 
-            System.out.println("Sent message successfully....");
         /*    message.setFrom(new InternetAddress(from));
             InternetAddress[] toAddress = new InternetAddress[to.length];
 

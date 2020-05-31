@@ -73,9 +73,7 @@ public class Historique implements Initializable, Vue {
     }
 
     private void remplirData() {
-        if(id_sejour==null){
-            System.out.println(" sejour nulllllllllllllllllllllllllllllllllllll");
-        }
+
         Sejour sejour=sejourDao.getSejourParId(id_sejour);
         Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
         Groupe groupe=groupeDao.getGroupeParId(id_groupe);
@@ -190,22 +188,7 @@ public class Historique implements Initializable, Vue {
         }
         final TreeItem<PaiementMarie> root = new RecursiveTreeItem<PaiementMarie>(centres, RecursiveTreeObject::getChildren);
 
-        if(id==null){
-            System.out.println("id = null");
-        }
-        if(id==groupe){
-            System.out.println("id = null");
-        }
 
-        if(id==sejour){
-            System.out.println("id = null");
-        }
-        if(id==paiement){
-            System.out.println("id = null");
-        }
-        if(id==methode){
-            System.out.println("id = null");
-        }
         paiementMarieJFXTreeTableView.getColumns().setAll(id,groupe,sejour,paiement,methode);
         paiementMarieJFXTreeTableView.setRoot(root);
         paiementMarieJFXTreeTableView.setShowRoot(false);

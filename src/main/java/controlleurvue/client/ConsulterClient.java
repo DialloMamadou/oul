@@ -8,6 +8,7 @@ import controlleurvue.Email;
 import controlleurvue.Vue;
 import controlleurvue.centre.ConsulterCentre;
 import controlleurvue.centre.CreerCentre;
+import controlleurvue.centre.EditerCentre;
 import daos.ClientDao;
 import daos.impl.ClientDaoImpl;
 import javafx.beans.value.ChangeListener;
@@ -34,10 +35,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import modele.Client;
-import modele.Groupe;
-import modele.Inscription;
-import modele.Sejour;
+import modele.*;
 import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
@@ -165,7 +163,6 @@ public class ConsulterClient implements Initializable, Vue {
         JFXTreeTableColumn<Client,String> client_datenaissance=this.genererDateNaissance();
         ObservableList<Client> clients = FXCollections.observableArrayList();
         List<Client> liste=clientDao.listeClient();
-        System.out.println("nb clients "+liste.size());
         for(Client client:liste){
             clients.add(client);
         }
@@ -276,18 +273,22 @@ public class ConsulterClient implements Initializable, Vue {
     }
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
+        if (this.idclient.getText().isEmpty()){
+            Notification.affichageEchec("Alerte","Veuillez séléctionner un client");
+        }else {
 
-        int res=clientDao.supprimerClient(chercherclient.getText().toString());
+            int res = clientDao.supprimerClient(this.idclient.getText());
 
-        if(res>0){
-            Notification.affichageSucces("succes","client supprimer avec succes");
+            if (res > 0) {
+                Notification.affichageSucces("succes", "client supprimer avec succes");
 
-            loadAllClient();
+                loadAllClient();
 
-            //updateStatus();
-        }else{
-            Notification.affichageEchec("echec","il y a eu erreur dans la suppression");
+                //updateStatus();
+            } else {
+                Notification.affichageEchec("echec", "il y a eu erreur dans la suppression");
 
+            }
         }
     }
 
@@ -299,44 +300,63 @@ public class ConsulterClient implements Initializable, Vue {
 
     public void historiqueClient(MouseEvent mouseEvent) {
 
-
-        controlleur.lancerPageSejourHistoriqueClient(this.idclient.getText());
+        if (this.idclient.getText().isEmpty()){
+            Notification.affichageEchec("Alerte","Veuillez séléctionner un client");
+        }else {
+            controlleur.lancerPageSejourHistoriqueClient(this.idclient.getText());
+        }
     }
 
     public void envoieEmail(MouseEvent mouseEvent) {
         //this.controlleur.envoyerEmail(this.idclient.getText());
         Email.idclient=this.idclient.getText();
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
-            /*
-             * if "fx:controller" is not set in fxml
-             * fxmlLoader.setController(NewWindowController);
-             */
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            if (!this.idclient.getText().isEmpty()) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
+                /*
+                 * if "fx:controller" is not set in fxml
+                 * fxmlLoader.setController(NewWindowController);
+                 */
+                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 
-            FileChooser fileChooser = new FileChooser();
+                FileChooser fileChooser = new FileChooser();
 
 
+                Stage stage = new Stage();
 
-
-            Stage stage = new Stage();
-
-            stage.setTitle("email");
-            stage.setScene(scene);
-           // Email.stage=stage;
-            stage.show();
+                stage.setTitle("email");
+                stage.setScene(scene);
+                // Email.stage=stage;
+                stage.show();
+            }else {
+                Notification.affichageEchec("Alerte","Veuillez séléctionner un client");
+            }
         } catch (IOException e) {
             Logger logger = Logger.getLogger(getClass().getName());
             logger.log(Level.SEVERE, "Failed to create new Window.", e);
+            Notification.affichageEchec("Erreur","Problème d'envoie de mail ");
+
         }
     }
 
-    public void editerclient(MouseEvent mouseEvent) {
-        if(!this.idclient.getText().isEmpty()){
-            EditerClient.id=Integer.parseInt(this.idclient.getText());
+
+
+
+    public void editerClient(MouseEvent mouseEvent) {
+        if(this.idclient.getText().isEmpty()) {
+            Notification.affichageEchec("Alerte", "Veuillez séléctionner un client");
+        }else {
+            Client client=clientDao.getClientParId(idclient.getText());
+            if(client==null){
+                Notification.affichageEchec("Alerte","aucun client avec cette id à été trouvé");
+
+            }else{
+                EditerClient.id=this.idclient.getText();
+                controlleur.lancerEditionClient();
+            }
         }
 
-
     }
+
 }

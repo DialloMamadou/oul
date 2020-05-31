@@ -79,9 +79,8 @@ public class ListeInscrit implements Initializable, Vue {
     }
 
     private void remplirData() {
-        if(id_sejour==null){
-            System.out.println(" sejour nulllllllllllllllllllllllllllllllllllll");
-        }
+
+
         Sejour sejour=sejourDao.getSejourParId(id_sejour);
         Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
         Groupe groupe=groupeDao.getGroupeParId(id_groupe);
@@ -332,8 +331,8 @@ this.resteapayer.setText(ListeInscrit.reste);
             //Notification.affichageEchec("test 2","test 2");
 
             Client client=clientDao.getClientParId(groupeSejourClient.idClient);
-            Reservation reservation=new Reservation(aujourdhui,client.id.get(),id_sejour,"inconnu");
-           // System.out.println("id client "+client.id.get()+" sejour "+id_sejour);
+            GroupeSejourClient groupeSejourClient1=groupeSejourClientDao.getGroupeSejourClient(id_groupe,id_sejour,client.id.get());
+            Reservation reservation=new Reservation(aujourdhui,client.id.get(),id_sejour,groupeSejourClient1.depart);
 
             Reservation reservation2= reservationDao.getReservationParIdClientEtIdSejour(client.id.get(),id_sejour);
             if(reservation2==null){
@@ -342,6 +341,7 @@ this.resteapayer.setText(ListeInscrit.reste);
 
 
                 reservationDao.insererReservation(reservation);
+                Notification.affichageSucces("ajout reservation","reservation faite");
             }else{
                // Notification.affichageEchec("deja present database","deja present");
             }

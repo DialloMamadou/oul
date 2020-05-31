@@ -59,8 +59,6 @@ public class InscriptionDaoImpl extends Dao<Inscription> implements InscriptionD
                 " VALUES (?,?,?,?,?)";
         try {
 
-            System.out.println("sejour ou on inscrit "+inscription2.id_sejour.get());
-            System.out.println("client inscrit "+inscription2.code_client.get());
 
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1, inscription2.paiement.get());
@@ -125,12 +123,10 @@ public class InscriptionDaoImpl extends Dao<Inscription> implements InscriptionD
 
         int x=0;
         String sql2 = "update inscription set paiement="+s+" where id_inscription="+idInscription+"";
-        System.out.println(sql2);
 try {
              Statement stmt = DBconnexion.getConnection().createStatement() ;
 
             x=stmt.executeUpdate(sql2);
-            System.out.println("Database updated successfully ");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -166,31 +162,6 @@ return x;
 
 
 
-    @Override
-    public Inscription getInscritptionParIdInscription(String s) {
-        String sql="SELECT * FROM inscription WHERE id_inscription ='"+s+"'";
-        Inscription liste=new Inscription();
-
-
-        try{
-            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
-            ResultSet rs=ps.executeQuery();
-
-            while(rs.next()){
-
-                liste=new Inscription(rs.getInt(1)+"",rs.getString(2),rs.getString(3),
-                        rs.getString(4),rs.getString(5),rs.getString(6));
-
-            }
-
-
-        }catch (Exception e){
-
-        }
-
-        return liste;
-
-    }
 
 
     @Override
@@ -247,7 +218,6 @@ return x;
 
 
     public int  nbInscriptionForId(String id) {
-        System.out.println("id sejour inscr"+id);
 
         int nbInsc=0;
         String sql="SELECT COUNT(*) FROM inscription WHERE id_sejour ='"+id+"'";
@@ -256,7 +226,6 @@ return x;
             ResultSet rs=ps.executeQuery();
 
             while(rs.next()) {
-                System.out.println("Count nb sejour dans inscription pour id:" + id + " = " + rs.getInt(1));
                 nbInsc = rs.getInt(1);
             }
             return nbInsc;

@@ -98,7 +98,7 @@ public class ConsulterCentre  implements Initializable, Vue {
 
     private JFXTreeTableColumn<Centre, String> creationTableColumnomcCapacite() {
         JFXTreeTableColumn<Centre, String> capaciteCentre = new JFXTreeTableColumn<>("capacite du centre");
-        capaciteCentre.setPrefWidth(110);
+        capaciteCentre.setPrefWidth(150);
         capaciteCentre.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Centre, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Centre, String> param) {
@@ -130,24 +130,11 @@ public class ConsulterCentre  implements Initializable, Vue {
 
 
         optimiserRechercheSejour();
-        treeView.getSelectionModel().selectedItemProperty().addListener((Observable, oldValue, newValue)
-                ->
-                showDetailsSejour(newValue)
-        );
+
 
 
     }
 
-    private void showDetailsSejour(TreeItem<Centre> newValue) {
-        if (newValue != null) {
-            this.lid.setText(newValue.getValue().id.get());
-            this.lnom.setText(newValue.getValue().nom_centre.get());
-            this.lcapacite.setText(newValue.getValue().capacite_centre.get());
-
-            this.textcapacite.setText(newValue.getValue().capacite_centre.get());
-            this.textnom.setText(newValue.getValue().nom_centre.get());
-        }
-    }
 
 
     private void optimiserRechercheSejour() {
@@ -291,13 +278,20 @@ public class ConsulterCentre  implements Initializable, Vue {
 
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
-        String s=this.search_text2.getText();
-        if (s != null && s != "") {
+        try {
+            String s=this.search_text2.getText();
+            Integer.parseInt(s);
             lancerSuppresion(mouseEvent);
+            /*if (s != null && s != "") {
+                lancerSuppresion(mouseEvent);
 
-        } else {
-            Notification.affichageEchec("echec", "il faut selectionner un centre");
-            return;
+            } else {
+                Notification.affichageEchec("echec", "il faut selectionner un centre");
+                return;
+            }*/
+        }catch (Exception  e){
+            Notification.affichageEchec("echec", "Veuillez saisir l'id du centre SVP");
+
         }
 
     }
@@ -306,7 +300,7 @@ public class ConsulterCentre  implements Initializable, Vue {
 
         JFXDialogLayout dialogLayout = new JFXDialogLayout();
         dialogLayout.setHeading(new Text("ferme"));
-        dialogLayout.setBody(new Text("vous voulez vraiment supprimer ce centre ?"));
+        dialogLayout.setBody(new Text("Voulez vous vraiment supprimer ce centre ?"));
 
         JFXButton ok = new JFXButton("oui");
         JFXButton cancel = new JFXButton("non");
@@ -342,7 +336,7 @@ public class ConsulterCentre  implements Initializable, Vue {
             this.controlleur.consulterCentre();
             return;
         } else {
-            Notification.affichageEchec("echec", "echec dans la suppresion du centre");
+            Notification.affichageEchec("echec", "Le Centre que vous souhaitez supprimer n'existe pas ou à déjà été supprimé\"");
             dialogLayout.close();
             return;
 
@@ -352,4 +346,16 @@ public class ConsulterCentre  implements Initializable, Vue {
 
     }
 
+    public void editerCentre(MouseEvent mouseEvent) {
+        if(this.search_text2.getText()!="" && search_text2.getText()!=null){
+            Centre centre=centreDao.getCentreParId(search_text2.getText());
+            if(centre==null){
+                Notification.affichageEchec("id incorrecte","aucun centre avec cette id à été trouvé");
+
+            }else{
+                EditerCentre.id=Integer.parseInt(search_text2.getText());
+                controlleur.lancerEditionCentre();
+            }
+        }
+    }
 }

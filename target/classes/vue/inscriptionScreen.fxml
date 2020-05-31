@@ -10,7 +10,7 @@
 
 <StackPane fx:id="stack" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.inscription.InscriptionScreen">
     <children>
-        <AnchorPane prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/lggg.jpg);">
+        <AnchorPane prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/iscren.jpg);">
             <children>
                 <Pane fx:id="pane_1" layoutX="167.0" layoutY="120.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#inscrireClientSejour" onMouseEntered="#souris_dessus_1" onMouseExited="#souris_sort_1" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
                     <children>
@@ -39,7 +39,7 @@
                     </children>
                 </Pane>
 
-                <Pane fx:id="pane_3" layoutX="175.0" layoutY="409.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#goback" onMouseEntered="#souris_dessus_3" onMouseExited="#souris_sort_3" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+                <Pane fx:id="pane_3" layoutX="964.0" layoutY="393.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#goback" onMouseEntered="#souris_dessus_3" onMouseExited="#souris_sort_3" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -52,7 +52,7 @@
                      </font></Label>
                     </children>
                 </Pane>
-                <Pane fx:id="pane_21" layoutX="979.0" layoutY="126.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consulterAnnulation" onMouseEntered="#souris_dessus_5" onMouseExited="#souris_sort_5" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                <Pane fx:id="pane_21" layoutX="167.0" layoutY="393.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consulterAnnulation" onMouseEntered="#souris_dessus_5" onMouseExited="#souris_sort_5" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -65,7 +65,7 @@
                      </font></Label>
                     </children>
                 </Pane>
-                <Pane fx:id="pane_111" layoutX="583.0" layoutY="403.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consulterLesReservations" onMouseEntered="#souris_dessus_reservationconsulter" onMouseExited="#souris_sort_reservationconsulter" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
+                <Pane fx:id="pane_111" layoutX="583.0" layoutY="393.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#consulterLesReservations" onMouseEntered="#souris_dessus_reservationconsulter" onMouseExited="#souris_sort_reservationconsulter" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="62.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                             <image>

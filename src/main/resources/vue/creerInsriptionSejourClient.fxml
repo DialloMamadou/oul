@@ -96,11 +96,11 @@
                                         <ComboBox fx:id="depart" layoutX="43.0" layoutY="220.0" prefWidth="150.0" />
                                     </children>
                                 </Pane>
-                                <Label fx:id="lprix" layoutX="21.0" layoutY="289.0" text="Prix" />
-                                <Label fx:id="prix" layoutX="72.0" layoutY="274.0" />
-                                <Label fx:id="laccompte" layoutX="20.0" layoutY="322.0" text="Acompte" />
-                                <JFXTextField fx:id="accompte" layoutX="81.0" layoutY="318.0" />
-                                <JFXTextField layoutX="72.0" layoutY="270.0" />
+                                <Label fx:id="lprix" layoutX="21.0" layoutY="289.0" prefHeight="17.0" prefWidth="37.0" text="Prix :" />
+                                <Label fx:id="prix" layoutX="72.0" layoutY="289.0" />
+
+                                <Label fx:id="laccompte" layoutX="20.0" layoutY="340.0" text="Acompte " />
+                                <JFXTextField fx:id="accompte" layoutX="103.0" layoutY="336.0" />
                             </children>
                         </Pane>
                         <Label layoutX="21.0" layoutY="14.0" prefHeight="25.0" prefWidth="158.0" text="Inscription à un séjour">

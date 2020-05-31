@@ -1,6 +1,7 @@
 package controlleurvue.sejour;
 
 import basededonnee.DBconnexion;
+import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
 import controlleurvue.centre.ConsulterCentre;
@@ -53,6 +54,7 @@ public class CreerSejour implements Initializable, Vue {
     public TextField agemin;
     public TextField prix;
     public TextField refsejour;
+    public JFXTextField numero;
 
 
     private SejourDao sejourDao;
@@ -108,20 +110,34 @@ public class CreerSejour implements Initializable, Vue {
             long diff = dateApres.getTime() - dateAvant.getTime();
             long nbJours = (diff / (1000*60*60*24));
             String duree = String.valueOf(nbJours);
-            System.out.println("duree = "+duree);
 
-            if (controleDate(datedebut, datefin) && Integer.parseInt(min) >= 4 && Integer.parseInt(min) <= 17 && type.length() >=5 ) {
-                Sejour sejour = new Sejour(duree, datedebut, datefin, type, centre.id.get(), prix, min, max, capacite, refSejour);
-                int res = sejourDao.insererSejour(sejour);
-                if (nbJours > 0) {
-                    Notification.affichageSucces("succes", "Séjour créé avec succès");
-                    this.back(mouseEvent);
+            if (controleDate(datedebut, datefin)){
+                if (Integer.parseInt(min) >= 4 && Integer.parseInt(min) <= 17){
+                    if (type.length() >=5){
+                        if (Integer.parseInt(capacite) <= Integer.parseInt(centre.capacite_centre.get())){
+                            Sejour sejour = new Sejour(duree, datedebut, datefin, type, centre.id.get(), prix, max, min, capacite, refSejour,this.numero.getText());
+                            int res = sejourDao.insererSejour(sejour);
+                            if (nbJours > 0) {
+                                Notification.affichageSucces("Succes", "Séjour créé avec succès");
+                                this.back(mouseEvent);
 
-                } else {
-                    Notification.affichageEchec("echec", "echec dans la création du sejour");
+                            } else {
+                                Notification.affichageEchec("Echec", "echec dans la création du sejour");
+                            }
+                        }else{
+                            Notification.affichageEchec("Echec", "Capacité du séjour doit être inferieur ou égal à celle du centre");
+                        }
+                    }else {
+                        Notification.affichageEchec("Echec", "Le champs doit avoir au moins 5 caractères");
+
+                    }
+                } else{
+                    Notification.affichageEchec("Echec", "L'âge doit être entre 4 et 17 ans");
+
                 }
-            } else {
-                Notification.affichageEchec("echec", "donnée(s) incorrecte(s)");
+            }else {
+                Notification.affichageEchec("echec","Dates incorrectes");
+
             }
         }catch (NullPointerException | NumberFormatException | ParseException e ){
             Notification.affichageEchec("Problème de donnees","veuillez saisir de(s) champ(s) non vides et valide(s) ");

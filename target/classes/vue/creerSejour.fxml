@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="stack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/mt.jpg);" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.sejour.CreerSejour">
+<StackPane fx:id="stack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/mb.jpg);" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.sejour.CreerSejour">
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="736.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
         <children>
             <Pane prefHeight="533.0" prefWidth="807.0" style="-fx-background-color: white;">
@@ -26,38 +26,40 @@
                             </ImageView>
                         </children>
                     </Pane>
-                    <Label layoutX="154.0" layoutY="123.0" prefHeight="17.0" prefWidth="87.0" text="Séjour" />
-                    <Label layoutX="157.0" layoutY="280.0" text="Date depart" />
-                    <Label layoutX="159.0" layoutY="332.0" text="Date de fin" />
-                    <Label layoutX="154.0" layoutY="181.0" text="Centre de séjour" />
-                    <Label layoutX="484.0" layoutY="132.0" text="Age min" />
-                    <Label layoutX="158.0" layoutY="231.0" prefHeight="17.0" prefWidth="76.0" text="ref sejour" />
-                    <Label layoutX="483.0" layoutY="182.0" text="Age max" />
-                    <Label layoutX="496.0" layoutY="289.0" text="Prix" />
-                    <Label layoutX="483.0" layoutY="228.0" text="Capacité" />
+                    <Label layoutX="170.0" layoutY="129.0" text="Séjour " />
+                    <Label layoutX="170.0" layoutY="290.0" text="Date début " />
+                    <Label layoutX="170.0" layoutY="331.0" text="Date fin " />
+                    <Label layoutX="170.0" layoutY="185.0" text="Centre " />
+                    <Label layoutX="480.0" layoutY="122.0" text="Age min " />
+                    <Label layoutX="170.0" layoutY="237.0" text="Référence " />
+                    <Label layoutX="480.0" layoutY="182.0" text="Age max" />
+                    <Label layoutX="480.0" layoutY="280.0" text="Prix " />
+                    <Label layoutX="480.0" layoutY="231.0" text="Capacité " />
 
 
-                    <JFXButton buttonType="RAISED" layoutX="529.0" layoutY="420.0" onMouseClicked="#book" prefHeight="39.0" prefWidth="99.0" ripplerFill="WHITE" style="-fx-background-color: TEAL;" text="Valider" textFill="WHITE">
+                    <JFXButton buttonType="RAISED" layoutX="400.0" layoutY="420.0" onMouseClicked="#book" prefHeight="39.0" prefWidth="99.0" ripplerFill="WHITE" style="-fx-background-color: TEAL;" text="Valider" textFill="WHITE">
                         <font>
                             <Font size="16.0" />
                         </font>
                     </JFXButton>
-                    <ImageView fitHeight="104.0" fitWidth="171.0" layoutX="317.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+                    <ImageView fitHeight="104.0" fitWidth="171.0" layoutX="400.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image url="@../img/oul.jpg" />
                         </image>
                     </ImageView>
-                    <JFXTextField fx:id="type" layoutX="254.0" layoutY="112.0" prefHeight="25.0" prefWidth="159.0" />
-                    <ComboBox fx:id="centre" layoutX="259.0" layoutY="177.0" prefWidth="150.0" />
+                    <JFXTextField fx:id="type" focusColor="#09e2a7" labelFloat="true" layoutX="254.0" layoutY="112.0" prefHeight="25.0" prefWidth="159.0" />
+                    <ComboBox fx:id="centre" layoutX="254.0" layoutY="178.0" prefWidth="159.0" />
 
       
-                          <JFXTextField fx:id="refsejour" layoutX="272.0" layoutY="233.0" />
-                    <JFXDatePicker fx:id="dateD" layoutX="254.0" layoutY="273.0" prefHeight="25.0" prefWidth="171.0" />
-                    <JFXDatePicker fx:id="dateF" layoutX="266.0" layoutY="335.0" />
-                    <JFXTextField fx:id="agemin" layoutX="562.0" layoutY="119.0" />
-                    <JFXTextField fx:id="agemax" layoutX="562.0" layoutY="165.0" />
-                    <JFXTextField fx:id="capacite" layoutX="551.0" layoutY="224.0" prefHeight="17.0" prefWidth="135.0" />
-                    <JFXTextField fx:id="prix" layoutX="551.0" layoutY="285.0" />
+                    <JFXTextField fx:id="refsejour" focusColor="#09e2a7" labelFloat="true" layoutX="254.0" layoutY="220.0" prefHeight="25.0" prefWidth="159.0" />
+                    <JFXDatePicker fx:id="dateD" layoutX="254.0" layoutY="270.0" prefHeight="28.0" prefWidth="159.0" />
+                    <JFXDatePicker fx:id="dateF" layoutX="254.0" layoutY="320.0" prefHeight="28.0" prefWidth="159.0" />
+                    <JFXTextField fx:id="agemin" focusColor="#09e2a7" labelFloat="true" layoutX="562.0" layoutY="112.0" prefHeight="25.0" prefWidth="159.0" />
+                    <JFXTextField fx:id="agemax" focusColor="#09e2a7" labelFloat="true" layoutX="562.0" layoutY="168.0" prefHeight="25.0" prefWidth="159.0" />
+                    <JFXTextField fx:id="capacite" focusColor="#09e2a7" labelFloat="true" layoutX="562.0" layoutY="220.0" prefHeight="25.0" prefWidth="159.0" />
+                    <JFXTextField fx:id="prix" focusColor="#09e2a7" labelFloat="true" layoutX="562.0" layoutY="270.0" prefHeight="25.0" prefWidth="159.0" />
+               <Label layoutX="480.0" layoutY="339.0" text="Numero" />
+               <JFXTextField fx:id="numero" focusColor="#09e2a7" labelFloat="true" layoutX="562.0" layoutY="327.0" prefHeight="25.0" prefWidth="159.0" />
                 </children>
             </Pane>
         </children>

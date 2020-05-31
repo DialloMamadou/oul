@@ -13,4 +13,5 @@ public interface GroupeSejourClientDao {
     public GroupeSejourClient getGroupeSejourClient(String id_groupe, String id_sejour,String id_client) ;
 
 
-    }
+    List<GroupeSejourClient> getGroupeSejourClientByIdSejour(String s);
+}

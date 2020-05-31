@@ -1,10 +1,7 @@
 package controlleurvue.client;
 
 import basededonnee.DBconnexion;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.mysql.jdbc.PreparedStatement;
 import controlleurvue.Vue;
@@ -14,6 +11,8 @@ import daos.ClientDao;
 import daos.GroupeDao;
 import daos.impl.ClientDaoImpl;
 import daos.impl.GroupeDaoImpl;
+import enumerations.Depart;
+import enumerations.Sexe;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -54,6 +53,7 @@ public class CreerClient  implements Initializable, Vue {
 
     public StackPane stack;
     public TextField nom;
+    public ComboBox sexe;
 
     private String id_Groupe;
     public TextField prenom;
@@ -63,7 +63,7 @@ public class CreerClient  implements Initializable, Vue {
     public TextField poste;
     public DatePicker annee;
     public TextField adresse;
-    public TextField groupelabel;
+    public Label groupelabel;
     public JFXTreeTableView<Groupe> tablegroupe;
     public JFXTextField chercher;
 
@@ -95,26 +95,34 @@ public class CreerClient  implements Initializable, Vue {
 
         //    Groupe groupe=groupeDao.trouverGroupeParNomGroupe(this.groupe.getValue().toString().trim());
 
-            String prenom=this.prenom.getText();
-            String nom=this.nom.getText();
+            String prenom;
+            String nom;
           //  String id_group=groupe.id.get();
-            String portable=this.portable.getText();
-            String observation=this.observation.getText();
-            String email=this.email.getText();
-            String adresse=this.adresse.getText();
-            String poste=this.poste.getText();
-            System.out.println("poste =="+poste);
-            String dateNaissance=this.annee.getValue().toString();
-            String groupeL=this.groupelabel.getText();
+            String portable;
+            String observation;
+            String email;
+            String adresse;
+            String poste;
+            String dateNaissance;
+            // groupeL=this.groupelabel.getText();
 
-            if (!nom.isEmpty() && !prenom.isEmpty() && !portable.isEmpty() && !adresse.isEmpty() && !poste.isEmpty() && !dateNaissance.isEmpty()) {
+            if (!this.nom.getText().isEmpty() && !this.prenom.getText().isEmpty() && !this.portable.getText().isEmpty() && !this.adresse.getText().isEmpty() && !this.poste.getText().isEmpty() && !this.annee.getValue().toString().isEmpty()) {
+
+                prenom=this.prenom.getText();
+                nom=this.nom.getText();
+                portable=this.portable.getText();
+                observation=this.observation.getText();
+                email=this.email.getText();
+                adresse=this.adresse.getText();
+                poste=this.poste.getText();
+                dateNaissance=this.annee.getValue().toString();
 
                 if ( !id_Groupe.isEmpty()) {
                         if (isEmailAdress(email)){
                             if (isCodePostale(poste)){
                                 Client cl = testClientExiste(nom , prenom, dateNaissance, id_Groupe);
                                 if ( cl== null) {
-                                    Client client = new Client("", nom, prenom, id_Groupe, portable, observation, email, adresse, poste, dateNaissance);
+                                    Client client = new Client("", nom, prenom, id_Groupe, portable, observation, email, adresse, poste, dateNaissance,this.sexe.getValue().toString());
 
                                     int res = this.clientDao.insererClient(client);
 
@@ -135,14 +143,15 @@ public class CreerClient  implements Initializable, Vue {
                             Notification.affichageEchec("erreur","l'Email est incorrect ");
                         }
                 }else {
-                    Notification.affichageEchec("erreur", "Veuillez selectionner son groupe");
+                    Notification.affichageEchec("erreur", "Veuillez selectionner un groupe");
 
                 }
             }else {
                 Notification.affichageEchec("Problème de donnees", "veuillez saisir de(s) champ(s) non vide(s)");
             }
         }catch (NullPointerException | NumberFormatException e){
-            Notification.affichageEchec("Problème de donnees","veuillez saisir de(s) champ(s) non vide(s)et valide(s) ");
+            e.printStackTrace();
+            Notification.affichageEchec("Données manques ","veuillez saisir de(s) champ(s) non vide(s)et valide(s) ");
         }
 
     }
@@ -164,7 +173,6 @@ public class CreerClient  implements Initializable, Vue {
     }
 
     public Client testClientExiste(String nom , String prenom, String dN, String idGrp){
-        System.out.println("dans testClientExiste");
         return clientDao.getClient( nom , prenom, dN, idGrp);
     }
 
@@ -218,6 +226,9 @@ public class CreerClient  implements Initializable, Vue {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         groupeDao=new GroupeDaoImpl(DBconnexion.getConnection());
+        for(Sexe sexe:Sexe.values()){
+            this.sexe.getItems().add(sexe);
+        }
         remplirGroupe();
 
     }

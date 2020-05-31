@@ -90,9 +90,7 @@ public class GroupeScreen implements Vue {
     }
 
     public void creerGroupe(MouseEvent mouseEvent) {
-        System.out.println("irci");
         if(controlleur==null){
-            System.out.println("controlleur null");
         }
         this.controlleur.creerVueGroupeCreation();
     }

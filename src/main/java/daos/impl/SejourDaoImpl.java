@@ -30,7 +30,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
     public int insererSejour(Sejour sejour) {
         int res=0;
 
-        String sql="INSERT INTO sejour (duree,date_debut,date_fin,type_sejour,centre_id,prix,age_min,age_max,capacite,ref_sejour) VALUES (?,?,?,?,?,?" +
+        String sql="INSERT INTO sejour (duree,date_debut,date_fin,type_sejour,centre_id,prix,age_min,age_max,capacite,ref_sejour,numero) VALUES (?,?,?,?,?,?,?" +
                 ",?,?,?,?)";
         try {
 
@@ -45,6 +45,8 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
             ps.setString(9,sejour.capacite.get() );
             ps.setString(5,sejour.nom_centre.get() );
             ps.setString(10,sejour.refSejour.get());
+            ps.setString(11,sejour.numero.get());
+
 
 
 
@@ -80,7 +82,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                         rs.getString(7),
                         rs.getString(8),
                       rs.getString(9),
-                        rs.getString(10)  ,rs.getString(11)));
+                        rs.getString(10)  ,rs.getString(11),rs.getString(12)));
 
             }
 
@@ -112,8 +114,7 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                         rs.getString(8),
                         rs.getString(9),
                         rs.getString(10),
-                        rs.getString(11));
-                System.out.println("trouvee");
+                        rs.getString(11),rs.getString(12));
 
             }
 
@@ -171,9 +172,8 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                         rs.getString(8),
                         rs.getString(9),
                         rs.getString(10),
-                        rs.getString(11));
+                        rs.getString(11),rs.getString(12));
                 liste.add(sejour);
-                System.out.println("trouvee");
 
             }
 
@@ -196,7 +196,6 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
         String sql="SELECT * FROM sejour where type_sejour ='"+value+"' AND date_debut='"+arg+"' AND date_fin='"+
                 arg1+"'";
 
-        System.out.println("requete sql "+sql);
 
 
         Connection connection= DBconnexion.getConnection();
@@ -210,10 +209,9 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
                 ,rs.getString(10),
-                        rs.getString(11));
+                        rs.getString(11),rs.getString(12));
                 list.add(sejour);
 
-                System.out.println("right here right now");
 
             }
         }catch (Exception e){
@@ -229,7 +227,6 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
         String sql = "SELECT * FROM sejour WHERE centre_id ='" + id+ "'";
 
 
-        System.out.println("requete sql "+sql);
 
 
         Connection connection= DBconnexion.getConnection();
@@ -243,10 +240,10 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
                         ,rs.getString(10),
-                        rs.getString(11));
+                        rs.getString(11),
+                        rs.getString(12));
                 list.add(sejour);
 
-                System.out.println("right here right now");
 
             }
         }catch (Exception e){
@@ -260,7 +257,6 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
         String sql="SELECT * FROM sejour where type_sejour ='"+(String)value+"' AND duree ='"+newItem+"'";
 
 
-        System.out.println("requete sql "+sql);
 
 
         Connection connection= DBconnexion.getConnection();
@@ -273,10 +269,10 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                 Sejour sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
-                        ,rs.getString(10),rs.getString(11));
+                        ,rs.getString(10),rs.getString(11),
+                        rs.getString(12));
                 list.add(sejour);
 
-                System.out.println("right here right now");
 
             }
         }catch (Exception e){
@@ -300,7 +296,8 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
                  sejour=new Sejour(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
-                        ,rs.getString(10),rs.getString(11));
+                        ,rs.getString(10),rs.getString(11),
+                         rs.getString(12));
 
             }
         }catch (Exception e){
@@ -308,5 +305,23 @@ public class SejourDaoImpl extends Dao<Sejour> implements SejourDao {
         }
 return sejour;
 
+    }
+
+    public List<String> testCapaciteSejour(String id){
+        String sql="SELECT id_sejour FROM sejour WHERE date_fin < (SELECT date_debut FROM `sejour` WHERE id_sejour='"+id+"')";
+        List<String> listeId = new ArrayList<>();
+        listeId.add(id);
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+                listeId.add(rs.getString(1));
+            }
+            return listeId;
+        }catch (Exception e){
+
+        }
+        return null;
     }
 }

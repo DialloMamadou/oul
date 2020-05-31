@@ -28,7 +28,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
     @Override
     public int[] insererClientMairie(Client client) {
-        String sql="INSERT INTO client (nom_client,prenom_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance) VALUES (?,?,?,?,?,?,?,?,?)";
+        String sql="INSERT INTO client (nom_client,prenom_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance,sexe) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 
         int []tab=new int[2];
@@ -38,8 +38,6 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
 
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
-            System.out.println("prenom_client :"+client.prenom_client.get());
-            System.out.println("cote postale :"+client.codePostale.get());
 
             ps.setString(1, client.prenom_client.get());
             ps.setString(2, client.nom_client.get());
@@ -50,6 +48,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
             ps.setString(7,client.adresse.get());
             ps.setString(8,client.codePostale.get());
             ps.setString(9,client.datenaissance.get());
+            ps.setString(10,client.sexe.get());
 
 
 
@@ -61,7 +60,6 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
                 if(ress.next()){
                     tab[1]=ress.getInt(1);
 
-                    System.out.println("trouuuve");
                 }
 
             } catch (SQLException e) {
@@ -80,7 +78,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
     @Override
     public int insererClient(Client client) {
-        String sql="INSERT INTO client (nom_client,prenom_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance) VALUES (?,?,?,?,?,?,?,?,?)";
+        String sql="INSERT INTO client (nom_client,prenom_client,groupe_client,numero,observation,email,adresse,code_postale,datenaissance,sexe) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
         int res=0;
         try {
@@ -99,6 +97,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
             ps.setString(7,client.adresse.get());
             ps.setString(8,client.codePostale.get());
             ps.setString(9,client.datenaissance.get());
+            ps.setString(10,client.sexe.get());
 
 
 
@@ -116,7 +115,20 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
 
     @Override
     public int supprimerClient(String id) {
-        return 0;
+        int res=0;
+        String sql ="DELETE FROM client WHERE id=?";
+        try{
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
+            ps.setString(1,id);
+            res= ps.executeUpdate();
+
+
+        }catch (Exception e){
+
+        }
+
+        return res;
+
     }
 
     @Override
@@ -141,7 +153,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
                 liste.add(new Client(rs.getString(1),rs.getString(2),rs.getString(3),
                         groupe.nom_groupe.get(),rs.getString(5),
                         rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),
-                        rs.getString(10)));
+                        rs.getString(10),rs.getString(11)));
 
 
 
@@ -174,7 +186,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
                     rs.getString(7),
                     rs.getString(8),
                     rs.getString(9),
-                    rs.getString(10));
+                    rs.getString(10),rs.getString(11));
 
         }
 
@@ -206,7 +218,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
                 Client=new Client(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
-                        ,rs.getString(10));
+                        ,rs.getString(10),rs.getString(11));
 
             }
         }catch (Exception e){
@@ -234,7 +246,7 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
                 Client=new Client(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4),rs.getString(5),rs.getString(6),
                         rs.getString(7),rs.getString(8),rs.getString(9)
-                        ,rs.getString(10));
+                        ,rs.getString(10),rs.getString(11));
 
             }
         }catch (Exception e){
@@ -242,4 +254,60 @@ public class ClientDaoImpl extends Dao<Client> implements ClientDao {
         }
         return Client;
     }
+
+    @Override
+    public Client getClient(String nom, String prenom, String dN, String idGrp) {
+        Client client=null;
+
+        String sql="SELECT * FROM client WHERE nom_client ='"+nom+"' AND prenom_client ='"+prenom+"'AND datenaissance ='"+dN+"'AND groupe_client ='"+idGrp+"'";
+        //
+
+        try {
+            PreparedStatement ps = (PreparedStatement)this.connect.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                client=new Client(rs.getString(1),rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6),
+                        rs.getString(7),rs.getString(8),rs.getString(9)
+                        ,rs.getString(10),rs.getString(11));
+
+            }
+
+
+            return client;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public int mettreAjourClient(String id, Client client) {
+        int x=0;
+
+        try{
+
+            String query = "update client set numero = ? ,  observation=?,email=?,adresse=?,code_postale=? where id = ?";
+
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(query);
+          ps.setString(1,client.numero.get());
+          ps.setString(2,client.observation.get());
+          ps.setString(3,client.email.get());
+          ps.setString(4,client.adresse.get());
+          ps.setString(5,client.codePostale.get());
+          ps.setString(6,id);
+            x=ps.executeUpdate();
+
+
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+        return x;
+    }
+
 }

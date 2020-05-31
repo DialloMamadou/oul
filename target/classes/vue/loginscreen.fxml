@@ -14,8 +14,8 @@
          <children>
             <Pane layoutX="118.0" layoutY="179.0" opacity="0.7" prefHeight="496.0" prefWidth="518.0" style="-fx-background-color: #FFF;" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="164.0" AnchorPane.topAnchor="179.0">
                <children>
-                  <TextField fx:id="password" layoutX="111.0" layoutY="270.0" prefHeight="25.0" prefWidth="270.0" promptText="Mot de passe" />
                   <TextField fx:id="login" layoutX="113.0" layoutY="214.0" prefHeight="25.0" prefWidth="270.0" promptText="Pseudo" />
+                  <TextField fx:id="password" layoutX="111.0" layoutY="270.0" prefHeight="25.0" prefWidth="270.0" promptText="Mot de passe" />
                   <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="105.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
                   <Button layoutX="80.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#loginbouton" prefHeight="25.0" prefWidth="104.0" style="-fx-background-color: teal;" text="login" textFill="WHITE" />
                   <Button layoutX="329.0" layoutY="322.0" mnemonicParsing="false" onMousePressed="#quitter" prefHeight="25.0" prefWidth="104.0" style="-fx-background-color: teal;" text="cancel" textFill="WHITE" />

@@ -19,6 +19,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
     public StringProperty capacite;
 
     public StringProperty refSejour;
+    public StringProperty numero;
 
     public Sejour(){
         super();
@@ -28,7 +29,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
 
     public Sejour(String id, String duree, String date_debut, String date_fin,
                   String type, String nom_centre,String prix,
-                  String ageMax, String ageMin, String capacite,String refSejour) {
+                  String ageMin, String ageMax, String capacite,String refSejour,String numero) {
         this.id = new SimpleStringProperty(id);
         this.duree = new SimpleStringProperty(duree);
         this.date_debut =new SimpleStringProperty( date_debut);
@@ -40,12 +41,13 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
         this.capacite =new SimpleStringProperty( capacite);
         this.prix = new SimpleStringProperty(prix);
         this.refSejour=new SimpleStringProperty(refSejour);
+        this.numero=new SimpleStringProperty(numero);
     }
 
 
     public Sejour(String duree, String date_debut, String date_fin,
                   String type, String nom_centre,String prix,
-                  String ageMax, String ageMin, String capacite,String refSejour) {
+                  String ageMax, String ageMin, String capacite,String refSejour,String numero) {
         this.duree = new SimpleStringProperty(duree);
         this.date_debut =new SimpleStringProperty( date_debut);
         this.date_fin = new SimpleStringProperty( date_fin);
@@ -56,6 +58,7 @@ public class Sejour extends RecursiveTreeObject<Sejour> {
         this.capacite =new SimpleStringProperty( capacite);
         this.prix = new SimpleStringProperty(prix);
         this.refSejour=new SimpleStringProperty(refSejour);
+        this.numero=new SimpleStringProperty(numero);
     }
     @Override
     public String toString() {

@@ -4,6 +4,7 @@ import basededonnee.DBconnexion;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controlleurvue.Vue;
+import controlleurvue.centre.EditerCentre;
 import daos.GroupeDao;
 import daos.impl.GroupeDaoImpl;
 import javafx.beans.value.ChangeListener;
@@ -25,8 +26,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import modele.Centre;
 import modele.Client;
 import modele.Groupe;
+import notification.Notification;
 import org.controlsfx.control.Notifications;
 import principale.Controlleur;
 
@@ -62,7 +65,7 @@ public class ConsulterGroupe implements Initializable, Vue {
 
     private JFXTreeTableColumn<Groupe,String> creerGroupeId(){
         JFXTreeTableColumn<Groupe,String> groupe_id=new JFXTreeTableColumn<>("groupe Id");
-        groupe_id.setPrefWidth(100);
+        groupe_id.setPrefWidth(80);
         groupe_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
@@ -86,6 +89,18 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
 
+    private JFXTreeTableColumn<Groupe,String> creerGroupeCommune(){
+        JFXTreeTableColumn<Groupe,String> groupe_id=new JFXTreeTableColumn<>("commune");
+        groupe_id.setPrefWidth(100);
+        groupe_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Groupe, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Groupe, String> param) {
+                return param.getValue().getValue().commune;
+            }
+        });
+        return groupe_id;
+    }
+
     private JFXTreeTableColumn<Groupe,String> creernomgroupe(){
         JFXTreeTableColumn<Groupe,String> groupe_nom=new JFXTreeTableColumn<>("nom du groupe");
         groupe_nom.setPrefWidth(110);
@@ -107,6 +122,7 @@ public class ConsulterGroupe implements Initializable, Vue {
         JFXTreeTableColumn<Groupe,String> groupe_id=this.creerGroupeId();
         JFXTreeTableColumn<Groupe,String> groupe_nom=this.creernomgroupe();
         JFXTreeTableColumn<Groupe,String> code_tiers=this.creerCodeTier();
+        JFXTreeTableColumn<Groupe,String> groupe_commune=this.creerGroupeCommune();
 
         ObservableList<Groupe> groupes = FXCollections.observableArrayList();
         List<Groupe> liste=groupeDao.listeGroupes();
@@ -115,7 +131,7 @@ public class ConsulterGroupe implements Initializable, Vue {
         }
 
         final TreeItem<Groupe> root = new RecursiveTreeItem<Groupe>(groupes, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(groupe_id,groupe_nom,code_tiers);
+        treeView.getColumns().setAll(groupe_id,groupe_nom,code_tiers,groupe_commune);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
@@ -137,7 +153,8 @@ public class ConsulterGroupe implements Initializable, Vue {
                     public boolean test(TreeItem<Groupe> t) {
                         boolean flag=t.getValue().id.getValue().toLowerCase().contains(newValue.toLowerCase())
                                 || t.getValue().nom_groupe.getValue().toLowerCase().contains(newValue.toLowerCase())
-                                || t.getValue().code_tiers.getValue().toLowerCase().contains(newValue.toLowerCase());
+                                || t.getValue().code_tiers.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().commune.getValue().toLowerCase().contains(newValue.toLowerCase());
 
                         return flag ;
 
@@ -247,16 +264,51 @@ public class ConsulterGroupe implements Initializable, Vue {
     }
 
     public void SupprimerCentre(MouseEvent mouseEvent) {
+        try {
+            String s = this.search_text2.getText();
+            Integer.parseInt(s);
+            lancerSuppresion(mouseEvent);
+            /*if (s != null && s != "") {
+                lancerSuppresion(mouseEvent);
 
+            } else {
+                Notification.affichageEchec("echec", "il faut selectionner un centre");
+                return;
+            }*/
+        } catch (Exception e) {
+            Notification.affichageEchec("echec", "Veuillez saisir l'id du groupe SVP");
+
+        }
+    }
+
+    public void lancerSuppresion(MouseEvent mouseEvent){
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+        dialogLayout.setHeading(new Text("ferme"));
+        dialogLayout.setBody(new Text("Voulez vous vraiment supprimer ce Groupe ?"));
+
+        JFXButton ok = new JFXButton("oui");
+        JFXButton cancel = new JFXButton("non");
+
+        final JFXDialog dialog = new JFXDialog(stackepane, dialogLayout, JFXDialog.DialogTransition.CENTER);
+
+        ok.setOnAction(MouseEvent -> finaliser(mouseEvent, dialog));
+        cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            public void handle(javafx.event.ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        dialogLayout.setActions(ok, cancel);
+        dialog.show();
+
+        //this.controlleur.consulterCentre();
+    }
+
+
+    private void finaliser(MouseEvent mouseEvent, JFXDialog dialogLayout) {
         int res=0;
 
-        if(search_text2.getText().length()!=0) {
-
-            res=groupeDao.supprimerGroupe(search_text2.getText().toString());
-        }
-
-
-
+        res=groupeDao.supprimerGroupe(search_text2.getText().toString());
 
         if(res>0){
             Image image=new Image("img/mooo.png");
@@ -269,6 +321,7 @@ public class ConsulterGroupe implements Initializable, Vue {
             notification.darkStyle();
             notification.show();
             loadallgroupe();
+            dialogLayout.close();
 
             //updateStatus();
         }else{
@@ -276,7 +329,7 @@ public class ConsulterGroupe implements Initializable, Vue {
             Notifications notification=Notifications.create()
                     .title("Error " +
                             "")
-                    .text("il y a eu une erreur dans la suppression")
+                    .text("Le Groupe que vous souhaitez supprimer n'existe pas ou à déjà été supprimé")
                     .hideAfter(Duration.seconds(3))
                     .position(Pos.BOTTOM_LEFT)
                     .graphic(new ImageView(image));
@@ -285,9 +338,20 @@ public class ConsulterGroupe implements Initializable, Vue {
         }
     }
 
-    public void registAction(ActionEvent actionEvent) {
-    }
 
-    public void hideSignupPane(ActionEvent actionEvent) {
+    public void EditerGroupe(MouseEvent mouseEvent) {
+        if(this.search_text2.getText()!="" && search_text2.getText()!=null){
+            Groupe groupe=groupeDao.getGroupeParId(search_text2.getText());
+            if(groupe==null){
+
+                Notification.affichageEchec("id incorrecte","aucun groupe avec cette id à été trouvé");
+
+            }else{
+                EditerGroupe.id=search_text2.getText();
+
+                controlleur.lancerEditionGroupe();
+            }
+        }
+
     }
 }

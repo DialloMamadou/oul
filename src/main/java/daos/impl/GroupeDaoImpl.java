@@ -6,6 +6,7 @@ import daos.GroupeDao;
 import java.sql.Array;
 import modele.Centre;
 import modele.Groupe;
+import notification.Notification;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,14 +24,16 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
 
     @Override
-    public int inserrerGroupe(String nom_groupe, String tiers) {
+    public int inserrerGroupe(String nom_groupe, String tiers,String commune) {
 
         int res = 0;
-        String sql = "INSERT INTO groupe (nom_groupe,tiers) VALUES (?,?)";
+        String sql = "INSERT INTO groupe (nom_groupe,tiers,commune) VALUES (?,?,?)";
         try {
             PreparedStatement ps = (PreparedStatement) connect.prepareStatement(sql);
             ps.setString(1, nom_groupe);
             ps.setString(2, tiers);
+            ps.setString(3,commune);
+
 
 
             res = ps.executeUpdate();
@@ -40,6 +43,32 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
         }
 
         return res;
+    }
+
+    @Override
+    public int mettreAjourGroupe(String id, Groupe groupe) {
+        int x=0;
+
+        try{
+
+            String query = "update groupe set nom_groupe = ? ,  tiers=? ,commune=? where id_groupe = ?";
+
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(query);
+            ps.setString(3,groupe.commune.get());
+            ps.setString(2,groupe.code_tiers.get());
+            ps.setString(1,groupe.nom_groupe.get());
+            ps.setString(4,id);
+            x=ps.executeUpdate();
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+
+        }
+
+        return x;
     }
 
     @Override
@@ -77,7 +106,8 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
             while (rs.next()) {
 
-                liste.add(new Groupe(rs.getInt(1) + "", rs.getString(2),rs.getString(3)));
+                liste.add(new Groupe(rs.getInt(1) + "", rs.getString(2),rs.getString(3),
+                        rs.getString(4)));
 
             }
 
@@ -91,22 +121,23 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
 
     @Override
     public Groupe trouverGroupeParNomGroupe(String nom_groupe) {
-        String sql = "SELECT * FROM groupe WHERE nom_groupe ='" + nom_groupe + "'";
-        Groupe liste = null;
+        String sql = "SELECT * FROM groupe WHERE nom_groupe ='"+nom_groupe+"'";
+        Groupe g = null;
         try {
             PreparedStatement ps = (PreparedStatement) connect.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
-                liste = new Groupe(rs.getInt(1) + "", rs.getString(2),rs.getString(3));
+                g = new Groupe(rs.getInt(1) + "", rs.getString(2),rs.getString(3),
+                        rs.getString(4));
 
             }
-            return liste;
+            return g;
 
 
         } catch (Exception e) {
-
+e.printStackTrace();
         }
 
         return null;
@@ -123,7 +154,8 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
             while (rs.next()) {
 
                 liste = new Groupe(rs.getInt(1) + "", rs.getString(2),
-                        rs.getString(3));
+                        rs.getString(3),
+                        rs.getString(4));
 
             }
 
@@ -148,7 +180,8 @@ public class GroupeDaoImpl extends Dao<Groupe> implements GroupeDao {
             while(rs.next()){
 
                 liste=new Groupe(rs.getInt(1)+"",rs.getString(2),
-                        rs.getString(3));
+                        rs.getString(3),
+                        rs.getString(4));
 
             }
 

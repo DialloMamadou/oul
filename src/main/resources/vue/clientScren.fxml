@@ -10,7 +10,7 @@
 
 <StackPane fx:id="stack" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleurvue.client.ClientScreen">
     <children>
-        <AnchorPane prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/lggg.jpg);">
+        <AnchorPane prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat ;-fx-background-size:cover;-fx-background-image: url(img/balade.jpg);">
             <children>
                 <Pane fx:id="pane_1" layoutX="182.0" layoutY="250.0" maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" onMouseClicked="#inscrireclient" onMouseEntered="#souris_dessus_1" onMouseExited="#souris_sort_1" opacity="0.7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 6px">
                     <children>

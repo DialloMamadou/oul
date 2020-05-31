@@ -44,7 +44,6 @@
                         <JFXRadioButton fx:id="btninscription" layoutX="13.0" layoutY="454.0" onMouseClicked="#visualiserinscription" text="inscription" />
                         <JFXRadioButton fx:id="btnreservation" layoutX="14.0" layoutY="420.0" onMouseClicked="#visualiserReservation" text="reservation" />
                         <JFXRadioButton fx:id="btnannulation" layoutX="14.0" layoutY="487.0" onMouseClicked="#visualiserannulation" text="annulation" />
-                        <Button layoutX="190.0" layoutY="544.0" mnemonicParsing="false" onMouseClicked="#genererDocument" prefHeight="34.0" prefWidth="118.0" style="-fx-background-color: teal;" text="Générer" textFill="WHITE" />
                      </children>
                   </Pane>
                </children>

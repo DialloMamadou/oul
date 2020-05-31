@@ -8,6 +8,7 @@ import controlleurvue.centre.CreerCentre;
 import daos.GroupeDao;
 import daos.impl.GroupeDaoImpl;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -27,6 +28,7 @@ public class CreerGroupe implements Vue {
     public StackPane stackepane;
     public JFXTextField nom;
     public JFXTextField tiers;
+    public JFXTextField commune;
     private Controlleur controlleur;
 
 
@@ -42,7 +44,7 @@ public class CreerGroupe implements Vue {
     private void messageSuccess(){
         Image image=new Image("img/mooo.png");
         Notifications notification=Notifications.create()
-                .title("finit")
+                .title("Notification")
                 .text("groupe creer avec succss ")
                 .hideAfter(Duration.seconds(3))
                 .position(Pos.BOTTOM_LEFT)
@@ -67,11 +69,11 @@ public class CreerGroupe implements Vue {
     public void book(MouseEvent mouseEvent) {
 
         int res=0;
-        if(nom.getText().length() >=3 && tiers.getText().length() >=3) {
+        if(nom.getText().length() >=3 && tiers.getText().length() >=3 && commune.getText().length()>=3) {
             Groupe findGrpByName = groupeDao.trouverGroupeParNomGroupe(nom.getText());
             Groupe findGrpByTiers = groupeDao.trouverGroupeParCodeTiers(tiers.getText());
             if (findGrpByName == null && findGrpByTiers == null) {
-                res = groupeDao.inserrerGroupe(nom.getText(), tiers.getText());
+                res = groupeDao.inserrerGroupe(nom.getText(), tiers.getText(),commune.getText());
                 if(res>0){
                     messageSuccess();
                     back(mouseEvent);

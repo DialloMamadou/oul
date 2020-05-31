@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import modele.Client;
 import modele.Inscription;
 import notification.Notification;
@@ -33,6 +34,7 @@ public class Email implements Initializable ,Vue{
     public Label recepteur;
    public static  String idclient;
    public static String idSejour;
+
 
 
 
@@ -78,7 +80,7 @@ public class Email implements Initializable ,Vue{
 
 
 
-        this.emeteur.setText("malikabdallah75019@gmail.com");
+        this.emeteur.setText("oultest6@gmail.com");
         facadeEmail = new FacadeEmailImpl();
         FileChooser fileChooser = new FileChooser();
 
@@ -97,7 +99,9 @@ public class Email implements Initializable ,Vue{
             String[] tab = new String[1];
             tab[0] = this.recepteur.getText();
             System.out.println("recepteur email " + tab[0]);
-            this.facadeEmail.sendFromGMail("malikabdallah75019", "Selamwait04", tab, sujet.getText(), message.getText(), file);
+            this.facadeEmail.sendFromGMail("oultest6", "25mars1993", tab, sujet.getText(), message.getText(), file);
+
+
 
 
         }else{
@@ -112,7 +116,7 @@ public class Email implements Initializable ,Vue{
 
 
             System.out.println("tab "+tab);
-            this.facadeEmail.sendFromGMail("malikabdallah75019", "Selamwait04", tab, sujet.getText(), message.getText(), file);
+            this.facadeEmail.sendFromGMail("oultest6", "25mars1993", tab, sujet.getText(), message.getText(), file);
 
 
 

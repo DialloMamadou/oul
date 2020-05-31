@@ -1,7 +1,7 @@
 package enumerations;
 
 public enum Paiement {
-    CarteBleu,
+    CarteBleue,
     Cheque,
     BonCaf,
     AideSocial,

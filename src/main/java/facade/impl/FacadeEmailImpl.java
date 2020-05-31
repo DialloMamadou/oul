@@ -18,9 +18,9 @@ public class FacadeEmailImpl implements facadeEmail {
 
 
 
-    private static String USER_NAME = "malikabdallah75019";  // GMail user name (just the part before "@gmail.com")
-    private static String PASSWORD = "Selamwait04"; // GMail password
-    private static String RECIPIENT = "malikabdallah75019@gmail.com";
+    private static String USER_NAME = "oultest6";  // GMail user name (just the part before "@gmail.com")
+    private static String PASSWORD = "25mars1993"; // GMail password
+    private static String RECIPIENT = "oultest6@gmail.com";
 
 
 
@@ -48,13 +48,12 @@ public class FacadeEmailImpl implements facadeEmail {
     }
 
     public   void sendFromGMail(String from, String pass, String[] to, String subject, String body, File file) {
-        System.out.println("to to "+to[0]);
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", host);
-        props.put("mail.smtp.user", "malikabdallah75019");
-        props.put("mail.smtp.password", "Selamwait04");
+        props.put("mail.smtp.user", "oultest6");
+        props.put("mail.smtp.password", "25mars1993");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
 
@@ -154,8 +153,6 @@ public class FacadeEmailImpl implements facadeEmail {
 
 
 
-
-
             /*message.setFrom(new InternetAddress(from));
 
             InternetAddress[] toAddress = new InternetAddress[to.length];
@@ -196,7 +193,6 @@ public class FacadeEmailImpl implements facadeEmail {
 
         }
         catch (AddressException ae) {
-            System.out.println("");
             Notification.affichageEchec("echec envoie message","l adresse n a pas ete trouve");
 
         }

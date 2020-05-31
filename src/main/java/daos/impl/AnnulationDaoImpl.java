@@ -6,6 +6,7 @@ import daos.AnnulationDao;
 import daos.CentreDao;
 import daos.GroupeDao;
 import modele.*;
+import notification.Notification;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -26,7 +27,7 @@ public class AnnulationDaoImpl extends Dao<Annulation> implements AnnulationDao 
 
     @Override
     public int insererAnnulation(Annulation annulation) {
-        int res=0;
+       int res=0;
         String sql="INSERT INTO annulation (motif,idsejour,idclient) VALUES (?,?,?)";
         try {
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
@@ -73,7 +74,6 @@ public class AnnulationDaoImpl extends Dao<Annulation> implements AnnulationDao 
 
     @Override
     public List<Annulation> getAnnulartions() {
-        System.out.println("xxxx");
 
         GroupeDao groupeDao=new GroupeDaoImpl(connect);
 
@@ -88,7 +88,6 @@ public class AnnulationDaoImpl extends Dao<Annulation> implements AnnulationDao 
 
             while(rs.next()){
 
-                System.out.println("xxxx1");
                 Groupe groupe=groupeDao.getGroupeParId(rs.getString(4));
                 liste.add(new Annulation(rs.getString(1),rs.getString(2),rs.getString(3),
                         rs.getString(4)));

@@ -33,10 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import modele.Centre;
-import modele.Client;
-import modele.Inscription;
-import modele.Sejour;
+import modele.*;
 import notification.Notification;
 import principale.Controlleur;
 
@@ -56,8 +53,7 @@ import java.util.logging.Logger;
 public class ConsulterSejour implements Initializable, Vue {
 
 
-    public JFXTextField search_text2;
-    public JFXTextField search_text3;
+    public GroupeSejourClientDao groupeSejourClientDao;
     public Label lcentre;
     public Label lsejour;
     public Label ldate;
@@ -77,6 +73,7 @@ public class ConsulterSejour implements Initializable, Vue {
     public JFXRadioButton regle;
     public JFXRadioButton retard;
     public Label refsejour;
+    public Label numero;
 
     /**
      * Initializes the controller class.
@@ -102,6 +99,12 @@ public class ConsulterSejour implements Initializable, Vue {
 
     private GestionDocs gestionDocs;
     private Client client = null;
+    private Sejour sejour = null;
+
+
+    private SejourDao sejourDao;
+    private InscriptionDao inscriptionDao;
+    private ClientDao clientDao;
 
 
     public JFXTreeTableColumn<Sejour,String> genererSejourId(){
@@ -150,7 +153,6 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
     public JFXTreeTableColumn<Sejour,String> genererDateFin(){
-
         JFXTreeTableColumn<Sejour,String> sejour_datefin=new JFXTreeTableColumn<>("fin");
         sejour_datefin.setPrefWidth(80);
         sejour_datefin.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Sejour, String>, ObservableValue<String>>() {
@@ -220,16 +222,6 @@ public class ConsulterSejour implements Initializable, Vue {
     }
 
 
-
-
-
-
-
-
-
-    private SejourDao sejourDao;
-    private InscriptionDao inscriptionDao;
-    private ClientDao clientDao;
     public void initialize(URL location, ResourceBundle resources) {
         sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
         inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
@@ -238,10 +230,7 @@ public class ConsulterSejour implements Initializable, Vue {
         centreDao=new CentreDaoImpl(DBconnexion.getConnection());
         gestionDocs = new GestionDocsImpl();
 
-
-
-
-
+        groupeSejourClientDao=new GroupeSejourClientDaoImpl(DBconnexion.getConnection());
 
         this.retard.setSelected(true);
         this.regle.setSelected(false);
@@ -347,6 +336,7 @@ public class ConsulterSejour implements Initializable, Vue {
 
     private void showDetails(TreeItem<Sejour> newValue) {
         if(newValue!=null) {
+            sejour=sejourDao.getSejourParId(newValue.getValue().id.get());
             this.lage.setText(newValue.getValue().ageMin.get() + " - " + newValue.getValue().ageMax.get());
             this.lcapacite.setText(newValue.getValue().capacite.get());
             this.lcentre.setText(newValue.getValue().nom_centre.get());
@@ -354,6 +344,8 @@ public class ConsulterSejour implements Initializable, Vue {
             this.lsejour.setText(newValue.getValue().type.get());
             this.ldate.setText(newValue.getValue().date_debut.get() + " au " + newValue.getValue().date_fin.get());
             this.idsejour.setText(newValue.getValue().id.get());
+            this.refsejour.setText(newValue.getValue().refSejour.get());
+            this.numero.setText(newValue.getValue().numero.get());
             RemplirClientSejour(newValue.getValue());
 
         }
@@ -407,15 +399,12 @@ public class ConsulterSejour implements Initializable, Vue {
 
 
     public void RemplirClientSejour(Sejour value) {
-        Sejour sejour=sejourDao.getSejourParId(idsejour.getText());
-        System.out.println("ref="+sejour.refSejour.get());
+        //Sejour sejour=sejourDao.getSejourParId(se);
        // this.refsejour.setText(sejour.refSejour.getValue());
-        System.out.println("on remplit liste");
         List<Inscription>listeInscription=this.inscriptionDao.getInscriptionsParIdSejour(value.id.get());
         List<Client>listeClient=new ArrayList<>();
         for(Inscription inscription:listeInscription){
             if(tous.isSelected()){
-                System.out.println("retard non selectex");
                 Client client = clientDao.getClientParId(inscription.code_client.get());
                 listeClient.add(client);
             }else{
@@ -424,7 +413,6 @@ public class ConsulterSejour implements Initializable, Vue {
                     int prixTotal=Integer.parseInt(lprix.getText());
 
 
-                    System.out.println("selected regle");
                     if(payer==prixTotal){
                         Client client=clientDao.getClientParId(inscription.code_client.get());
                         listeClient.add(client);
@@ -436,7 +424,6 @@ public class ConsulterSejour implements Initializable, Vue {
                     int prixTotal=Integer.parseInt(lprix.getText());
 
 
-                    System.out.println("selected retard");
                     if(payer<prixTotal){
                         Client client=clientDao.getClientParId(inscription.code_client.get());
                         listeClient.add(client);
@@ -513,8 +500,6 @@ public class ConsulterSejour implements Initializable, Vue {
                         boolean flag =t.getValue().id.get().toLowerCase().contains(newValue.toLowerCase())||
                                 t.getValue().prenom_client.get().toLowerCase().contains(newValue.toLowerCase()) ||
                                 t.getValue().nom_client.get().toLowerCase().contains(newValue.toLowerCase());
-                        if(flag)
-                            System.out.println("trouve" + t.getValue().id.get());
 
                         return flag;
 
@@ -529,17 +514,19 @@ public class ConsulterSejour implements Initializable, Vue {
     private void showDetailsClient(TreeItem<Client> newValue) {
 
         if(newValue!=null) {
-            System.out.println("client alscma " + newValue);
             client = clientDao.getClientParId(newValue.getValue().id.get());
+            sejour = sejourDao.getSejourParId(this.idsejour.getText());
+            Groupe groupe= groupeDao.getGroupeParId(client.groupe.get());
 
 
-            this.idclient.setText(client.id.get());
+            this.idclient.setText(groupe.code_tiers.get());
+
             this.dateclient.setText(client.datenaissance.get());
             this.prenomnom.setText(client.prenom_client.get() + " " + client.nom_client.get());
             this.emailclient.setText(client.email.get());
             this.numeroclient.setText(client.numero.get());
 
-            Inscription inscription = inscriptionDao.getInscriptionsParIdSejourEtIdClient(this.idsejour.getText(), client.id.get());
+            Inscription inscription = inscriptionDao.getInscriptionsParIdSejourEtIdClient(this.sejour.id.get(), this.client.id.get());
             int reste = Integer.parseInt(this.lprix.getText()) - Integer.parseInt(inscription.paiement.get());
 
             this.reste.setText(String.valueOf(reste));
@@ -575,8 +562,7 @@ public class ConsulterSejour implements Initializable, Vue {
                                 ||t.getValue().date_fin.get().toLowerCase().contains(newValue.toLowerCase())
                                 || t.getValue().date_debut.get().toLowerCase().contains(newValue.toLowerCase())
 ;
-                        if(flag)
-                            System.out.println("trouve" + t.getValue().id.get());
+
 
                         return flag;
 
@@ -588,237 +574,108 @@ public class ConsulterSejour implements Initializable, Vue {
         });
     }
 
-    public void cherchecentreparid(MouseEvent mouseEvent) {
-        chargerTousLesSejours();
-
-    }
-
-    public void EditerCentre(MouseEvent mouseEvent) {
-    }
-
-    public void SupprimerCentre(MouseEvent mouseEvent) {
-        int res=sejourDao.supprimerSejourParid(search_text2.getText().toString());
-        if(res>0){
-            Notification.affichageSucces("succes","suces dans la supression du sejour");
-            chargerTousLesSejours();
-        }else{
-            Notification.affichageEchec("echec","il y a eu un probleme lors de la supresion du sejour" );
-
-        }
-    }
-
-    public void registAction(ActionEvent actionEvent) {
-    }
-
-    public void hideSignupPane(ActionEvent actionEvent) {
-    }
-
-    public void genererattestation(MouseEvent mouseEvent){
-        if (this.client != null) {
-            Sejour sejour = sejourDao.getSejourParId(this.idsejour.getText());
-
-            gestionDocs.genereAttestationFacture(this.client, sejour);
-        }else {
-            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
-
-        }
-
-        /*if(client != null){
-            Document doc = new Document();
-
-            try {
-                PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("src/main/resources/docs/Inscription_"+client.prenom_client.get()+".pdf"));
-                doc.open();
-
-                //Add Image
-                Image img = Image.getInstance("src/main/resources/img/oul.jpg");
-                //Fixed Positioning
-                img.setAbsolutePosition(25f, 750f);
-                //Scale to new height and new width of image
-                img.scaleAbsolute(80, 80);
-                //Add to document
-                doc.add(img);
-                //doc.add(Chunk.SPACETABBING);
-                doc.add(new Paragraph("\n\n"));
-                Font font = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD);
-                font.setColor(BaseColor.BLUE);
-                Font font1 =FontFactory.getFont(FontFactory.HELVETICA, 10);
-                font1.setColor(BaseColor.BLUE);
-
-                Font font0 =FontFactory.getFont(FontFactory.HELVETICA, 8);
-
-                Font font2 =FontFactory.getFont(FontFactory.HELVETICA, 10);
 
 
-                doc.add(new Phrase("ŒUVRE UNIVERSITAIRE DU LOIRET\n",font));
-                doc.add(new Phrase("2  rue des Deux Ponts \nCS 30724 \n45017 ORLEANS CEDEX 1 \nTél : 02.38.53.38.61\n",font0));
-                doc.add(new Phrase("siege.asso@ouloiret.fr\nwww.ouloiret.fr \n",font1));
-                doc.add(new Phrase("SIRET : 77550821100072 \nAPE : 552 E",font0));
-
-                Paragraph dest = new Paragraph("Mme ou M. "+client.observation.get()+"              \n"+client.codePostale.get()+" "+client.adresse.get()+"             ",font2);
-                dest.setAlignment(Element.ALIGN_RIGHT);
-                doc.add(dest);
-
-                Paragraph p = new Paragraph("\n\n");
-
-                doc.add(p);
-                Paragraph titre = new Paragraph("ATTESTATION / FACTURE",font);
-                titre.setAlignment(Element.ALIGN_CENTER);
-                doc.add(titre);
-                doc.add(p);
-
-
-                String lettre = "Je soussigné, M. JOBERT, Directeur de l’Œuvre Universitaire du Loiret, certifie que :\n\n"+
-                        "L’enfant : " + client.prenom_client.get()+" "+client.nom_client.get()+"\n\n"+
-                         "Né(e) le : " + client.datenaissance.get()+"\n"+
-                         "A participé à l'activité "+sejour.type.get()+" de l’Œuvre Universitaire du Loiret  à : "+sejour.nom_centre.get()+"  du  date.getValue()      soit :"+sejour.duree.get()+" jours.\n\n"+
-                        "Le coût du séjour  pour la famille s’élève à : "+sejour.prix.get()+" €       EUROS.\n\n";
-
-                        String numDec = "";
-                        if(sejour.type.get() == "classe de découverte") {
-                            numDec = "N°de Déclaration de l’Inspection Académique :" ;
-                        }else{
-                            numDec = "N° de Déclaration à la D.D.C.S du Loiret :";
-                        }
-                        lettre+=numDec;
-
-                Paragraph par = new Paragraph(lettre);
-
-                doc.add(par);
-                doc.add(p);
-                Paragraph st = new Paragraph(" FACTURE ACQUITTEE",font);
-                st.setAlignment(Element.ALIGN_CENTER);
-                doc.add(st);
-
-                DateFormat fullDateFormat = DateFormat.getDateInstance(DateFormat.FULL);
-                Paragraph dt = new Paragraph("Orléans, le "+fullDateFormat.format(new Date()),font2);
-
-                dt.setAlignment(Element.ALIGN_CENTER);
-                doc.add(dt);
-
-                Paragraph dir = new Paragraph(" Le directeur: \nM. JOBERT",font);
-                dir.setAlignment(Element.ALIGN_CENTER);
-                doc.add(dir);
-
-
-                /*Paragraph par = new Paragraph("       Madame, Monsieur,\n " +
-                        "     Nous avons le plaisir de vous confirmer l’inscription de votre enfant " + client.prenom_client.get()+" "+client.nom_client.get()+"\n"+
-                        "     •  au centre de vacances de CV "+sejour.nom_centre.get()+",\n     •  pour le séjour du "+date.getValue()+"\n     •  pour une durée de "+sejour.duree.get()+" jours.\n"+
-                        "     Les frais de séjour et de voyage s’élèvent  à : "+sejour.prix.get()+" €, auxquels s’ajoute le montant de l’adhésion, soit 3,00 € par famille et par année.\n\n"+
-                        "     Vous avez versé des arrhes pour un montant de  50 € ainsi que l’adhésion de 3 € (sauf si elle a déjà été réglée lors d’un précédent séjour). Le solde est à régler entre trois et quatre semaines avant le départ. Nous vous rappelons que notre association est habilitée pour accepter les paiements par Chèques-Vacances.\n\n"+
-                        "     Deux à trois semaines avant le départ, une fois le séjour soldé, nous vous ferons parvenir les documents suivants :\n"+
-                        "     •  la convocation avec les lieux et heures de départ et retour\n"+
-                        "     •  le dossier du jeune ou de l’enfant à compléter\n"+
-                        "     •  la lettre du directeur vous donnant des informations sur le déroulement du séjour.\n"+
-                        "     Nous vous rappelons que pour toutes les activités nautiques (voile, kayak, canyoning, surf, plongée…) le test de natation est obligatoire (le brevet de 25 ou 50 m est non valable).\n"+
-                        "     Attention : Pour la plongée un certificat médical est également demandé.\n"+
-                        "     Si vous êtes en possession de Bons-Vacances CAF ou MSA et si vous ne nous les avez pas encore transmis, veuillez nous les adresser dans les meilleurs délais (ou votre numéro d’allocataire pour les VACAF).\n"+
-                        "     En souhaitant que votre enfant passe un agréable séjour en Centre de Vacances, nous vous adressons nos respectueuses salutations.",font2);
-
-                doc.add(par);
-                Paragraph dir = new Paragraph(" Le directeur: \nM. JOBERT",font);
-                dir.setAlignment(Element.ALIGN_CENTER);
-                doc.add(dir);
-
-
-                doc.add(new Phrase("-------------------------------------------------------------------------------------------------------------------- "));
-                Paragraph p = new Paragraph(" PAPILLON à DETACHER ET à RETOURNER A L’O.U.L.AVEC VOTRE REGLEMENT\n (si séjour NON SOLDÉ ou non pris en charge)",font);
-                p.setAlignment(Element.ALIGN_CENTER);
-                doc.add(p);
-                doc.add(new Phrase("NOM :",font2));
-                doc.add(new Phrase(client.nom_client.get()+"\n",font));
-                doc.add(new Phrase("REFERENCE :",font2));
-                font.setSize(8);
-                doc.add(new Phrase("159297 /  1112 - 8V0 /  CV "+sejour.nom_centre.get()+" du "+sejour.duree.get()+"\n",font));
-                doc.add(new Phrase("     (votre dossier ne pourra être pris en compte sans cette référence)\n\n",font2));
-                Image alerte1 = Image.getInstance("src/main/resources/img/alerte.jpg");
-
-                alerte1.setAbsolutePosition(40f, 90f);
-
-                alerte1.scaleAbsolute(10, 10);
-                doc.add(alerte1);
-
-                doc.add(new Paragraph("Le transport n’est pas compris pour les centres du Loiret, (INGRANNES, LES CAILLETTES, L’ETANG DU PUITS)\n"+
-                        "vous devez conduire votre enfant sur place. Cependant un départ d’ORLEANS est possible (20 € ALLER/RETOUR),\n"+
-                        "        le nombre de places étant limité, veuillez nous en informer par téléphone ou par courrier.",font));
-                doc.close();
-                writer.close();
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }else{
-            Notification.affichageEchec("erreur", "Veuillez selectionner le client");
-        }*/
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void genereliste(MouseEvent mouseEvent) {
+    public void genereliste(MouseEvent mouseEvent) throws IOException, DocumentException {
         if (this.idsejour.getText().isEmpty()) {
-            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un sejour SVP  ");
 
         } else {
 
-            Sejour sejour = sejourDao.getSejourParId(this.idsejour.getText());
-            List<Inscription> inscriptions = inscriptionDao.getInscriptionsParIdSejour(sejour.id.get());
-            List<Client> clients = new ArrayList<>();
-            for (Inscription inscription : inscriptions) {
-                Client client = clientDao.getClientParId(inscription.code_client.get());
-                clients.add(client);
+            Sejour sejour = sejourDao.getSejourParId(this.sejour.id.get());//this.idsejour.getText());
+
+            List<Inscription> inscriptionsListBySejour = inscriptionDao.getInscriptionsParIdSejour(this.sejour.id.get());
+            List<GroupeSejourClient> groupeSejourClientListBySejour = groupeSejourClientDao.getGroupeSejourClientByIdSejour(this.sejour.id.get());
+
+            for (Inscription ins : inscriptionsListBySejour){
+                System.out.println("Id Insc"+ins.id.get()+"Id Client"+ins.code_client.get()+"Id Sej"+ins.id_sejour.get());
+            }
+
+            for (GroupeSejourClient  grpins : groupeSejourClientListBySejour){
+                System.out.println("Id Insc"+grpins.id+", Id Client"+grpins.idClient+",  Id Sej"+grpins.idSejour);
             }
 
             Centre centre = centreDao.getCentreParId(sejour.nom_centre.get());
 
-            gestionDocs.genereListeInscrit(clients, sejour, centre);
+            gestionDocs.genereListeInscritPdf(inscriptionsListBySejour,groupeSejourClientListBySejour, sejour, centre);
+
+        }
+    }
+
+    public void generelisteExcel(MouseEvent mouseEvent) throws IOException, DocumentException {
+        if (this.idsejour.getText().isEmpty()) {
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un sejour SVP  ");
+
+        } else {
+
+            Sejour sejour = sejourDao.getSejourParId(this.sejour.id.get());//this.idsejour.getText());
+
+            List<Inscription> inscriptionsListBySejour = inscriptionDao.getInscriptionsParIdSejour(this.sejour.id.get());
+            List<GroupeSejourClient> groupeSejourClientListBySejour = groupeSejourClientDao.getGroupeSejourClientByIdSejour(this.sejour.id.get());
+
+            Centre centre = centreDao.getCentreParId(sejour.nom_centre.get());
+
+            gestionDocs.genereListeInscritExcel(inscriptionsListBySejour,groupeSejourClientListBySejour, sejour, centre);
+
 
         }
     }
 
     public void envoieEmail(MouseEvent mouseEvent) {
-        Email.idclient="-1";
-        Email.idSejour=this.idsejour.getText();
-        Notification.affichageSucces("ici","ici");
-        System.out.println("id sejour "+this.idsejour.getText());
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
-            /*
-             * if "fx:controller" is not set in fxml
-             * fxmlLoader.setController(NewWindowController);
-             */
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 
-            FileChooser fileChooser = new FileChooser();
+               // this.idsejour.getText();
+                //this.client.id.get();
+                Email.idclient = "-1";
+                Email.idSejour = this.sejour.id.get();//this.idsejour.getText();
+
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/vue/email.fxml"));
+                /*
+                 * if "fx:controller" is not set in fxml
+                 * fxmlLoader.setController(NewWindowController);
+                 */
+                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+
+                FileChooser fileChooser = new FileChooser();
 
 
+                Stage stage = new Stage();
 
-            Stage stage = new Stage();
+                stage.setTitle("email");
+                stage.setScene(scene);
+                // Email.stage=stage;
+                stage.show();
+        } catch (IOException | NullPointerException | IndexOutOfBoundsException e) {
+           // Logger logger = Logger.getLogger(getClass().getName());
+            //logger.log(Level.SEVERE, "Failed to create new Window.", e);
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un  séjour et un client SVP  ");
 
-            stage.setTitle("email");
-            stage.setScene(scene);
-            // Email.stage=stage;
-            System.out.println("sejour id "+Email.idSejour);
-            stage.show();
-        } catch (IOException e) {
-            Logger logger = Logger.getLogger(getClass().getName());
-            logger.log(Level.SEVERE, "Failed to create new Window.", e);
+    }
+    }
+
+    public void genereConvocation(MouseEvent mouseEvent) {
+        if (!this.idclient.getText().isEmpty() && !this.idsejour.getText().isEmpty()) {
+            gestionDocs.genereAttestationFacture(clientDao.getClientParId(client.id.get()), sejourDao.getSejourParId(this.sejour.id.get()));
+        }else {
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
         }
     }
+
+
+    public void supprimer(MouseEvent mouseEvent) {
+        if(!this.idsejour.getText().isEmpty()){
+            int res=sejourDao.supprimerSejourParid(this.idsejour.getText());
+            if(res!=0){
+                Notification.affichageSucces("suppression reussi","le sejour a ete supprime avec succes");
+                controlleur.consulterSejour();
+            }else{
+                Notification.affichageEchec("suppression non aboutit","le sejour n  a pas pu etre supprime");
+            }
+        }else {
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un  séjour et un client SVP  ");
+        }
+    }
+
 }
 

@@ -9,10 +9,11 @@ public interface GroupeDao {
 
 
 
-    int inserrerGroupe(String nom_groupe, String tiers);
+    int inserrerGroupe(String nom_groupe, String tiers,String commune);
 
 
 
+    int mettreAjourGroupe(String id, Groupe groupe);
 
     int supprimerGroupe(String id);
 

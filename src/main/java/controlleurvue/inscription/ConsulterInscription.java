@@ -61,6 +61,7 @@ public class ConsulterInscription implements Initializable, Vue {
     public Label idclient;
     public Label idsejour;
     public Label groupe;
+    public JFXButton paiement;
     /**
      * Initializes the controller class.
      */
@@ -70,8 +71,7 @@ public class ConsulterInscription implements Initializable, Vue {
     private GestionDocs gestionDocs;
 
 
-
-    String status=null;
+    String status = null;
     @FXML
     private JFXTreeTableView<Inscription> treeView;
     @FXML
@@ -82,10 +82,9 @@ public class ConsulterInscription implements Initializable, Vue {
     private StackPane stackepane;
 
 
+    public JFXTreeTableColumn<Inscription, String> genererInscriptionId() {
 
-    public JFXTreeTableColumn<Inscription,String>genererInscriptionId(){
-
-        JFXTreeTableColumn<Inscription,String> inscription_id=new JFXTreeTableColumn<>(" Id");
+        JFXTreeTableColumn<Inscription, String> inscription_id = new JFXTreeTableColumn<>(" Id");
         inscription_id.setPrefWidth(100);
         inscription_id.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
@@ -96,8 +95,8 @@ public class ConsulterInscription implements Initializable, Vue {
         return inscription_id;
     }
 
-    public JFXTreeTableColumn<Inscription,String> genererInscriptionPaiement(){
-        JFXTreeTableColumn<Inscription,String> inscription_paiement=new JFXTreeTableColumn<>("paiement");
+    public JFXTreeTableColumn<Inscription, String> genererInscriptionPaiement() {
+        JFXTreeTableColumn<Inscription, String> inscription_paiement = new JFXTreeTableColumn<>("paiement");
         inscription_paiement.setPrefWidth(100);
         inscription_paiement.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
@@ -111,8 +110,8 @@ public class ConsulterInscription implements Initializable, Vue {
     }
 
 
-    public JFXTreeTableColumn<Inscription,String> genererDepart(){
-        JFXTreeTableColumn<Inscription,String> inscription_paiement=new JFXTreeTableColumn<>("depart");
+    public JFXTreeTableColumn<Inscription, String> genererDepart() {
+        JFXTreeTableColumn<Inscription, String> inscription_paiement = new JFXTreeTableColumn<>("depart");
         inscription_paiement.setPrefWidth(100);
         inscription_paiement.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
@@ -126,11 +125,8 @@ public class ConsulterInscription implements Initializable, Vue {
     }
 
 
-
-
-
-    public JFXTreeTableColumn<Inscription,String> genererDataInscriptioninscription(){
-        JFXTreeTableColumn<Inscription,String> inscription_dateinscription=new JFXTreeTableColumn<>("date inscription");
+    public JFXTreeTableColumn<Inscription, String> genererDataInscriptioninscription() {
+        JFXTreeTableColumn<Inscription, String> inscription_dateinscription = new JFXTreeTableColumn<>("date inscription");
         inscription_dateinscription.setPrefWidth(110);
         inscription_dateinscription.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
@@ -138,12 +134,12 @@ public class ConsulterInscription implements Initializable, Vue {
                 return param.getValue().getValue().dateinscription;
             }
         });
-        return  inscription_dateinscription;
+        return inscription_dateinscription;
     }
 
 
-    public JFXTreeTableColumn<Inscription,String> genererInscriptionClient(){
-        JFXTreeTableColumn<Inscription,String> inscription_client=new JFXTreeTableColumn<>(" Client");
+    public JFXTreeTableColumn<Inscription, String> genererInscriptionClient() {
+        JFXTreeTableColumn<Inscription, String> inscription_client = new JFXTreeTableColumn<>(" Client");
         inscription_client.setPrefWidth(110);
         inscription_client.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
@@ -154,9 +150,9 @@ public class ConsulterInscription implements Initializable, Vue {
         return inscription_client;
     }
 
-    public  JFXTreeTableColumn<Inscription,String> genererInscriptionSejour(){
+    public JFXTreeTableColumn<Inscription, String> genererInscriptionSejour() {
 
-        JFXTreeTableColumn<Inscription,String> inscription_sejour=new JFXTreeTableColumn<>(" Sejour");
+        JFXTreeTableColumn<Inscription, String> inscription_sejour = new JFXTreeTableColumn<>(" Sejour");
         inscription_sejour.setPrefWidth(110);
         inscription_sejour.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Inscription, String>, ObservableValue<String>>() {
             @Override
@@ -164,30 +160,30 @@ public class ConsulterInscription implements Initializable, Vue {
                 return param.getValue().getValue().id_sejour;
             }
         });
-        return  inscription_sejour;
+        return inscription_sejour;
     }
 
-    public void chargertouslesinscriptions(){
-        JFXTreeTableColumn<Inscription,String> inscription_id=this.genererInscriptionId();
-        JFXTreeTableColumn<Inscription,String> inscription_paiement=this.genererInscriptionPaiement();
-        JFXTreeTableColumn<Inscription,String> inscription_dateinscription=this.genererDataInscriptioninscription();
-        JFXTreeTableColumn<Inscription,String> inscription_client=this.genererInscriptionClient();
-        JFXTreeTableColumn<Inscription,String> inscription_sejour=this.genererInscriptionSejour();
-        JFXTreeTableColumn<Inscription,String> inscription_depart=this.genererDepart();
+    public void chargertouslesinscriptions() {
+        JFXTreeTableColumn<Inscription, String> inscription_id = this.genererInscriptionId();
+        JFXTreeTableColumn<Inscription, String> inscription_paiement = this.genererInscriptionPaiement();
+        JFXTreeTableColumn<Inscription, String> inscription_dateinscription = this.genererDataInscriptioninscription();
+        JFXTreeTableColumn<Inscription, String> inscription_client = this.genererInscriptionClient();
+        JFXTreeTableColumn<Inscription, String> inscription_sejour = this.genererInscriptionSejour();
+        JFXTreeTableColumn<Inscription, String> inscription_depart = this.genererDepart();
         ObservableList<Inscription> inscriptions = FXCollections.observableArrayList();
-        List<Inscription> inscription=inscriptionDao.getInscriptions();
-        for(Inscription inscription1: inscription){
+        List<Inscription> inscription = inscriptionDao.getInscriptions();
+        for (Inscription inscription1 : inscription) {
 
 
-            Client client=clientDao.getClientParId(inscription1.code_client.get());
-            System.out.println("id sejour :"+inscription1.id_sejour.get());
-            Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
-            String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
-            String id_sejour=sejour.id.get();
+            Client client = clientDao.getClientParId(inscription1.code_client.get());
+            System.out.println("id sejour :" + inscription1.id_sejour.get());
+            Sejour sejour = sejourDao.getSejourParId(inscription1.id_sejour.get());
+            String nom_client = client.nom_client.get() + " " + client.prenom_client.get();
+            String id_sejour = sejour.id.get();
 
-            Sejour sejour1=sejourDao.getSejourParId(id_sejour);
-            Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),
-                    inscription1.dateinscription.get(),  nom_client,sejour1.type.get(),  inscription1.depart.get()
+            Sejour sejour1 = sejourDao.getSejourParId(id_sejour);
+            Inscription inscription2 = new Inscription(inscription1.id.get(), inscription1.paiement.get(),
+                    inscription1.dateinscription.get(), nom_client, sejour1.type.get(), inscription1.depart.get()
             );
 
             inscription2.setTriche(sejour1.id.get());
@@ -195,7 +191,7 @@ public class ConsulterInscription implements Initializable, Vue {
             inscriptions.add(inscription2);
         }
         final TreeItem<Inscription> root = new RecursiveTreeItem<Inscription>(inscriptions, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(inscription_id,inscription_paiement,inscription_dateinscription,inscription_client,inscription_sejour,inscription_depart);
+        treeView.getColumns().setAll(inscription_id, inscription_paiement, inscription_dateinscription, inscription_client, inscription_sejour, inscription_depart);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
 
@@ -211,19 +207,19 @@ public class ConsulterInscription implements Initializable, Vue {
     private void showDetailsSejour(TreeItem<Inscription> newValue) {
 
         this.idinscription.setText(newValue.getValue().id.get());
-        Sejour sejour=sejourDao.getSejourParId(newValue.getValue().getTriche());
+        Sejour sejour = sejourDao.getSejourParId(newValue.getValue().getTriche());
         this.idsejour.setText(sejour.id.get());
         System.out.println(sejour.toString());
-        Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
+        Centre centre = centreDao.getCentreParId(sejour.nom_centre.get());
         this.lprix.setText(sejour.prix.get());
-        this.ldates.setText(sejour.date_debut.get()+" "+sejour.date_fin.get());
+        this.ldates.setText(sejour.date_debut.get() + " " + sejour.date_fin.get());
         this.ltype.setText(sejour.type.get());
         this.lcentre.setText(centre.nom_centre.get());
         this.lcapacite.setText(centre.capacite_centre.get());
 
-        System.out.println("code client "+newValue.getValue().code_client.get());
+        System.out.println("code client " + newValue.getValue().code_client.get());
 
-        Client client=clientDao.getClientParId(newValue.getValue().getTriche2());
+        Client client = clientDao.getClientParId(newValue.getValue().getTriche2());
         this.idclient.setText(client.id.get());
 
         this.lnom.setText(client.nom_client.get());
@@ -232,12 +228,12 @@ public class ConsulterInscription implements Initializable, Vue {
         this.lemail.setText(client.email.get());
         this.lnumero.setText(client.numero.get());
 
-        int x=Integer.parseInt(sejour.prix.get());
-        x=x-Integer.parseInt(newValue.getValue().paiement.get());
+        int x = Integer.parseInt(sejour.prix.get());
+        x = x - Integer.parseInt(newValue.getValue().paiement.get());
         this.lreste.setText(String.valueOf(x));
-        if(x>0){
+        if (x > 0) {
             this.lreste.setTextFill(Color.web("#ff0000"));
-        }else if(x==0){
+        } else if (x == 0) {
             this.lreste.setTextFill(Color.web("#00ff00"));
 
         }
@@ -245,11 +241,23 @@ public class ConsulterInscription implements Initializable, Vue {
 
         this.groupe.setText(client.groupe.get());
 
-        GroupeSejourClient groupeSejourClient=groupeSejourClientDao.getGroupeSejourClient(client.groupe.get(),
-                sejour.id.get(),client.id.get());
-        if(groupeSejourClient==null){
+        GroupeSejourClient groupeSejourClient = groupeSejourClientDao.getGroupeSejourClient(client.groupe.get(),
+                sejour.id.get(), client.id.get());
+
+
+        if (groupeSejourClient == null) {
             this.groupe.setText("faux");
-        }else{
+            this.paiement.setDisable(false);
+        } else {
+            this.groupe.setText("true");
+            this.paiement.setDisable(true);
+
+        }
+
+        if (groupeSejourClient == null) {
+            this.groupe.setText("faux");
+
+        } else {
             this.groupe.setText("true");
         }
     }
@@ -271,9 +279,9 @@ public class ConsulterInscription implements Initializable, Vue {
                                         || t.getValue().code_client.getValue().toLowerCase().contains(newValue.toLowerCase())
                                         || t.getValue().dateinscription.getValue().toLowerCase().contains(newValue.toLowerCase())
                                         || t.getValue().id.getValue().toLowerCase().contains(newValue.toLowerCase())
-                                        ||t.getValue().paiement.getValue().toLowerCase().contains(newValue.toLowerCase());
+                                        || t.getValue().paiement.getValue().toLowerCase().contains(newValue.toLowerCase());
                         ;
-                        if(flag)
+                        if (flag)
                             remplirGrideSejour(t);
                         System.out.println("trouve");
 
@@ -298,35 +306,33 @@ public class ConsulterInscription implements Initializable, Vue {
     private CentreDao centreDao;
     private AnnulationDao annulationDao;
     private EvenementDao evenementDao;
+    private GroupeDao groupeDao;
 
     private GroupeSejourClientDao groupeSejourClientDao;
 
     public void initialize(URL location, ResourceBundle resources) {
-        groupeSejourClientDao=new GroupeSejourClientDaoImpl(DBconnexion.getConnection());
-        clientDao=new ClientDaoImpl(DBconnexion.getConnection());
-        sejourDao=new SejourDaoImpl(DBconnexion.getConnection());
-        inscriptionDao=new InscriptionDaoImpl(DBconnexion.getConnection());
-        centreDao=new CentreDaoImpl(DBconnexion.getConnection());
-        annulationDao=new AnnulationDaoImpl(DBconnexion.getConnection());
-        evenementDao=new EvenementDaoImpl(DBconnexion.getConnection());
-        gestionDocs=new GestionDocsImpl();
+        groupeSejourClientDao = new GroupeSejourClientDaoImpl(DBconnexion.getConnection());
+        clientDao = new ClientDaoImpl(DBconnexion.getConnection());
+        sejourDao = new SejourDaoImpl(DBconnexion.getConnection());
+        groupeDao = new GroupeDaoImpl(DBconnexion.getConnection());
+        inscriptionDao = new InscriptionDaoImpl(DBconnexion.getConnection());
+        centreDao = new CentreDaoImpl(DBconnexion.getConnection());
+        annulationDao = new AnnulationDaoImpl(DBconnexion.getConnection());
+        evenementDao = new EvenementDaoImpl(DBconnexion.getConnection());
+        gestionDocs = new GestionDocsImpl();
         chargertouslesinscriptions();
     }
 
 
-
-
-
-
     public void close(javafx.scene.input.MouseEvent mouseEvent) {
-        JFXDialogLayout dialogLayout=new JFXDialogLayout();
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
         dialogLayout.setHeading(new Text("ferme"));
         dialogLayout.setBody(new Text("vous voulez partir ?"));
 
-        JFXButton ok=new JFXButton("ok");
-        JFXButton cancel=new JFXButton("annule");
+        JFXButton ok = new JFXButton("ok");
+        JFXButton cancel = new JFXButton("annule");
 
-        final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
+        final JFXDialog dialog = new JFXDialog(stackepane, dialogLayout, JFXDialog.DialogTransition.CENTER);
 
         ok.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(javafx.event.ActionEvent event) {
@@ -338,7 +344,7 @@ public class ConsulterInscription implements Initializable, Vue {
                 dialog.close();
             }
         });
-        dialogLayout.setActions(ok,cancel);
+        dialogLayout.setActions(ok, cancel);
         dialog.show();
     }
 
@@ -348,7 +354,7 @@ public class ConsulterInscription implements Initializable, Vue {
     }
 
     public void setController(Controlleur controller) {
-        this.controlleur=controller;
+        this.controlleur = controller;
     }
 
     public void cherchecentreparid(MouseEvent mouseEvent) {
@@ -360,15 +366,17 @@ public class ConsulterInscription implements Initializable, Vue {
             gestionDocs.genereAttestationFacture(clientDao.getClientParId(this.idclient.getText()), sejourDao.getSejourParId(this.idsejour.getText()));
             Notification.affichageSucces("Message Succes", "Facture générée avec succès");
 
-        }else {
+        } else {
             Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
         }
     }
 
 
     public void paiement(MouseEvent mouseEvent) {
-        if (!this.idclient.getText().isEmpty()) {
-            System.out.println("ID Client"+this.idclient.getText());
+        if (this.idsejour.getText().isEmpty() || this.idclient.getText().isEmpty()) {
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
+
+        } else {
             Dialog<Pair<String, String>> dialog = new Dialog<>();
             dialog.setTitle("paiement");
 
@@ -417,14 +425,18 @@ public class ConsulterInscription implements Initializable, Vue {
             Optional<Pair<String, String>> result = dialog.showAndWait();
 
             result.ifPresent(pair -> {
-                if(Integer.parseInt(pair.getKey()) < 0){
+                if (Integer.parseInt(pair.getKey()) < 0) {
                     Notification.affichageEchec("Echec", "Le montant ne doit être négatif");
-                }else if (Integer.parseInt(pair.getKey()) > Integer.parseInt(this.lreste.getText())){
+                } else if (Integer.parseInt(pair.getKey()) > Integer.parseInt(this.lreste.getText())) {
                     Notification.affichageEchec("Echec", "Le montant ne doit pas être superieur au montant restant");
-                }else {
+                } else {
 
-                    Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "paiement", pair.getKey(),
-                            new Date().toString().toString(), pair.getValue().toString());
+                    Client client = clientDao.getClientParId(this.idclient.getText());
+                    Sejour sejour = sejourDao.getSejourParId(this.idsejour.getText());
+                    Groupe groupe =groupeDao.getGroupeParId(client.groupe.get());
+
+                    Evenement evenement = new Evenement("1", groupe.code_tiers.get(), sejour.refSejour.get(), "paiement", pair.getKey(),
+                            new Date().toString(), pair.getValue());
                     int res = evenementDao.insererEvenement(evenement);
                     if (res == 0) {
 
@@ -446,41 +458,39 @@ public class ConsulterInscription implements Initializable, Vue {
                         System.out.println("id inscription = " + idinscription.getText());
                         int sommef = rest + somme;
                         inscriptionDao.mettreAjourPaiement(idinscription.getText(), pair.getKey());
-                        this.chargertouslesinscriptions();
-                        // inscriptionDao.mettreAjourPaiement(idinscription.getText(),String.valueOf(x));
+                        //this.chargertouslesinscriptions();
+                        this.controlleur.consulterInscription();                        // inscriptionDao.mettreAjourPaiement(idinscription.getText(),String.valueOf(x));
                     }
 
-                }});
-
-        }else {
-            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
-
+                }
+            });
         }
+
     }
 
 
-    public void genererBis () {
+    public void genererBis() {
 
-        JFXTreeTableColumn<Inscription,String> inscription_id=this.genererInscriptionId();
-        JFXTreeTableColumn<Inscription,String> inscription_paiement=this.genererInscriptionPaiement();
-        JFXTreeTableColumn<Inscription,String> inscription_dateinscription=this.genererDataInscriptioninscription();
-        JFXTreeTableColumn<Inscription,String> inscription_client=this.genererInscriptionClient();
-        JFXTreeTableColumn<Inscription,String> inscription_sejour=this.genererInscriptionSejour();
-        JFXTreeTableColumn<Inscription,String> inscription_depart=this.genererDepart();
+        JFXTreeTableColumn<Inscription, String> inscription_id = this.genererInscriptionId();
+        JFXTreeTableColumn<Inscription, String> inscription_paiement = this.genererInscriptionPaiement();
+        JFXTreeTableColumn<Inscription, String> inscription_dateinscription = this.genererDataInscriptioninscription();
+        JFXTreeTableColumn<Inscription, String> inscription_client = this.genererInscriptionClient();
+        JFXTreeTableColumn<Inscription, String> inscription_sejour = this.genererInscriptionSejour();
+        JFXTreeTableColumn<Inscription, String> inscription_depart = this.genererDepart();
         ObservableList<Inscription> inscriptions = FXCollections.observableArrayList();
-        List<Inscription> inscription=inscriptionDao.getInscriptions();
-        for(Inscription inscription1: inscription){
+        List<Inscription> inscription = inscriptionDao.getInscriptions();
+        for (Inscription inscription1 : inscription) {
 
 
-            Client client=clientDao.getClientParId(inscription1.code_client.get());
-            System.out.println("id sejour :"+inscription1.id_sejour.get());
-            Sejour sejour=sejourDao.getSejourParId(inscription1.id_sejour.get());
-            String nom_client=client.nom_client.get()+" "+client.prenom_client.get();
-            String id_sejour=sejour.id.get();
+            Client client = clientDao.getClientParId(inscription1.code_client.get());
+            System.out.println("id sejour :" + inscription1.id_sejour.get());
+            Sejour sejour = sejourDao.getSejourParId(inscription1.id_sejour.get());
+            String nom_client = client.nom_client.get() + " " + client.prenom_client.get();
+            String id_sejour = sejour.id.get();
 
-            Sejour sejour1=sejourDao.getSejourParId(id_sejour);
-            Inscription inscription2=new Inscription(inscription1.id.get(),inscription1.paiement.get(),
-                    inscription1.dateinscription.get(),  nom_client,sejour1.type.get(),  inscription1.depart.get()
+            Sejour sejour1 = sejourDao.getSejourParId(id_sejour);
+            Inscription inscription2 = new Inscription(inscription1.id.get(), inscription1.paiement.get(),
+                    inscription1.dateinscription.get(), nom_client, sejour1.type.get(), inscription1.depart.get()
             );
 
             inscription2.setTriche(sejour1.id.get());
@@ -488,10 +498,12 @@ public class ConsulterInscription implements Initializable, Vue {
             inscriptions.add(inscription2);
         }
         final TreeItem<Inscription> root = new RecursiveTreeItem<Inscription>(inscriptions, RecursiveTreeObject::getChildren);
-        treeView.getColumns().setAll(inscription_id,inscription_paiement,inscription_dateinscription,inscription_client,inscription_sejour,inscription_depart);
+        treeView.getColumns().setAll(inscription_id, inscription_paiement, inscription_dateinscription, inscription_client, inscription_sejour, inscription_depart);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
     }
+
+
 
 // The Java 8 way to get the response value (with lambda expression).
 
@@ -503,29 +515,34 @@ public class ConsulterInscription implements Initializable, Vue {
     }
 
     public void annuler(MouseEvent mouseEvent) {
+        if (this.idsejour.getText().isEmpty() || this.idclient.getText().isEmpty()){
+            Notification.affichageEchec("Message Echec", "Veuillez selectionner un client SVP  ");
 
-        JFXDialogLayout dialogLayout=new JFXDialogLayout();
-        dialogLayout.setHeading(new Text("ferme"));
-        dialogLayout.setBody(new Text("vous voulez vraiment annuler cette inscription ?"));
+        }else {
 
-        JFXButton ok=new JFXButton("oui");
-        JFXButton cancel=new JFXButton("non");
+            JFXDialogLayout dialogLayout = new JFXDialogLayout();
+            dialogLayout.setHeading(new Text("ferme"));
+            dialogLayout.setBody(new Text("vous voulez vraiment annuler cette inscription ?"));
 
-        final JFXDialog dialog=new JFXDialog(stackepane,dialogLayout, JFXDialog.DialogTransition.CENTER);
+            JFXButton ok = new JFXButton("oui");
+            JFXButton cancel = new JFXButton("non");
 
-        ok.setOnAction(MouseEvent ->annulerReservation(mouseEvent,dialog));
-        cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            public void handle(javafx.event.ActionEvent event) {
-                dialog.close();
-            }
-        });
-        dialogLayout.setActions(ok,cancel);
-        dialog.show();
+            final JFXDialog dialog = new JFXDialog(stackepane, dialogLayout, JFXDialog.DialogTransition.CENTER);
+
+            ok.setOnAction(MouseEvent -> annulerInscription(mouseEvent, dialog));
+            cancel.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+                public void handle(javafx.event.ActionEvent event) {
+                    dialog.close();
+                }
+            });
+            dialogLayout.setActions(ok, cancel);
+            dialog.show();
+        }
 
     }
 
 
-    private void annulerReservation(MouseEvent mouseEvent,JFXDialog dialogLayout) {
+    private void annulerInscription(MouseEvent mouseEvent,JFXDialog dialogLayout) {
 
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("annulation reservation");
@@ -546,11 +563,16 @@ public class ConsulterInscription implements Initializable, Vue {
 
             }else{
 
-                Evenement evenement = new Evenement("1", this.idclient.getText(), this.idsejour.getText(), "annulation inscription",String.valueOf(0), new Date().toString(),"aucune");
+                Client client = clientDao.getClientParId(this.idclient.getText());
+                Sejour sejour = sejourDao.getSejourParId(this.idsejour.getText());
+                Groupe groupe =groupeDao.getGroupeParId(client.groupe.get());
+
+                Evenement evenement = new Evenement("1",  groupe.code_tiers.get(), sejour.refSejour.get(), "annulation inscription",String.valueOf(0), new Date().toString(),"aucune");
                 evenementDao.insererEvenement(evenement);
                 Notification.affichageSucces("annulation","l annulation a bien ete effectue");
                 int bis=inscriptionDao.supperimerParId(this.idinscription.getText());
-                this.chargertouslesinscriptions();
+                //this.chargertouslesinscriptions();
+                this.controlleur.consulterInscription();
 
             }
         }
@@ -561,4 +583,3 @@ public class ConsulterInscription implements Initializable, Vue {
 
     }
 }
-

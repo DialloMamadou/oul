@@ -16,7 +16,11 @@ public class Controlleur {
 
     public Controlleur(Stage stage){
         this. fabriqueVue= new FabriqueVue(stage, this);
-        this.fabriqueVue.creerLoginVue();
+        this.fabriqueVue.creerPageAcceuil();//lancerSplach();
+    }
+
+    public  void lancerEditionAssociation() {
+        this.fabriqueVue.lancerEditionAssociation();
     }
 
     public void lancerPageAccueil() {
@@ -136,5 +140,30 @@ public class Controlleur {
 
     public void lancerListeInscritSejourGroupe() {
         this.fabriqueVue.lancerListeSejourClient();
+    }
+
+    public void lancerEditionGroupe() {
+        this.fabriqueVue.lancerEditionGroupe();
+    }
+
+    public void lancerEditionCentre() {
+        this.fabriqueVue.lancerEditionCentre();
+
+    }
+
+    public void lancerEditionClient() {
+        this.fabriqueVue.lancerEditionClient();
+    }
+
+    public void lancerOptionAvancerVue() {
+        this.fabriqueVue.lancerVueOptionAvancer();
+    }
+
+    public void lancerVueComptabilite() {
+        this.fabriqueVue.vueGenererDocCompta();
+    }
+
+    public void lancerComptaAvanance() {
+        this.fabriqueVue.vueComptaAvance();
     }
 }

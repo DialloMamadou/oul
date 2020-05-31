@@ -38,12 +38,12 @@
 
 
 
-                                <Label layoutX="278.0" layoutY="335.0" text="Capacité">
+                                <Label layoutX="247.0" layoutY="335.0" text="Capacité">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="capacite" layoutX="364.0" layoutY="332.0" prefHeight="25.0" prefWidth="200.0" promptText="Capacite du centre" />
+                                <JFXTextField fx:id="capacite" focusColor="#09e2a7" labelFloat="true" layoutX="364.0" layoutY="332.0" prefHeight="25.0" prefWidth="200.0" promptText="Capacite du centre" />
                                 <Pane prefHeight="481.0" prefWidth="200.0" style="-fx-background-color: TEAL;">
                                     <children>
                                         <ImageView accessibleRole="BUTTON" fitHeight="87.0" fitWidth="102.0" layoutX="40.0" layoutY="60.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">

@@ -53,7 +53,6 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
     public int insererReservation(Reservation reservation) {
         int res=0;
 
-        System.out.println("reservation "+reservation);
         String sql="INSERT INTO reservation (date_reservation,code_client,id_sejour,depart)" +
                 " VALUES (?,?,?,?)";
         try {
@@ -77,7 +76,6 @@ public class ReservationDaoImpl  extends Dao<Reservation> implements Reservation
 
         int res=0;
         String sql="DELETE FROM reservation WHERE id_reservation="+toString;
-        System.out.println("sql supprime "+sql);
         Connection connection= DBconnexion.getConnection();
         try {
             PreparedStatement ps=(PreparedStatement)connection.prepareStatement(sql);
@@ -164,7 +162,6 @@ Reservation reservation=null;
 
     @Override
     public int nbReservationForId(String id) {
-        System.out.println("id sejour reserv"+id);
 
         int nbReserv=0;
         String sql="SELECT COUNT(*) FROM reservation WHERE id_sejour ='"+id+"'";
@@ -173,7 +170,6 @@ Reservation reservation=null;
             ResultSet rs=ps.executeQuery();
 
             while(rs.next()) {
-                System.out.println("Count nb sejour dans reservation pour id:" + id + " = " + rs.getInt(1));
                 nbReserv = rs.getInt(1);
             }
             return nbReserv;

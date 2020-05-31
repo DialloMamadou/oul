@@ -15,7 +15,7 @@
     <children>
         <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1366.0" style="-fx-background-repeat: no-repeat; -fx-background-size: cover;">
             <children>
-                <JFXTreeTableView fx:id="treeView" layoutX="664.0" layoutY="31.0" maxWidth="-Infinity" prefHeight="685.0" prefWidth="616.0" stylesheets="@../css/hotel.css" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="31.0" />
+                <JFXTreeTableView fx:id="treeView" layoutX="664.0" layoutY="31.0" maxWidth="-Infinity" prefHeight="685.0" prefWidth="616.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="31.0" />
                 <Pane layoutX="226.0" layoutY="15.0" prefHeight="700.0" prefWidth="421.0" style="-fx-background-color: #fff; -fx-background-radius: 6 px;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="719.0" AnchorPane.topAnchor="15.0">
                     <children>
                         <Pane layoutX="14.0" layoutY="7.0" prefHeight="133.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
@@ -33,19 +33,19 @@
             
             
             
-                        <Pane layoutX="14.0" layoutY="146.0" prefHeight="517.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
+                        <Pane layoutX="14.0" layoutY="146.0" prefHeight="548.0" prefWidth="378.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXButton buttonType="RAISED" layoutX="22.0" layoutY="466.0" onMouseClicked="#editerclient" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: grey;" text="Editer" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="22.0" layoutY="466.0" onMouseClicked="#envoieEmail" prefHeight="30.0" prefWidth="101.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="Email" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
-                                <JFXButton buttonType="RAISED" layoutX="130.0" layoutY="466.0" onMouseClicked="#SupprimerCentre" prefHeight="30.0" prefWidth="101.0" ripplerFill="WHITE" style="-fx-background-color: grey;" text="Supprimer" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="180.0" layoutY="504.0" onMouseClicked="#SupprimerCentre" prefHeight="30.0" prefWidth="101.0" ripplerFill="WHITE" style="-fx-background-color: red;" text="Supprimer" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="247.0" layoutY="466.0" onMouseClicked="#historiqueClient" prefHeight="30.0" prefWidth="101.0" ripplerFill="WHITE" style="-fx-background-color: grey;" text="historique" textFill="WHITE">
+                        <JFXButton buttonType="RAISED" layoutX="180.0" layoutY="466.0" onMouseClicked="#historiqueClient" prefHeight="30.0" prefWidth="101.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="historique" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -70,7 +70,7 @@
                         <Label fx:id="lgroupe" layoutX="57.0" layoutY="378.0" prefHeight="17.0" prefWidth="123.0" />
                         <Label layoutX="10.0" layoutY="417.0" text="id client" />
                         <Label fx:id="idclient" layoutX="70.0" layoutY="419.0" prefHeight="17.0" prefWidth="74.0" />
-                        <JFXButton buttonType="RAISED" layoutX="253.0" layoutY="412.0" onMouseClicked="#envoieEmail" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: grey;" text="email" textFill="WHITE">
+                        <JFXButton buttonType="RAISED" layoutX="26.0" layoutY="504.0" onMouseClicked="#editerClient" prefHeight="30.0" prefWidth="101.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="Editer" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>

@@ -40,12 +40,12 @@
 
                         <Pane layoutX="8.0" layoutY="109.0" prefHeight="589.0" prefWidth="459.0" style="-fx-border-radius: 15; -fx-border-color: #ccc; -fx-border-width: 2 px;">
                             <children>
-                                <JFXButton buttonType="RAISED" layoutX="32.0" layoutY="536.0" onMouseClicked="#EditerCentre" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: grey;" text="facture" textFill="WHITE">
+                                <JFXButton buttonType="RAISED" layoutX="32.0" layoutY="536.0" onMouseClicked="#EditerFacture" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: green;" text="facture" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </JFXButton>
-                                <JFXButton buttonType="RAISED" layoutX="153.0" layoutY="536.0" onMouseClicked="#paiement" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: grey;" text="paiement" textFill="WHITE">
+                                <JFXButton fx:id="paiement" buttonType="RAISED" layoutX="153.0" layoutY="536.0" onMouseClicked="#paiement" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: teal;" text="paiement" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
@@ -81,10 +81,10 @@
                                   <Label fx:id="lnumero" layoutX="98.0" layoutY="374.0" />
                                   <Label fx:id="lemail" layoutX="98.0" layoutY="400.0" prefHeight="17.0" prefWidth="360.0" />
                                 <Label layoutX="33.0" layoutY="494.0" prefHeight="17.0" prefWidth="80.0" text="Reste à payer" />
-                                <Label fx:id="lreste" layoutX="122.0" layoutY="470.0" prefHeight="17.0" prefWidth="87.0" />
+                                <Label fx:id="idinscription" layoutX="122.0" layoutY="470.0" prefHeight="17.0" prefWidth="87.0" />
                                 <Label layoutX="33.0" layoutY="470.0" text="Id inscription" />
-                                <Label fx:id="idinscription" layoutX="125.0" layoutY="494.0" prefHeight="17.0" prefWidth="80.0" />
-                                <JFXButton buttonType="RAISED" layoutX="281.0" layoutY="536.0" onMouseClicked="#annuler" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: grey;" text="annuler" textFill="WHITE">
+                                <Label fx:id="lreste" layoutX="125.0" layoutY="494.0" prefHeight="17.0" prefWidth="80.0" />
+                                <JFXButton buttonType="RAISED" layoutX="281.0" layoutY="536.0" onMouseClicked="#annuler" prefHeight="30.0" prefWidth="80.0" ripplerFill="WHITE" style="-fx-background-color: red;" text="annuler" textFill="WHITE">
                                     <font>
                                         <Font size="14.0" />
                                     </font>

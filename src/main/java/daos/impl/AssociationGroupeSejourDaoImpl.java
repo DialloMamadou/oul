@@ -33,8 +33,7 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
 
     public int inserrerAssociation(Associationgroupesejour associerGroupeSejour) {
         int res=0;
-
-        String sql="INSERT INTO associationgroupesejour (prix_unitaire,groupe,sejour,nbplace) VALUES (?,?,?,?)";
+        String sql="INSERT INTO associationgroupesejour (prix_unitaire,groupe,id_sejour,nbplace) VALUES (?,?,?,?)";
         try {
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ps.setString(1,associerGroupeSejour.prix_unitaire.get());
@@ -68,9 +67,8 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
 
             while(rs.next()){
 
-                System.out.println("xxxx1");
                 liste.add(new Associationgroupesejour(rs.getString(1),rs.getString(2),rs.getString(3),
-                       rs.getString(4),rs.getString(5)));
+                        rs.getString(4),rs.getString(5)));
 
 
 
@@ -99,7 +97,7 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5)
-                       );
+                );
 
             }
 
@@ -110,7 +108,6 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
 
         return associationgroupesejour;
     }
-
 
     @Override
     public int supprimerById(String text) {
@@ -129,10 +126,10 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
             Logger.getLogger(CreerCentre.class.getName()).log(Level.SEVERE, null, ex);
         }
         return res;
-
     }
+
     public List<String> testCapaciteCentre(String id){
-        String sql="SELECT id_sejour FROM sejour WHERE date_fin < (SELECT date_debut FROM `sejour` WHERE sejour='"+id+"')";
+        String sql="SELECT id_sejour FROM sejour WHERE date_fin < (SELECT date_debut FROM `sejour` WHERE id_sejour='"+id+"')";
         List<String> listeId = new ArrayList<>();
         listeId.add(id);
         try{
@@ -151,16 +148,14 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
 
     @Override
     public int nbReservationGroupSejourForId(String id) {
-        System.out.println("=========id sejour reservGroupeSejour "+id+" ==========");
 
         int nbReserv=0;
-        String sql="SELECT SUM(nbplace) FROM associationgroupesejour WHERE sejour ='"+id+"'";
+        String sql="SELECT SUM(nbplace) FROM associationgroupesejour WHERE id_sejour ='"+id+"'";
         try{
             PreparedStatement ps=(PreparedStatement)connect.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
 
             while(rs.next()) {
-                System.out.println("sum nbPlace sejour dans reservationGroupeSejour pour id:" + id + " = " + rs.getInt(1));
                 nbReserv = rs.getInt(1);
             }
             return nbReserv;
@@ -170,4 +165,29 @@ public class AssociationGroupeSejourDaoImpl extends Dao<Associationgroupesejour>
         }
         return nbReserv;
     }
+
+    @Override
+    public int mettreAJourAssociation(String id,String prix,String place) {
+        int x=0;
+
+        try{
+
+            String query = "update associationgroupesejour set prix_unitaire = ? ,  nbplace=? where id = ?";
+
+            PreparedStatement ps=(PreparedStatement)connect.prepareStatement(query);
+            ps.setString(3,id);
+            ps.setString(2,place);
+            ps.setString(1,prix);
+            x=ps.executeUpdate();
+
+
+
+        }catch (Exception e){
+            return 0;
+
+        }
+
+        return x;
+    }
+
 }

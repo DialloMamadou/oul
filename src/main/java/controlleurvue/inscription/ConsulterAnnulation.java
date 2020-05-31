@@ -181,7 +181,6 @@ public class ConsulterAnnulation implements Initializable, Vue {
 
         //this.idinscription.setText(newValue.getValue().id.get());
         Sejour sejour=sejourDao.getSejourParId(newValue.getValue().getTriche());
-        System.out.println(sejour.toString());
         Centre centre=centreDao.getCentreParId(sejour.nom_centre.get());
         this.lprix.setText(sejour.prix.get());
         this.ldates.setText(sejour.date_debut.get()+" "+sejour.date_fin.get());
@@ -222,8 +221,7 @@ public class ConsulterAnnulation implements Initializable, Vue {
                                         || t.getValue().idclient.getValue().toLowerCase().contains(newValue.toLowerCase())
                                         || t.getValue().idsejour.getValue().toLowerCase().contains(newValue.toLowerCase())
                                         || t.getValue().motif.getValue().toLowerCase().contains(newValue.toLowerCase());
-                        if(flag)
-                        System.out.println("trouve");
+
 
 
                         return flag;
@@ -320,7 +318,6 @@ public class ConsulterAnnulation implements Initializable, Vue {
             reservationDao.supprimerParId(this.idinscription.getText());
 
             inscriptionDao.insererInscription(inscription);
-            System.out.println("tout est bien ");
             chargertouslesinscriptions();
 
 
@@ -366,7 +363,6 @@ public class ConsulterAnnulation implements Initializable, Vue {
 // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if(result.isPresent()){
-            System.out.println("motif "+result.get());
 
             Annulation annulation=new Annulation(result.get(),this.lidsejour.getText(),this.lidclient.getText(),this.lidsejour.getText());
             int res=annulationDao.insererAnnulation(annulation);

@@ -22,4 +22,7 @@ public interface AssociationGroupeSejourDao {
     List<String> testCapaciteCentre(String id);
 
     int nbReservationGroupSejourForId(String id);
+
+    int mettreAJourAssociation(String id ,String prix,String nbPlace);
+
 }
